@@ -34,10 +34,16 @@ COPY . .
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+    && chmod -R 755 /var/www/storage \
+    && chmod -R 755 /var/www/bootstrap/cache \
+    && chmod -R 755 /var/www/public
 
 # Install dependencies
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+RUN composer install --no-interaction
 
 # Install Node.js dependencies and build assets
-RUN npm install && npm run build
+RUN npm install
+RUN npm run build
+
+# Change ownership of the build directory
+RUN chown -R www-data:www-data /var/www/public/build

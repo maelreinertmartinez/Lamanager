@@ -10,6 +10,9 @@ services:
         working_dir: /var/www
         volumes:
             - ./:/var/www
+            - ./public:/var/www/public
+            - /var/www/node_modules
+            - /var/www/vendor
             - ./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
         ports:
             - "8000:80"
@@ -26,7 +29,7 @@ services:
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_PASSWORD: ${DB_PASSWORD}
-            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_USER: ${DB_USERNAME}s
         volumes:
             - dbdata:/var/lib/mysql
         networks:
