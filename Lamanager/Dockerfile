@@ -32,6 +32,7 @@ WORKDIR /var/www
 # Copy existing application directory
 COPY . .
 
+
 # Set permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
