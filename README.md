@@ -77,3 +77,5 @@ Compiler les assets
 docker-compose exec app npm run build
 Mode développement
 docker-compose exec app npm run dev
+
+Migration
