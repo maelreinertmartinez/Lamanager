@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('nom');
-            $table->integer('nombreHeure');
+            $table->integer('nombreHeure', 5);
             $table->timestamps();
         });
     }
