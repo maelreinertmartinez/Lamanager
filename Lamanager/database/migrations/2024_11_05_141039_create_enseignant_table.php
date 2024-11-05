@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('enseignant', function (Blueprint $table) {
             $table->id();
-            $table->boolean('alternant')->default(false);
-            $table->string('nom');
-            $table->integer('nombreHeureCM', 5);
-            $table->integer('nombreHeureTD', 5);
-            $table->integer('nombreHeureTP', 5);
-            $table->integer('Semestre', 1);
+
+            $table->string('code', 10)->unique();
+            $table->boolean('actif')->default(true);
+            $table->string('motDePasse');
+            $table->string('nom', 50);
+            $table->string('prenom', 50);
+            $table->string('mail', 50);
             $table->timestamps();
         });
     }
