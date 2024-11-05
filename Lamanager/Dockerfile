@@ -43,6 +43,7 @@ RUN composer install --no-interaction
 # Install Node.js dependencies and build assets
 RUN npm install
 RUN npm run build
+RUN npm run dev
 
 # Ensure the build directory exists and has correct permissions
 RUN mkdir -p /var/www/public/build \
