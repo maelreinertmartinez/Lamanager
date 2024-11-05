@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enseignant', function (Blueprint $table) {
-            $table->id();
-
+            $table->id('idEnseignant');
+            $table->foreignId('idRole')->constrained('role');
             $table->string('code', 10)->unique();
             $table->boolean('actif')->default(true);
             $table->string('motDePasse');

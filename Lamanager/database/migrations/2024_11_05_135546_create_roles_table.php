@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('role', function (Blueprint $table) {
             $table->id();
-
             $table->string('nom');
-            $table->integer('nombreHeure', 5);
+            $table->integer('nombreHeure');
             $table->timestamps();
         });
     }
