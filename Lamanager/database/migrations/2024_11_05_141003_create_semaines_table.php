@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('semaine', function (Blueprint $table) {
+        Schema::create('semaines', function (Blueprint $table) {
             $table->id('idSemaine');
             $table->string('numero',3);
             $table->timestamps();
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('semaine');
+        Schema::dropIfExists('semaines');
     }
 };
