@@ -44,6 +44,9 @@ RUN composer install --no-interaction
 RUN npm install
 RUN npm run build
 
+# Exposez le port
+EXPOSE 5173
+
 # Ensure the build directory exists and has correct permissions
 RUN mkdir -p /var/www/public/build \
     && chown -R www-data:www-data /var/www/public
