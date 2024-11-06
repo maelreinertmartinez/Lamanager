@@ -26,4 +26,9 @@ class Promo extends Model
     {
         return $this->hasMany(Enseignement::class);
     }
+
+    public function groupe(): HasMany
+    {
+        return $this->hasMany(Groupe::class);
+    }
 }
