@@ -11,5 +11,9 @@ class Semaine extends Model
         'numero',
     ];
 
+    public function cases()
+    {
+        return $this->hasMany(CaseTableau::class);
+    }
 
 }

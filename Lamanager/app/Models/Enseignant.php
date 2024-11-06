@@ -21,4 +21,9 @@ class Enseignant extends Model
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
+
+    public function cases()
+    {
+        return $this->hasMany(CaseTableau::class);
+    }
 }

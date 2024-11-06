@@ -16,4 +16,9 @@ class Groupe extends Model
     {
         return $this->belongsTo(Promo::class, 'promo_id');
     }
+
+    public function cases()
+    {
+        return $this->hasMany(CaseTableau::class);
+    }
 }
