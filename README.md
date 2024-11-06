@@ -23,6 +23,9 @@ bash
 docker-compose build
 docker-compose up -d
 
+docker exec -it lamanager-app composer install
+docker exec -it lamanager-app npm i
+
 4. Installer les dépendances et configurer l'application
 bash
 Générer la clé d'application
