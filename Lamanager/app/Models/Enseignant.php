@@ -3,21 +3,22 @@
 namespace app\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Enseignant extends Model
 {
     protected $fillable = [
-        'idRole',
+        'role_id',
         'code',
         'actif',
-        'motDePasse',
+        'mot_de_passe',
         'nom',
         'prenom',
         'mail',
     ];
 
-    public function role()
+    public function role(): BelongsTo
     {
-        return $this->belongsTo(Role::class, 'idRole');
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }

@@ -3,13 +3,18 @@
 namespace app\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
     protected $fillable = [
         'nom',
-        'nombreHeure',
+        'nombre_heure',
     ];
 
+    public function enseignant(): HasMany
+    {
+        return $this->HasMany(Enseignant::class);
+    }
 
 }
