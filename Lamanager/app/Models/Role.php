@@ -11,8 +11,5 @@ class Role extends Model
         'nombreHeure',
     ];
 
-    public function enseignants()
-    {
-        return $this->hasMany(Enseignant::class, 'idRole');
-    }
+
 }
