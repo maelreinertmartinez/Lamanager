@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Promo extends Model
 {
@@ -19,5 +20,10 @@ class Promo extends Model
     public function annee(): BelongsTo
     {
         return $this->belongsTo(Annee::class, 'annee_id');
+    }
+
+    public function enseignements(): HasMany
+    {
+        return $this->hasMany(Enseignement::class);
     }
 }

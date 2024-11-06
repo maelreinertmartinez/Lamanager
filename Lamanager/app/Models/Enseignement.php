@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Enseignement extends Model
 {
     protected $fillable = [
+        'promo_id',
         'alternant',
         'nom',
         'nombre_heure_cm',
@@ -15,4 +17,9 @@ class Enseignement extends Model
         'semestre',
         'nombre_heure_max',
     ];
+
+    public function promo(): BelongsTo
+    {
+        return $this->belongsTo(Promo::class, 'promo_id');
+    }
 }
