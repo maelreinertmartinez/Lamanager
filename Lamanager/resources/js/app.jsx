@@ -4,7 +4,7 @@ import './bootstrap';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
-
+import Home from './Pages/Home';
 
 createInertiaApp({
     title: (title) => `${title}`,
@@ -19,9 +19,10 @@ createInertiaApp({
         
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(<Home/>);
     },
     progress: {
         color: '#4B5563',
     },
 });
+
