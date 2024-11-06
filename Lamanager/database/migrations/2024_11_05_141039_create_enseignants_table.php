@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('enseignants', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Role::class, 'role_id')->nullable()->constrained('roles');
+            $table->foreignIdFor(Role::class, 'role_id')->nullable()->constrained('roles')->onDelete('set null');
             $table->string('code', 10)->unique();
             $table->boolean('actif')->default(true);
             $table->string('mot_de_passe');
