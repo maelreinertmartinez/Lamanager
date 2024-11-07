@@ -1,3 +1,273 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#root {
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  width: 100%;
+  height: 7vh;
+  display: flex;
+  align-items: center;
+  background-color: #564787;
+}
+
+.logo {
+  height: 100%; /* Garde les proportions de l'image */
+  margin-right: 10px;
+}
+
+.title {
+  font-size: 1.5rem; /* Taille du texte */
+  color: #fff; /* Couleur du texte */
+}
+
+.app {
+  display: flex; /* Active Flexbox */
+  flex-direction: row; /* Aligne les éléments en ligne */
+  height: 93vh; /* Hauteur de l'élément */
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: #1a1a1a;
+}
+
+p {
+  font-size: 1.6em;
+  color: #000000;
+}
+
+.Left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  width: 25vh;
+  background-color: #DBCBD8;
+}
+
+.Right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 3;
+  background-color: #2222;
+  height: 100%;
+  width: 75vh;
+}
+
+.Annees {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  height: 85vh;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.annees-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+}
+
+.annees-list li {
+  width: calc(50% - 40px);
+}
+
+.but-class {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 60px;
+  font-size: 3rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.30);
+  border-radius: 12px;
+  background-color: #ffffff;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.but-class:hover {
+  border: 2px solid #564787;
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.ModificationsAnnees {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  height: 15vh;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.btn-modif-class {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  width: 100px;
+  padding: 10px;
+  background-color: #ffffff; /* Couleur de fond pour les boutons */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Ombre pour un effet 3D */
+  transition: transform 0.2s;
+}
+
+.btn-modif-class:hover {
+  transform: scale(1.1);
+  border: 2px solid #564787;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 90%;
+}
+
+.popup-content h2 {
+  margin-top: 0;
+  color: #564787;
+}
+
+.popup-content button {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background-color: #564787;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup-content button:hover {
+  background-color: #453a6b;
+}
+
+/* Ajoutez ces styles après les styles existants du header */
+
+header a {
+  height: 7vh;
+  display: flex;
+  align-items: center;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
+}
+
+.logo {
+  height: 100%;
+  width: auto;
+  margin-right: 10px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: #fff;
+}

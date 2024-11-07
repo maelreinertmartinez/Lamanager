@@ -33,6 +33,8 @@ docker-compose exec app php artisan key:generate
 Exécuter les migrations
 docker-compose exec app php artisan migrate
 
+Lancer le serveur React
+docker exec -it lamanager-app npm run dev
 
 ## Accès à l'application
 Une fois l'installation terminée, l'application est accessible à :
