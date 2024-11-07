@@ -64,6 +64,23 @@ docker-compose logs -f
 Reconstruire les conteneurs
 docker-compose build --no-cache
 
+### Utiliser Docker sous Ubuntu
+Installer Ubuntu depuis le Windows Store
+wsl --install sous Powershell windows
+sur Docker Desktop : Paramètres > Ressources > WSL Integration > Activer Ubuntu.
+lancer le logiciel Ubuntu > Créer son utilisateur
+Toujours sous Ubuntu :
+mkdir projet
+cp -r /mnt/c/Users/utilisateur/<votre>/<dossier>/Lamanager /projet
+docker-compose build
+docker-compose up -d
+docker-compose exec app npm run dev
+
+Si erreur de permission, aller sur le conteneur app et executer
+sudo chown -R www-data:www-data /var/www/html/Lamanager/storage /var/www/html/Lamanager/bootstrap/cache
+sudo chmod -R 775 /var/www/html/Lamanager/storage /var/www/html/Lamanager/bootstrap/cache
+
+
 ### Laravel
 Exécuter les migrations
 docker-compose exec app php artisan migrate
@@ -83,6 +100,7 @@ docker-compose exec app npm run build
 Mode développement
 docker-compose exec app npm run dev
 executer seeder
+
 docker exec -it lamanager-app php artisan migrate:fresh --seed
 
 Migration
