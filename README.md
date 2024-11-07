@@ -71,14 +71,14 @@ sur Docker Desktop : Paramètres > Ressources > WSL Integration > Activer Ubuntu
 lancer le logiciel Ubuntu > Créer son utilisateur
 Toujours sous Ubuntu :
 mkdir projet
-cp -r /mnt/c/Users/utilisateur/<votre>/<dossier>/Lamanager /projet
+cp -r /mnt/c/Users/utilisateur/<votre>/<dossier>/Lamanager projet
 docker-compose build
 docker-compose up -d
 docker-compose exec app npm run dev
 
-Si erreur de permission, aller sur le conteneur app et executer
-sudo chown -R www-data:www-data /var/www/html/Lamanager/storage /var/www/html/Lamanager/bootstrap/cache
-sudo chmod -R 775 /var/www/html/Lamanager/storage /var/www/html/Lamanager/bootstrap/cache
+Aller sur le conteneur app et executer
+chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 
 ### Laravel
