@@ -82,6 +82,8 @@ Compiler les assets
 docker-compose exec app npm run build
 Mode développement
 docker-compose exec app npm run dev
+executer seeder
+docker exec -it lamanager-app php artisan migrate:fresh --seed
 
 Migration
 
