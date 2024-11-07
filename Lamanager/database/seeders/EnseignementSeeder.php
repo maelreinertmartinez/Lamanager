@@ -14,8 +14,7 @@ class EnseignementSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Role
-        $this->call(PromoSeeder::class);
+
 
         // Create Enseignant
         Enseignement::factory()

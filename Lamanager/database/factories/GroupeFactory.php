@@ -24,8 +24,8 @@ class GroupeFactory extends Factory
     public function definition(): array
     {
         return [
-            'nom' => 'G'. random_int(1,9). array_rand($this->lettre),
-            'type' => array_rand($this->type),
+            'nom' => 'G'. random_int(1,9). $this->lettre[array_rand($this->lettre)],
+            'type' => $this->type[array_rand($this->type)],
 
         ];
     }

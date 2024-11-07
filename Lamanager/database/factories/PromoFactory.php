@@ -26,9 +26,9 @@ class PromoFactory extends Factory
     {
 
         return [
-            'nom'=>array_rand($this->promo),
-            'nombre_td'=>array_rand($this->nbr_td),
-            'nombre_tp'=>array_rand($this->nbr_tp),
+            'nom'=>$this->promo[array_rand($this->promo)],
+            'nombre_td'=>$this->nbr_td[array_rand($this->nbr_td)],
+            'nombre_tp'=>$this->nbr_tp[array_rand($this->nbr_tp)],
             'alternant'=>true,
             'annee_id'=>Annee::factory(),
         ];
