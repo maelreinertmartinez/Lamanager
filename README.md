@@ -51,6 +51,21 @@ Le projet utilise trois services Docker :
 - **app** : PHP 8.2 avec Apache
 - **db** : MariaDB 10.6
 
+## Utiliser Docker sous Ubuntu
+Installez Ubuntu depuis le Windows Store puis tapez wsl --install sous Powershell windows
+sur Docker Desktop : Paramètres > Ressources > WSL Integration > Activer Ubuntu
+lancer le logiciel Ubuntu > Créer son utilisateur si ce n'est pas déjà fait
+Toujours sous Ubuntu :
+mkdir projet
+cp -r /mnt/c/Users/utilisateur/<votre>/<dossier>/Lamanager projet (prendre le dossier avec le .git)
+docker-compose build
+docker-compose up -d
+docker-compose exec app npm run dev
+
+Aller sur le conteneur app et executer
+chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
 ## Commandes utiles
 
 ### Docker
@@ -63,23 +78,6 @@ Voir les logs
 docker-compose logs -f
 Reconstruire les conteneurs
 docker-compose build --no-cache
-
-### Utiliser Docker sous Ubuntu
-Installer Ubuntu depuis le Windows Store
-wsl --install sous Powershell windows
-sur Docker Desktop : Paramètres > Ressources > WSL Integration > Activer Ubuntu.
-lancer le logiciel Ubuntu > Créer son utilisateur
-Toujours sous Ubuntu :
-mkdir projet
-cp -r /mnt/c/Users/utilisateur/<votre>/<dossier>/Lamanager projet
-docker-compose build
-docker-compose up -d
-docker-compose exec app npm run dev
-
-Aller sur le conteneur app et executer
-chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-
 
 ### Laravel
 Exécuter les migrations
