@@ -106,3 +106,19 @@ docker exec -it lamanager-app php artisan migrate:fresh --seed
 Migration
 
 caramel
+---------------------------------------------
+Installation serveur
+git
+curl
+libpng-dev
+libonig-dev
+libxml2-dev
+zip
+unzip
+nodejs
+php-mysql
+php-mbstring
+php-exif
+php-pcntl
+phpbc-math
+php-gd
