@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('enseignements', function (Blueprint $table) {
             $table->id();
+            $table->string('nom');
             $table->foreignIdFor(Promo::class, 'promo_id')->nullable()->constrained('promos')->onDelete('set null');
             $table->boolean('alternant');
             $table->integer('nombre_heures_cm');
