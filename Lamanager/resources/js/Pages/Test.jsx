@@ -6,6 +6,7 @@ export default function Test() {
     <>
     <Header />
         <div className="app">
+            <h1>Test</h1>
             <p>Ceci est une page de test pour la redirection depuis les boutons d'année.</p>
         </div>
     </>
