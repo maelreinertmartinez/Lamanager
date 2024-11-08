@@ -1,13 +1,16 @@
 import React from 'react';
 import Header from '../Components/Header';
+import LeftPart from '@/Components/LeftPart';
+import RightPart from '@/Components/RightPart';
+import Tableau from '@/Components/Tableau';
 
 export default function Test() {
   return (
     <>
     <Header />
         <div className="app">
-            <h1>Test</h1>
-            <p>Ceci est une page de test pour la redirection depuis les boutons d'année.</p>
+            <LeftPart />
+            <RightPart ComposantProp={Tableau}/>
         </div>
     </>
   );
