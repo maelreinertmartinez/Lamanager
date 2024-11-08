@@ -1,6 +1,7 @@
 import React from "react";
 import logo from '../../img/testlogo.png';
 import { Link } from '@inertiajs/react';
+import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUser, Download } from "lucide-react";
 
 function BarreOutils ({}) {
     const params = new URLSearchParams(window.location.search);
@@ -19,14 +20,13 @@ function BarreOutils ({}) {
             </div>
             <div className="BarreOutils">
                 <ul className="barre-outils-list">
-                    <li>1</li>
-                    <li>2</li>
-                    <li>3</li>
-                    <li>4</li>
-                    <li>5</li>
-                    <li>6</li>
-                    <li>7</li>
-                    <li>8</li>
+                    <li><Table /></li>
+                    <li><ChartColumnIncreasing /></li>
+                    <li><MousePointer2 /></li>
+                    <li><Settings /></li>
+                    <li><BookUser /></li>
+                    <li><FileUser /></li>
+                    <li><Download /></li>
                 </ul>
             </div>
       </>
