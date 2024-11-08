@@ -26,20 +26,27 @@ function Tableau({ selectedEnseignements = [], onRemoveEnseignement }) {
                 </div>
                 {selectedEnseignements.map((enseignement) => enseignement && (
                     <div key={enseignement.id} className="mb-4">
-                        <table className="w-full border-collapse border border-gray-300">
+                        <table className="w-full border-collapse border border-black">
                             <thead>
                                 <tr>
-                                    <th className="border border-gray-300 p-2">CM</th>
-                                    <th className="border border-gray-300 p-2">TD</th>
-                                    <th className="border border-gray-300 p-2">TP</th>
+                                    <th className="border border-black p-2" style={{ width: '70px',height: '70px' }}> {/* Ajustez la largeur ici */}
+                                        </th>
+                                    <th className="border border-black p-2" style={{ width: '300px' }}>CM</th>
+                                    <th className="border border-black p-2" colSpan="2" style={{ width: '600px' }}>TD</th>
+                                    <th className="border border-black p-2" colSpan="4" style={{ width: '900px' }}>TP</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'Total'].map((row) => (
                                     <tr key={row}>
-                                        <td className="border border-gray-300 p-2"></td>
-                                        <td className="border border-gray-300 p-2"></td>
-                                        <td className="border border-gray-300 p-2"></td>
+                                        <td className="border border-black p-2" style={{ height: '70px' }}>{row}</td>
+                                        <td className="border border-black p-2"></td>
+                                        <td className="border border-black p-2"></td>
+                                        <td className="border border-black p-2"></td>
+                                        <td className="border border-black p-2"></td>
+                                        <td className="border border-black p-2"></td>
+                                        <td className="border border-black p-2"></td>
+                                        <td className="border border-black p-2"></td>
                                     </tr>
                                 ))}
                             </tbody>
