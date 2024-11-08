@@ -78,9 +78,10 @@ header a {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  left: 20%;
   height: 6vh;
   margin-top: 1vh;
-  margin-left: 11.3vh;
   width: 20vh;
   border-top-left-radius: 2vh;
   border-top-right-radius: 2vh;
@@ -96,7 +97,7 @@ header a {
   display: flex;
   list-style-type: none;
   padding: 0;
-  margin-left: 13vh;
+  margin-left: 45vh;
 }
 
 .barre-outils-list li {
