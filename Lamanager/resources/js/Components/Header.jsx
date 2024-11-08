@@ -8,7 +8,7 @@ function Header() {
       <Link href="/">
         <div className="header-content">
           <img src={logo} alt="Logo" className="logo" />
-          <h1 className="title">Lamanager Le meilleur programme du monde</h1>
+          <h1 className="title">Lamanager</h1>
         </div>
       </Link>
     </header>
