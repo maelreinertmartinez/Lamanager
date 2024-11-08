@@ -24,13 +24,11 @@ class PromoFactory extends Factory
     protected $nbr_tp = [4, 6];
     public function definition(): array
     {
-
         return [
-            'nom'=>$this->promo[array_rand($this->promo)],
-            'nombre_td'=>$this->nbr_td[array_rand($this->nbr_td)],
-            'nombre_tp'=>$this->nbr_tp[array_rand($this->nbr_tp)],
-            'alternant'=>true,
-            'annee_id'=>Annee::factory(),
+            'nombre_td' => $this->nbr_td[array_rand($this->nbr_td)],
+            'nombre_tp' => $this->nbr_tp[array_rand($this->nbr_tp)],
+            'alternant' => true,
+            'annee_id' => Annee::factory(),
         ];
     }
 }

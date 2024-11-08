@@ -3,27 +3,24 @@
 namespace Database\Seeders;
 
 use App\Models\Enseignement;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Eloquent\Factories\Sequence;
+use App\Models\Promo;
 use Illuminate\Database\Seeder;
 
 class EnseignementSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-// Create Role
         $this->call(PromoSeeder::class);
 
-        // Create Enseignant
-        Enseignement::factory()
-            ->count(30)
-            ->state(new Sequence(fn()=>
-            [
-                'promo_id'=>rand(1,12),
-            ]))
-            ->create();
+        // Pour chaque promo
+        Promo::all()->each(function ($promo) {
+            // Crée 5 enseignements par promo
+            Enseignement::factory()
+                ->count(5)
+                ->create([
+                    'promo_id' => $promo->id,
+                    'alternant' => $promo->alternant,
+                ]);
+        });
     }
 }
