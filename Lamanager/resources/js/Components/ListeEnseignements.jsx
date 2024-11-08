@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function ListeEnseignements({ onEnseignementSelect }) {
+function ListeEnseignements({ promo_id, onEnseignementSelect }) {
     const [enseignements, setEnseignements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -9,7 +9,7 @@ function ListeEnseignements({ onEnseignementSelect }) {
     useEffect(() => {
         const fetchEnseignements = async () => {
             try {
-                const response = await axios.get('/api/enseignements');
+                const response = await axios.get(`/api/enseignements/${promo_id}`);
                 setEnseignements(response.data);
                 setLoading(false);
             } catch (err) {
@@ -18,9 +18,12 @@ function ListeEnseignements({ onEnseignementSelect }) {
             }
         };
 
-        fetchEnseignements();
-    }, []);
+        if (promo_id) {
+            fetchEnseignements();
+        }
+    }, [promo_id]);
 
+    if (!promo_id) return null;
     if (loading) return <div>Chargement...</div>;
     if (error) return <div>{error}</div>;
 

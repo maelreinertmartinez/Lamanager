@@ -20,7 +20,7 @@ export default function Test() {
     };
 
     const ListeEnseignementsWithProps = () => (
-        <ListeEnseignements onEnseignementSelect={handleEnseignementSelect} />
+        <ListeEnseignements promo_id={1} onEnseignementSelect={handleEnseignementSelect} />
     );
 
     const TableauWithProps = () => (

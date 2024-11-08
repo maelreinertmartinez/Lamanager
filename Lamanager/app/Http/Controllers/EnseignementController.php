@@ -7,9 +7,15 @@ use Illuminate\Http\JsonResponse;
 
 class EnseignementController extends Controller
 {
-    public function index(): JsonResponse
+    public function index($promo_id = null): JsonResponse
     {
-        $enseignements = Enseignement::select('id', 'nom')->get();
+        $query = Enseignement::select('id', 'nom');
+        
+        if ($promo_id) {
+            $query->where('promo_id', $promo_id);
+        }
+        
+        $enseignements = $query->get();
         return response()->json($enseignements);
     }
 }
