@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EnseignementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -24,3 +25,5 @@ Route::get('/test', function () {
 })->name('test');
 
 require __DIR__.'/auth.php';
+
+Route::get('/api/enseignements', [EnseignementController::class, 'index'])->name('api.enseignements');
