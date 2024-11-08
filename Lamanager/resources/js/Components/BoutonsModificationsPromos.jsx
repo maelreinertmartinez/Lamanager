@@ -1,6 +1,6 @@
 import React from "react";
 
-function BoutonModificationsAnnees({ className, Icon, onClick }) {
+function BoutonModificationsPromos({ className, Icon, onClick }) {
   return (
     <div className={className} onClick={onClick}>
       <Icon width={50} height={50} color="#564787" />
@@ -8,4 +8,4 @@ function BoutonModificationsAnnees({ className, Icon, onClick }) {
   );
 }
 
-export default BoutonModificationsAnnees;
+export default BoutonModificationsPromos;

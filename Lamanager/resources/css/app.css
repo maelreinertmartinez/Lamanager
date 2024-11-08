@@ -95,7 +95,7 @@ p {
   width: 75vh;
 }
 
-.Annees {
+.Promos {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -106,7 +106,7 @@ p {
   background-color: #ffffff;
 }
 
-.annees-list {
+.promos-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -116,7 +116,7 @@ p {
   gap: 50px;
 }
 
-.annees-list li {
+.promos-list li {
   width: calc(50% - 40px);
 }
 
@@ -141,7 +141,7 @@ p {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
 
-.ModificationsAnnees {
+.ModificationsPromos {
   display: flex;
   flex-direction: row;
   align-items: center;

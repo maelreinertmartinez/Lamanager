@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '../Components/Header';
 import LeftPart from '../Components/LeftPart';
 import RightPart from '../Components/RightPart';
-import AnneeRightPart from '@/Components/AnneeRightPart';
+import PromoRightPart from '@/Components/PromoRightPart';
 
 const Home = () => {
     return (
@@ -11,7 +11,7 @@ const Home = () => {
         <Header />
         <div className="app">
                 <LeftPart />
-                <RightPart ComposantProp={AnneeRightPart}/>
+                <RightPart ComposantProp={PromoRightPart}/>
         </div>
         </>
     );

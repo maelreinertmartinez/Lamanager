@@ -1,6 +1,6 @@
 import React from "react";
 
-function ChoixAnnee({ className, title }) {
+function ChoixPromo({ className, title }) {
     return (
       <div className={className}>
         <h2>{title}</h2>
@@ -8,4 +8,4 @@ function ChoixAnnee({ className, title }) {
     );
   }
   
-  export default ChoixAnnee;
+  export default ChoixPromo;

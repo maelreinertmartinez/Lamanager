@@ -1,30 +1,30 @@
 import React, { useState } from "react";
-import ChoixAnnee from "./ChoixAnnee";
-import BoutonModificationsAnnees from "./BoutonsModificationsAnnees";
+import ChoixPromo from "./ChoixPromo";
+import BoutonModificationsPromos from "./BoutonsModificationsPromos";
 import { Trash2, Edit } from "lucide-react";
 import { Link } from '@inertiajs/react';
 
-function AnneeRightPart() {
+function PromoRightPart() {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showEditPopup, setShowEditPopup] = useState(false);
 
     return (
         <>
-        <div className="Annees">
-            <ul className="annees-list">
-            <li><Link href="/test"><ChoixAnnee className="but-class" title="BUT 1" /></Link></li>
-            <li><Link href="/test"><ChoixAnnee className="but-class" title="BUT 2" /></Link></li>
-            <li><Link href="/test"><ChoixAnnee className="but-class" title="BUT 3" /></Link></li>
-            <li><Link href="/test"><ChoixAnnee className="but-class" title="+" /></Link></li>
+        <div className="Promos">
+            <ul className="promos-list">
+            <li><Link href="/test"><ChoixPromo className="but-class" title="BUT 1" /></Link></li>
+            <li><Link href="/test"><ChoixPromo className="but-class" title="BUT 2" /></Link></li>
+            <li><Link href="/test"><ChoixPromo className="but-class" title="BUT 3" /></Link></li>
+            <li><Link href="/test"><ChoixPromo className="but-class" title="+" /></Link></li>
             </ul>
         </div>
-        <div className="ModificationsAnnees">
-            <BoutonModificationsAnnees 
+        <div className="ModificationsPromos">
+            <BoutonModificationsPromos 
             className="btn-modif-class" 
             Icon={Trash2} 
             onClick={() => setShowDeletePopup(true)}
             />
-            <BoutonModificationsAnnees 
+            <BoutonModificationsPromos 
             className="btn-modif-class" 
             Icon={Edit} 
             onClick={() => setShowEditPopup(true)}
@@ -56,4 +56,4 @@ function AnneeRightPart() {
     );
 }
 
-export default AnneeRightPart;
+export default PromoRightPart;
