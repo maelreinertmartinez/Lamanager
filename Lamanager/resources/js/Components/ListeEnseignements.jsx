@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function ListeEnseignements() {
+function ListeEnseignements({ onEnseignementSelect }) {
     const [enseignements, setEnseignements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -28,8 +28,16 @@ function ListeEnseignements() {
         <div className="select-container">
             <select 
                 className="w-full p-2 rounded-md border border-gray-300 focus:border-[#564787] focus:ring focus:ring-[#564787] focus:ring-opacity-50"
+                onChange={(e) => {
+                    const selectedId = parseInt(e.target.value);
+                    const selectedEnseignement = enseignements.find(e => e.id === selectedId);
+                    if (selectedEnseignement) {
+                        onEnseignementSelect(selectedEnseignement);
+                    }
+                }}
+                defaultValue=""
             >
-                <option value="" disabled selected>Sélectionnez un enseignement</option>
+                <option value="" disabled>Sélectionnez un enseignement</option>
                 {enseignements.map((enseignement) => (
                     <option key={enseignement.id} value={enseignement.id}>
                         {enseignement.nom}
