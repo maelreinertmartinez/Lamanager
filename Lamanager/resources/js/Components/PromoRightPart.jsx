@@ -12,10 +12,10 @@ function PromoRightPart() {
         <>
         <div className="Promos">
             <ul className="promos-list">
-            <li><Link href="/test"><ChoixPromo className="but-class" title="BUT 1" /></Link></li>
-            <li><Link href="/test"><ChoixPromo className="but-class" title="BUT 2" /></Link></li>
-            <li><Link href="/test"><ChoixPromo className="but-class" title="BUT 3" /></Link></li>
-            <li><Link href="/test"><ChoixPromo className="but-class" title="+" /></Link></li>
+            <li><Link href="/test?promo=BUT 1"><ChoixPromo className="but-class" title="BUT 1" /></Link></li>
+            <li><Link href="/test?promo=BUT 2"><ChoixPromo className="but-class" title="BUT 2" /></Link></li>
+            <li><Link href="/test?promo=BUT 3"><ChoixPromo className="but-class" title="BUT 3" /></Link></li>
+            <li><ChoixPromo className="but-class" title="+" /></li>
             </ul>
         </div>
         <div className="ModificationsPromos">
