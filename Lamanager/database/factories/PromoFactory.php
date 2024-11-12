@@ -22,18 +22,18 @@ class PromoFactory extends Factory
         ];
     protected $nbr_td = [3,2,2];
     protected $nbr_tp = [6,4,4];
-   
+
     public function definition(): array
     {
 
-        
 
-       
+
+
 
         return [
             'nom' => function(array $attributes) {
                 $nom = array_pop($this->promo);
-                
+
                 if (empty($this->promo)){
                     $this->promo=[
                         'BUT 1',
@@ -45,7 +45,7 @@ class PromoFactory extends Factory
             },
             'nombre_td' => function(array $attributes) {
                 $nombre_td = array_pop($this->nbr_td);
-                
+
                 if (empty($this->nbr_td)){
                     $this->nbr_td=[3,2,2];
                 }
@@ -53,8 +53,7 @@ class PromoFactory extends Factory
             },
             'nombre_tp' => function(array $attributes) {
                 $nombre_tp = array_pop($this->nbr_tp);
-                print_r($nombre_tp);
-                
+
                 if (empty($this->nbr_tp)){
                     $this->nbr_tp=[6,4,4];
                 }
