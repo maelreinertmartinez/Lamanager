@@ -82,7 +82,7 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                     style={{ display: activeTableau === enseignement.nom ? 'block' : 'none' }}
                 >
                     <div className="flex flex-col">
-                        <div className="mb-4">
+                        <div className="mb-4 relative">
                             <table className="w-full border-collapse border border-black">
                                 <thead>
                                     <tr>
@@ -93,7 +93,7 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'Total'].map((row, rowIndex) => (
+                                    {['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10'].map((row, rowIndex) => (
                                         <tr key={row}>
                                             <td
                                                 className="border border-black p-2"
@@ -112,6 +112,19 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                             ))}
                                         </tr>
                                     ))}
+                                </tbody>
+                            </table>
+                            <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
+                                <tbody>
+                                    <tr>
+                                        <td className="border border-black p-2" style={{ height: '70px', width: '70px' }}>Total</td>
+                                        {[1, 2, 3, 4, 5, 6, 7].map((colIndex) => (
+                                            <td
+                                                key={colIndex}
+                                                className={`border border-black p-2 ${clickedCells[`10-${colIndex}`] ? getColorClass(colIndex) : ''}`}
+                                            ></td>
+                                        ))}
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
