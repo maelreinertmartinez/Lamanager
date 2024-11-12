@@ -4,6 +4,7 @@ use App\Http\Controllers\EnseignementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AnneeController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -27,3 +28,4 @@ Route::get('/test', function () {
 require __DIR__.'/auth.php';
 
 Route::get('/api/enseignements/{promo_id?}', [EnseignementController::class, 'index'])->name('api.enseignements');
+Route::get('/api/annees', [AnneeController::class, 'index'])->name('api.annees');

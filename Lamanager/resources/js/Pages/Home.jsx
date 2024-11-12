@@ -7,13 +7,20 @@ import HeaderNeutre from '@/Components/HeaderNeutre';
 import MenuAnnee from '@/Components/MenuAnnee';
 
 const Home = () => {
+    const [selectedAnneeId, setSelectedAnneeId] = React.useState(null);
+
+    const handleAnneeSelect = (anneeId) => {
+        setSelectedAnneeId(anneeId);
+        // Vous pouvez utiliser anneeId ici ou le passer à d'autres composants
+    };
+
     return (
         <>
-        <Header ComposantProp={HeaderNeutre}/>
-        <div className="app">
-            <LeftPart ComposantProp={MenuAnnee} />
-            <RightPart ComposantProp={PromoRightPart}/>
-        </div>
+            <Header ComposantProp={HeaderNeutre}/>
+            <div className="app">
+                <LeftPart ComposantProp={() => <MenuAnnee onAnneeSelect={handleAnneeSelect} />} />
+                <RightPart ComposantProp={PromoRightPart}/>
+            </div>
         </>
     );
 };
