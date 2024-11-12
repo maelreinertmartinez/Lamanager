@@ -3,46 +3,30 @@
 namespace Database\Seeders;
 
 use App\Models\Promo;
+use App\Models\Annee;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class PromoSeeder extends Seeder
 {
+    protected $liste = [1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6];
     public function run(): void
     {
+        
         // Create Annee
         $this->call(AnneeSeeder::class);
-
-        // Création des packs de promos pour chaque année
-        for ($annee_id = 1; $annee_id <= 6; $annee_id++) {
-            // Création d'un pack de 3 promos pour chaque année
-            $promos = [
+        // Create Promo
+        Promo::factory()
+        ->count(18)
+        ->has(
+            Annee::factory()
+            ->state(new Sequence(fn()=>
                 [
-                    'nom' => 'BUT1',
-                    'nombre_td' => 2,
-                    'nombre_tp' => 4,
-                    'alternant' => false,
-                    'annee_id' => $annee_id,
-                ],
-                [
-                    'nom' => 'BUT2',
-                    'nombre_td' => 2,
-                    'nombre_tp' => 4,
-                    'alternant' => false,
-                    'annee_id' => $annee_id,
-                ],
-                [
-                    'nom' => 'BUT3',
-                    'nombre_td' => 2,
-                    'nombre_tp' => 4,
-                    'alternant' => true,
-                    'annee_id' => $annee_id,
-                ]
-            ];
-
-            // Création des promos en base de données
-            foreach ($promos as $promo) {
-                Promo::create($promo);
-            }
+                    'annee_id'=> array_pop($this->liste)
+                ]))
+        )
+        
+        ->create();
         }
-    }
 }

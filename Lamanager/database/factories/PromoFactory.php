@@ -16,17 +16,50 @@ class PromoFactory extends Factory
      * @return array<string, mixed>
      */
     protected $promo=[
-        'BUT1',
-        'BUT2',
-        'BUT3',
-    ];
-    protected $nbr_td = [2, 3];
-    protected $nbr_tp = [4, 6];
+            'BUT 1',
+            'BUT 2',
+            'BUT 3',
+        ];
+    protected $nbr_td = [3,2,2];
+    protected $nbr_tp = [6,4,4];
+   
     public function definition(): array
     {
+
+        
+
+       
+
         return [
-            'nombre_td' => $this->nbr_td[array_rand($this->nbr_td)],
-            'nombre_tp' => $this->nbr_tp[array_rand($this->nbr_tp)],
+            'nom' => function(array $attributes) {
+                $nom = array_pop($this->promo);
+                
+                if (empty($this->promo)){
+                    $this->promo=[
+                        'BUT 1',
+                        'BUT 2',
+                        'BUT 3',
+                    ];
+                }
+                return $nom;
+            },
+            'nombre_td' => function(array $attributes) {
+                $nombre_td = array_pop($this->nbr_td);
+                
+                if (empty($this->nbr_td)){
+                    $this->nbr_td=[3,2,2];
+                }
+                return $nombre_td;
+            },
+            'nombre_tp' => function(array $attributes) {
+                $nombre_tp = array_pop($this->nbr_tp);
+                print_r($nombre_tp);
+                
+                if (empty($this->nbr_tp)){
+                    $this->nbr_tp=[6,4,4];
+                }
+                return $nombre_tp;
+            },
             'alternant' => true,
             'annee_id' => Annee::factory(),
         ];
