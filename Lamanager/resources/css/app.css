@@ -146,7 +146,7 @@ p {
   align-items: center;
   justify-content: center;
   flex: 4;
-  background-color: #2222;
+  background-color: #f2f2f2;
   height: 100%;
   width: 75vh;
 }
@@ -387,6 +387,15 @@ p {
 
 .liste-ressources div:hover {
     background-color: #e0e0e0;
+}
+
+.tab-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.tab-item.active {
+  background-color: #e0e0e0; 
 }
 
 .circle-x {
