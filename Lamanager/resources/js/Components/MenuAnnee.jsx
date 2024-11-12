@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, usePage } from '@inertiajs/react';
 
-function MenuAnnee({ onAnneeSelect }) {
+function MenuAnnee({ selectedAnnee, onAnneeSelect }) {
     const [annees, setAnnees] = useState([]);
-    const [selectedAnnee, setSelectedAnnee] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -13,10 +11,9 @@ function MenuAnnee({ onAnneeSelect }) {
             try {
                 const response = await axios.get('/api/annees');
                 setAnnees(response.data);
-                // Sélectionne par défaut la première année
-                if (response.data.length > 0) {
-                    setSelectedAnnee(response.data[0]);
-                    onAnneeSelect && onAnneeSelect(response.data[0].id);
+                // Sélectionne par défaut la première année si aucune n'est sélectionnée
+                if (response.data.length > 0 && !selectedAnnee) {
+                    onAnneeSelect(response.data[0]);
                 }
                 setLoading(false);
             } catch (err) {
@@ -27,11 +24,6 @@ function MenuAnnee({ onAnneeSelect }) {
 
         fetchAnnees();
     }, []);
-
-    const handleAnneeClick = (annee) => {
-        setSelectedAnnee(annee);
-        onAnneeSelect && onAnneeSelect(annee.id);
-    };
 
     if (loading) return <div>Chargement...</div>;
     if (error) return <div>{error}</div>;
@@ -44,7 +36,7 @@ function MenuAnnee({ onAnneeSelect }) {
                     <div 
                         key={annee.id} 
                         className={`menu-item cursor-pointer ${selectedAnnee?.id === annee.id ? 'bg-[#564787] text-white' : 'hover:bg-purple-100'}`}
-                        onClick={() => handleAnneeClick(annee)}
+                        onClick={() => onAnneeSelect(annee)}
                     >
                         {annee.annee_scolaire}
                     </div>

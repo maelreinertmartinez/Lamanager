@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../Components/Header';
 import LeftPart from '../Components/LeftPart';
 import RightPart from '../Components/RightPart';
@@ -7,19 +7,25 @@ import HeaderNeutre from '@/Components/HeaderNeutre';
 import MenuAnnee from '@/Components/MenuAnnee';
 
 const Home = () => {
-    const [selectedAnneeId, setSelectedAnneeId] = React.useState(null);
+    const [selectedAnnee, setSelectedAnnee] = useState(null);
 
-    const handleAnneeSelect = (anneeId) => {
-        setSelectedAnneeId(anneeId);
-        // Vous pouvez utiliser anneeId ici ou le passer à d'autres composants
+    const handleAnneeSelect = (annee) => {
+        setSelectedAnnee(annee);
     };
+
+    const MenuAnneeWithProps = () => (
+        <MenuAnnee 
+            selectedAnnee={selectedAnnee} 
+            onAnneeSelect={handleAnneeSelect} 
+        />
+    );
 
     return (
         <>
             <Header ComposantProp={HeaderNeutre}/>
             <div className="app">
-                <LeftPart ComposantProp={() => <MenuAnnee onAnneeSelect={handleAnneeSelect} />} />
-                <RightPart ComposantProp={PromoRightPart}/>
+                <LeftPart ComposantProp={MenuAnneeWithProps} />
+                <RightPart ComposantProp={() => <PromoRightPart selectedAnnee={selectedAnnee} />}/>
             </div>
         </>
     );
