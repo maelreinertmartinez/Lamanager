@@ -83,13 +83,13 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                 >
                     <div className="flex flex-col">
                         <div className="mb-4">
-                            <table className="w-full border-collapse border border-black">
+                            <table className="w-full border-collapse border border-black" style={{ width: '100%'}}>
                                 <thead>
                                     <tr>
                                         <th className="border border-black p-2" style={{ width: '70px', height: '70px' }}>{enseignement.nom}</th>
-                                        <th className="border border-black p-2" style={{ width: '300px' }}>CM</th>
-                                        <th className="border border-black p-2" colSpan="2" style={{ width: '600px' }}>TD</th>
-                                        <th className="border border-black p-2" colSpan="4" style={{ width: '900px' }}>TP</th>
+                                        <th className="border border-black p-2">CM</th>
+                                        <th className="border border-black p-2" colSpan="2">TD</th>
+                                        <th className="border border-black p-2" colSpan="4">TP</th>
                                     </tr>
                                 </thead>
                                 <tbody>

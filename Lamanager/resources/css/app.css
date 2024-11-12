@@ -360,9 +360,8 @@ p {
   position: absolute;
   top:0;
   height: 77vh;
+  width: 95%;
   margin-top: 12vh;
-  margin-left: 4vh;
-  margin-right: 4vh;
 }
 
 .Select-enseignement {
