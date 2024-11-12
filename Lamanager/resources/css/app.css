@@ -33,10 +33,14 @@
 }
 
 html, body, #root {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+  height: 100%;   /* Prend 100% de la hauteur de la fenêtre */
+  width: 100%;    /* Prend 100% de la largeur de la fenêtre */
+  margin: 0;      /* Supprime les marges par défaut */
+  padding: 0;     /* Supprime les espacements internes par défaut */
+}
+
+#root {
+  min-height: 100%;  /* Permet à #root de s'étendre si nécessaire */
 }
 
 header {
@@ -350,11 +354,15 @@ p {
 }
 
 .Tableau {
-  display: flex;
+  overflow-y: scroll;
+  display: block;
+  justify-content: center;
   position: absolute;
   top:0;
-  justify-content: center;
-  margin: 12vh 4vh;
+  height: 77vh;
+  margin-top: 12vh;
+  margin-left: 4vh;
+  margin-right: 4vh;
 }
 
 .Select-enseignement {
