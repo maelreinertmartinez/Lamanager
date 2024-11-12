@@ -87,9 +87,9 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                 <thead>
                                     <tr>
                                         <th className="border border-black p-2" style={{ width: '70px', height: '70px' }}>{enseignement.nom}</th>
-                                        <th className="border border-black p-2" style={{ width: '13%'}}>CM</th>
-                                        <th className="border border-black p-2" style={{ width: '26%'}} colSpan="2">TD</th>
-                                        <th className="border border-black p-2" style={{ width: '52%'}} colSpan="4">TP</th>
+                                        <th className="border border-black p-2" style={{ width: '13%' }}>CM</th>
+                                        <th className="border border-black p-2" style={{ width: '26%' }} colSpan="2">TD</th>
+                                        <th className="border border-black p-2" style={{ width: '52%' }} colSpan="4">TP</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -115,9 +115,19 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                 </tbody>
                             </table>
                             <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
+                                <colgroup>
+                                    <col style={{ width: '70px' }} />
+                                    <col style={{ width: '13%' }} />
+                                    <col style={{ width: '13%' }} />
+                                    <col style={{ width: '13%' }} />
+                                    <col style={{ width: '13%' }} />
+                                    <col style={{ width: '13%' }} />
+                                    <col style={{ width: '13%' }} />
+                                    <col style={{ width: '13%' }} />
+                                </colgroup>
                                 <tbody>
                                     <tr>
-                                        <td className="border border-black p-2" style={{ height: '70px', width: '70px' }}>Total</td>
+                                        <td className="border border-black p-2" style={{ height: '70px' }}>Total</td>
                                         {[1, 2, 3, 4, 5, 6, 7].map((colIndex) => (
                                             <td
                                                 key={colIndex}
