@@ -41,10 +41,12 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
         fetchSemaines();
     }, []);
 
+    const longueurSemaines = semaines.length;
+
     const handleCellClick = (rowIndex, colIndex) => {
         const key = `${rowIndex}-${colIndex}`;
         const params = new URLSearchParams(window.location.search);
-        const enseignant = params.get('enseignant') || 'Inconnu';
+        const enseignant = params.get('enseignant') || '';
     
         setClickedCells((prev) => {
             const updatedCells = { ...prev };
@@ -160,9 +162,9 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                         {[1, 2, 3].map((colIndex) => (
                                             <td
                                                 key={colIndex}
-                                                className={`border border-black p-2 ${clickedCells[`10-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''}`}
+                                                className={`border border-black p-2 ${clickedCells[`${longueurSemaines}-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''}`}
                                             >
-                                                {clickedCells[`10-${colIndex}`]?.text && <span>{clickedCells[`10-${colIndex}`].text}</span>}
+                                                {clickedCells[`${longueurSemaines}-${colIndex}`]?.text && <span>{clickedCells[`${longueurSemaines}-${colIndex}`].text}</span>}
                                             </td>
                                         ))}
                                     </tr>
