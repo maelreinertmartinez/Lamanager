@@ -41,13 +41,12 @@ function PromoRightPart({ selectedAnnee }) {
             <ul className="promos-list">
                 {promos.map((promo) => (
                     <li key={promo.id}>
-                        <Link href={`/test?promo=${promo.nom}`}>
+                        <Link href={`/test?promo=${promo.nom}&annee_id=${selectedAnnee.id}`}>
                             <ChoixPromo className="but-class" title={promo.nom} />
                         </Link>
                     </li>
                 ))}
                 <li onClick={() => setShowCustomPopup(true)}><ChoixPromo className="but-class" title="+"/></li>
-
             </ul>
         </div>
         <div className="ModificationsPromos">
