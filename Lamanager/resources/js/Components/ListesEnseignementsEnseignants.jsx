@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function ListesEnseignementsEnseignants({ butLevel, onEnseignementSelect, selectedEnseignant, onEnseignantSelect }) {
+function ListesEnseignementsEnseignants({ promoId, anneeId, onEnseignementSelect, selectedEnseignant, onEnseignantSelect }) {
     const [enseignements, setEnseignements] = useState([]);
     const [enseignants, setEnseignants] = useState([]);
-    const [loadingEnseignements, setLoadingEnseignements] = useState(true);
     const [loadingEnseignants, setLoadingEnseignants] = useState(true);
-    const [errorEnseignements, setErrorEnseignements] = useState(null);
     const [errorEnseignants, setErrorEnseignants] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchEnseignements = async () => {
             try {
-                const response = await axios.get(`/api/enseignements/${butLevel}`);
+                const response = await axios.get(`/api/enseignements/${promoId}/${anneeId}`);
                 setEnseignements(response.data);
+                setLoading(false);
             } catch (err) {
-                setErrorEnseignements('Erreur lors du chargement des enseignements');
-            } finally {
-                setLoadingEnseignements(false);
+                setError('Erreur lors du chargement des enseignements');
+                setLoading(false);
             }
         };
 
-        if (butLevel) {
+        if (promoId && anneeId) {
             fetchEnseignements();
         }
-    }, [butLevel]);
+    }, [promoId, anneeId]);
 
     useEffect(() => {
         const fetchEnseignants = async () => {
@@ -51,36 +51,32 @@ function ListesEnseignementsEnseignants({ butLevel, onEnseignementSelect, select
         window.history.pushState({}, '', url);
     };
 
-    if (!butLevel) return null;
+    if (!promoId || !anneeId) return null;
+    if (loading) return <div>Chargement...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <>
-            {loadingEnseignements ? (
-                <div>Chargement des enseignements...</div>
-            ) : errorEnseignements ? (
-                <div>{errorEnseignements}</div>
-            ) : (
-                <div className="select-container">
-                    <select 
-                        className="w-full p-2 rounded-md border border-gray-300 focus:border-[#564787] focus:ring focus:ring-[#564787] focus:ring-opacity-50"
-                        onChange={(e) => {
-                            const selectedId = parseInt(e.target.value);
-                            const selectedEnseignement = enseignements.find(e => e.id === selectedId);
-                            if (selectedEnseignement) {
-                                onEnseignementSelect(selectedEnseignement);
-                            }
-                        }}
-                        defaultValue=""
-                    >
-                        <option value="" disabled>Sélectionnez un enseignement</option>
-                        {enseignements.map((enseignement) => (
-                            <option key={enseignement.id} value={enseignement.id}>
-                                {enseignement.nom}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            )}
+            <div className="select-container">
+                <select 
+                    className="w-full p-2 rounded-md border border-gray-300 focus:border-[#564787] focus:ring focus:ring-[#564787] focus:ring-opacity-50"
+                    onChange={(e) => {
+                        const selectedId = parseInt(e.target.value);
+                        const selectedEnseignement = enseignements.find(e => e.id === selectedId);
+                        if (selectedEnseignement) {
+                            onEnseignementSelect(selectedEnseignement);
+                        }
+                    }}
+                    defaultValue=""
+                >
+                    <option value="" disabled>Sélectionnez un enseignement</option>
+                    {enseignements.map((enseignement) => (
+                        <option key={enseignement.id} value={enseignement.id}>
+                            {enseignement.nom}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             <div className="menu-wrapper">
                 <h2 className="menu-title">Enseignants</h2>

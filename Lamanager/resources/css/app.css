@@ -491,3 +491,12 @@ p {
 .circle-x:hover {
     color: #564787;
 }
+
+.tab-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .tab-item.active {
+    background-color: #e0e0e0; 
+  }
