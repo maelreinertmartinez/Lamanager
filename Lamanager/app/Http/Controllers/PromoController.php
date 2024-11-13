@@ -15,4 +15,9 @@ class PromoController extends Controller
         
         return response()->json($promos);
     }
+    public function getPromo($id): JsonResponse
+    {
+        $promo = Promo::find($id);
+        return response()->json($promo);
+    }
 }
