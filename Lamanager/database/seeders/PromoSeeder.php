@@ -19,13 +19,11 @@ class PromoSeeder extends Seeder
         // Create Promo
         Promo::factory()
         ->count(18)
-        ->has(
-            Annee::factory()
-            ->state(new Sequence(fn()=>
-                [
-                    'annee_id'=> array_pop($this->liste)
-                ]))
-        )
+        ->state(new Sequence(fn()=>
+            [
+                'annee_id'=> array_pop($this->liste)
+            ]))
+        
         
         ->create();
         }
