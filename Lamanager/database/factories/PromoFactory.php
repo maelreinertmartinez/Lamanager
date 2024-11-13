@@ -16,9 +16,9 @@ class PromoFactory extends Factory
      * @return array<string, mixed>
      */
     protected $promo=[
-        'BUT1',
-        'BUT2',
-        'BUT3',
+        'BUT 1',
+        'BUT 2',
+        'BUT 3',
     ];
     protected $nbr_td = [2, 3];
     protected $nbr_tp = [4, 6];
