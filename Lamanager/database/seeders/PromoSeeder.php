@@ -16,6 +16,7 @@ class PromoSeeder extends Seeder
         
         // Create Annee
         $this->call(AnneeSeeder::class);
+        // Création des packs de promos pour chaque année
         // Create Promo
         Promo::factory()
         ->count(18)

@@ -28,6 +28,7 @@ Route::get('/test', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/api/enseignements/{promo_id?}', [EnseignementController::class, 'index'])->name('api.enseignements');
 Route::get('/api/annees', [AnneeController::class, 'index'])->name('api.annees');
 Route::get('/api/promos/{annee_id}', [PromoController::class, 'index'])->name('api.promos');
+Route::get('/api/enseignements/{promo_id}/{annee_id}', [EnseignementController::class, 'index']);
+Route::get('/api/promo/{id}', [PromoController::class, 'getPromo'])->name('api.promo.get');

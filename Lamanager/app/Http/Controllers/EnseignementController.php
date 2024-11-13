@@ -8,20 +8,12 @@ use Illuminate\Http\JsonResponse;
 
 class EnseignementController extends Controller
 {
-    public function index($but_level = null): JsonResponse
+    public function index($promo_id, $annee_id): JsonResponse
     {
-        $query = Enseignement::select('id', 'nom');
-        
-        if ($but_level) {
-            // Récupère la promo correspondante pour l'année 1
-            $promo = Promo::where('annee_id', 1)
-                         ->where('nom', 'BUT' . $but_level)
-                         ->first();
-            
-            if ($promo) {
-                $query->where('promo_id', $promo->id);
-            }
-        }
+        $query = Enseignement::select('enseignements.id', 'enseignements.nom')
+            ->join('promos', 'enseignements.promo_id', '=', 'promos.id')
+            ->where('promos.id', $promo_id)
+            ->where('promos.annee_id', $annee_id);
         
         $enseignements = $query->get();
         return response()->json($enseignements);
