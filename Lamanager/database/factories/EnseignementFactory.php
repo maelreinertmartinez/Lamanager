@@ -2,11 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Models\Enseignement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Promo;
+use Random\RandomException;
 
 class EnseignementFactory extends Factory
 {
+    /**
+     * @throws RandomException
+     */
     public function definition(): array
     {
         // Détermine les numéros R possibles selon le nom de la promo
@@ -18,23 +23,35 @@ class EnseignementFactory extends Factory
                 default => [1, 2],    // Par défaut BUT1
             };
         };
+        $ind_random = random_int(0, 1);
+        $nombre_heures_cm = rand(10, 30);
+        $nombre_heures_td = rand(20, 40);
+        $nombre_heures_tp = rand(20, 40);
 
         return [
-            'nom' => function (array $attributes) use ($but_level) {
+
+            'nom' => function (array $attributes) use ($but_level, $ind_random) {
                 $promo = Promo::find($attributes['promo_id']);
                 $r_numbers = $but_level($promo->nom);
-                $r_number = $r_numbers[array_rand($r_numbers)];
-                return 'R' . $r_number . '.' . str_pad(rand(1, 15), 2, '0', STR_PAD_LEFT);
+                $semestre =  $r_numbers[$ind_random];
+                return 'R' . $semestre . '.' . str_pad(rand(1, 15), 2, '0', STR_PAD_LEFT);
             },
+
+
             'alternant' => function (array $attributes) {
                 $promo = Promo::find($attributes['promo_id']);
                 return $promo->nom === 'BUT3';
             },
-            'nombre_heures_cm' => rand(10, 30),
-            'nombre_heures_td' => rand(20, 40),
-            'nombre_heures_tp' => rand(20, 40),
-            'semestre' => rand(1, 2),
-            'nombre_heures_max' => rand(50, 110),
+            'nombre_heures_cm' => $nombre_heures_cm,
+            'nombre_heures_td' => $nombre_heures_td,
+            'nombre_heures_tp' => $nombre_heures_tp,
+            'semestre' => function (array $attributes) use ($but_level, $ind_random) {
+                $promo = Promo::find($attributes['promo_id']);
+                $r_numbers = $but_level($promo->nom);
+                $semestre =  $r_numbers[$ind_random];
+                return (($semestre + 1) % 2) + 1;
+            },
+            'nombre_heures_max' => $nombre_heures_cm + $nombre_heures_td + $nombre_heures_tp,
         ];
     }
 }

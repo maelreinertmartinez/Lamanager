@@ -25,14 +25,22 @@ class EnseignantFactory extends Factory
 
     public function definition(): array
     {
+
+        $prenom = $this->faker->firstName;
+        $nom = $this->faker->lastName;
+        $code = strtoupper(substr($prenom, 0, 1) . substr($nom, 0, 2));
+        $mail = strtolower($prenom . '.' . $nom . '@example.com');
+
         return [
-            'nom' => fake()->lastName(),
-            'prenom' => fake()->firstName(),
-            'code' => strtoupper(fake()->bothify("??")),
+            'nom' => $prenom,
+            'prenom' => $nom,
+            'code' => $code,
             'actif' => true,
-            'mot_de_passe' => static::$password ??= Hash::make('ichbinschnapy'),
-            'mail' => fake()->unique()->safeEmail(),
+            'mot_de_passe' => static::$password ??= Hash::make('password'),
+            'mail' => $mail,
             'role_id' => Role::factory(),
         ];
+
+        
     }
 }
