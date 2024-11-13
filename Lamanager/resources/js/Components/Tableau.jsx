@@ -21,32 +21,46 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
     };
 
     const handleCellClick = (rowIndex, colIndex) => {
-        if (colIndex === 0) {
-            const isRowFullyColored = [1, 2, 3, 4, 5, 6, 7].every(
-                (col) => clickedCells[`${rowIndex}-${col}`]
-            );
-
-            setClickedCells((prev) => {
-                const updatedCells = { ...prev };
-                
+        const key = `${rowIndex}-${colIndex}`;
+        const params = new URLSearchParams(window.location.search);
+        const enseignant = params.get('enseignant') || 'Inconnu';
+    
+        setClickedCells((prev) => {
+            const updatedCells = { ...prev };
+    
+            if (colIndex === 0) {
+                // Gérer la sélection de la ligne entière
+                const isRowFullyColored = [1, 2, 3, 4, 5, 6, 7].every(
+                    (col) => updatedCells[`${rowIndex}-${col}`] && updatedCells[`${rowIndex}-${col}`].clicked
+                );
+    
                 if (isRowFullyColored) {
+                    // Si toute la ligne est colorée, on réinitialise toutes les cases
                     for (let i = 1; i <= 7; i++) {
-                        delete updatedCells[`${rowIndex}-${i}`];
+                        updatedCells[`${rowIndex}-${i}`] = { clicked: false, text: "" };
                     }
                 } else {
+                    // Sinon, on colore toutes les cases de cette ligne
                     for (let i = 1; i <= 7; i++) {
-                        updatedCells[`${rowIndex}-${i}`] = true;
+                        updatedCells[`${rowIndex}-${i}`] = { clicked: true, text: `2h - ${enseignant}` };
                     }
                 }
-                
-                return updatedCells;
-            });
-        } else {
-            setClickedCells((prev) => ({
-                ...prev,
-                [`${rowIndex}-${colIndex}`]: !prev[`${rowIndex}-${colIndex}`],
-            }));
-        }
+            } else {
+                // Inverser l'état de la cellule spécifique
+                if (!updatedCells[key]) {
+                    updatedCells[key] = { clicked: false, text: "" };
+                }
+    
+                const cell = updatedCells[key];
+                if (cell.text === "") {
+                    updatedCells[key] = { clicked: true, text: `2h - ${enseignant}` };
+                } else {
+                    updatedCells[key] = { clicked: false, text: "" };
+                }
+            }
+    
+            return updatedCells;
+        });
     };
 
     const getColorClass = (colIndex) => {
@@ -82,18 +96,18 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                     style={{ display: activeTableau === enseignement.nom ? 'block' : 'none' }}
                 >
                     <div className="flex flex-col">
-                        <div className="mb-4">
+                        <div className="mb-4 relative">
                             <table className="w-full border-collapse border border-black">
                                 <thead>
                                     <tr>
                                         <th className="border border-black p-2" style={{ width: '70px', height: '70px' }}>{enseignement.nom}</th>
-                                        <th className="border border-black p-2" style={{ width: '300px' }}>CM</th>
-                                        <th className="border border-black p-2" colSpan="2" style={{ width: '600px' }}>TD</th>
-                                        <th className="border border-black p-2" colSpan="4" style={{ width: '900px' }}>TP</th>
+                                        <th className="border border-black p-2" style={{ width: '13%' }}>CM</th>
+                                        <th className="border border-black p-2" style={{ width: '26%' }} colSpan="2">TD</th>
+                                        <th className="border border-black p-2" style={{ width: '52%' }} colSpan="4">TP</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'Total'].map((row, rowIndex) => (
+                                    {['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10'].map((row, rowIndex) => (
                                         <tr key={row}>
                                             <td
                                                 className="border border-black p-2"
@@ -105,13 +119,36 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                             {[1, 2, 3, 4, 5, 6, 7].map((colIndex) => (
                                                 <td
                                                     key={colIndex}
-                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${colIndex}`] ? getColorClass(colIndex) : ''}`}
-                                                    style={{ cursor: row !== 'Total' ? 'pointer' : 'default' }}
+                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''} `}
+                                                    style={{ cursor: row !== 'Total' ? 'pointer' : 'default', width: '13%' }}
                                                     onClick={row !== 'Total' ? () => handleCellClick(rowIndex, colIndex): null}
-                                                ></td>
+                                                >
+                                                    {clickedCells[`${rowIndex}-${colIndex}`]?.text && <h3>{clickedCells[`${rowIndex}-${colIndex}`].text}</h3>}
+                                                </td>
                                             ))}
                                         </tr>
                                     ))}
+                                </tbody>
+                            </table>
+                            <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
+                                <colgroup>
+                                    <col style={{ width: '70px' }} />
+                                    <col style={{ width: '13%' }} />
+                                    <col style={{ width: '26%' }} />
+                                    <col style={{ width: '52%' }} />
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td className="border border-black p-2" style={{ height: '70px' }}>Total</td>
+                                        {[1, 2, 3].map((colIndex) => (
+                                            <td
+                                                key={colIndex}
+                                                className={`border border-black p-2 ${clickedCells[`10-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''}`}
+                                            >
+                                                {clickedCells[`10-${colIndex}`]?.text && <span>{clickedCells[`10-${colIndex}`].text}</span>}
+                                            </td>
+                                        ))}
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
