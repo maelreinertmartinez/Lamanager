@@ -21,32 +21,29 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
     };
 
     const handleCellClick = (rowIndex, colIndex) => {
-        if (colIndex === 0) {
-            const isRowFullyColored = [1, 2, 3, 4, 5, 6, 7].every(
-                (col) => clickedCells[`${rowIndex}-${col}`]
-            );
-
-            setClickedCells((prev) => {
-                const updatedCells = { ...prev };
-                
-                if (isRowFullyColored) {
-                    for (let i = 1; i <= 7; i++) {
-                        delete updatedCells[`${rowIndex}-${i}`];
-                    }
-                } else {
-                    for (let i = 1; i <= 7; i++) {
-                        updatedCells[`${rowIndex}-${i}`] = true;
-                    }
-                }
-                
-                return updatedCells;
-            });
-        } else {
-            setClickedCells((prev) => ({
-                ...prev,
-                [`${rowIndex}-${colIndex}`]: !prev[`${rowIndex}-${colIndex}`],
-            }));
-        }
+        const key = `${rowIndex}-${colIndex}`;
+        
+        setClickedCells((prev) => {
+            const params = new URLSearchParams(window.location.search);
+            const enseignant = params.get('enseignant') || 'Inconnu';
+        
+            const updatedCells = { ...prev };
+            
+            if (!updatedCells[key]) {
+                updatedCells[key] = { clicked: false, text: "" };
+            }
+        
+            const cell = updatedCells[key];
+        
+            if (cell.text === "") {
+                updatedCells[key] = { clicked: true, text: "2h - "+enseignant };
+            } else {
+                updatedCells[key] = { clicked: false, text: "" };
+            }
+        
+            return updatedCells;
+        });
+        
     };
 
     const getColorClass = (colIndex) => {
@@ -105,10 +102,12 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                             {[1, 2, 3, 4, 5, 6, 7].map((colIndex) => (
                                                 <td
                                                     key={colIndex}
-                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${colIndex}`] ? getColorClass(colIndex) : ''}`}
-                                                    style={{ cursor: row !== 'Total' ? 'pointer' : 'default' }}
+                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''} `}
+                                                    style={{ cursor: row !== 'Total' ? 'pointer' : 'default', width: '13%' }}
                                                     onClick={row !== 'Total' ? () => handleCellClick(rowIndex, colIndex): null}
-                                                ></td>
+                                                >
+                                                    {clickedCells[`${rowIndex}-${colIndex}`]?.text && <h3>{clickedCells[`${rowIndex}-${colIndex}`].text}</h3>}
+                                                </td>
                                             ))}
                                         </tr>
                                     ))}
@@ -118,21 +117,19 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                 <colgroup>
                                     <col style={{ width: '70px' }} />
                                     <col style={{ width: '13%' }} />
-                                    <col style={{ width: '13%' }} />
-                                    <col style={{ width: '13%' }} />
-                                    <col style={{ width: '13%' }} />
-                                    <col style={{ width: '13%' }} />
-                                    <col style={{ width: '13%' }} />
-                                    <col style={{ width: '13%' }} />
+                                    <col style={{ width: '26%' }} />
+                                    <col style={{ width: '52%' }} />
                                 </colgroup>
                                 <tbody>
                                     <tr>
                                         <td className="border border-black p-2" style={{ height: '70px' }}>Total</td>
-                                        {[1, 2, 3, 4, 5, 6, 7].map((colIndex) => (
+                                        {[1, 2, 3].map((colIndex) => (
                                             <td
                                                 key={colIndex}
-                                                className={`border border-black p-2 ${clickedCells[`10-${colIndex}`] ? getColorClass(colIndex) : ''}`}
-                                            ></td>
+                                                className={`border border-black p-2 ${clickedCells[`10-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''}`}
+                                            >
+                                                {clickedCells[`10-${colIndex}`]?.text && <span>{clickedCells[`10-${colIndex}`].text}</span>}
+                                            </td>
                                         ))}
                                     </tr>
                                 </tbody>

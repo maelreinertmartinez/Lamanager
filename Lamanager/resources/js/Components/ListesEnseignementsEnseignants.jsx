@@ -32,7 +32,6 @@ function ListesEnseignementsEnseignants({ butLevel, onEnseignementSelect, select
                 const response = await axios.get('/api/enseignants');
                 setEnseignants(response.data);
 
-                // Sélectionne par défaut le premier enseignant si aucun n'est sélectionné
                 if (response.data.length > 0 && !selectedEnseignant) {
                     onEnseignantSelect(response.data[0]);
                 }
@@ -44,7 +43,13 @@ function ListesEnseignementsEnseignants({ butLevel, onEnseignementSelect, select
         };
 
         fetchEnseignants();
-    }, [selectedEnseignant]);
+    }, []);
+
+    const updateUrlWithEnseignant = (enseignant) => {
+        const url = new URL(window.location);
+        url.searchParams.set('enseignant', enseignant.code);
+        window.history.pushState({}, '', url);
+    };
 
     if (!butLevel) return null;
 
@@ -87,9 +92,13 @@ function ListesEnseignementsEnseignants({ butLevel, onEnseignementSelect, select
                     <div className="menu-container">
                         {enseignants.map((enseignant) => (
                             <div 
-                                key={enseignant.id} 
+                                key={enseignant.id}
+                                id={enseignant.id}
                                 className={`menu-item cursor-pointer ${selectedEnseignant?.id === enseignant.id ? 'bg-[#564787] text-white' : 'hover:bg-purple-100'}`}
-                                onClick={() => onEnseignantSelect(enseignant)}
+                                onClick={() => {
+                                    onEnseignantSelect(enseignant);
+                                    updateUrlWithEnseignant(enseignant);  // Met à jour l'URL avec l'ID du prof
+                                }}
                             >
                                 {enseignant.nom} {enseignant.prenom}
                             </div>
