@@ -17,9 +17,9 @@ class EnseignementFactory extends Factory
         // Détermine les numéros R possibles selon le nom de la promo
         $but_level = function($promo_nom) {
             return match($promo_nom) {
-                'BUT1' => [1, 2],    // BUT1 -> R1 ou R2
-                'BUT2' => [3, 4],    // BUT2 -> R3 ou R4
-                'BUT3' => [5, 6],    // BUT3 -> R5 ou R6
+                'BUT 1' => [1, 2],    // BUT1 -> R1 ou R2
+                'BUT 2' => [3, 4],    // BUT2 -> R3 ou R4
+                'BUT 3' => [5, 6],    // BUT3 -> R5 ou R6
                 default => [1, 2],    // Par défaut BUT1
             };
         };
@@ -40,7 +40,7 @@ class EnseignementFactory extends Factory
 
             'alternant' => function (array $attributes) {
                 $promo = Promo::find($attributes['promo_id']);
-                return $promo->nom === 'BUT3';
+                return $promo->nom === 'BUT 3';
             },
             'nombre_heures_cm' => $nombre_heures_cm,
             'nombre_heures_td' => $nombre_heures_td,
