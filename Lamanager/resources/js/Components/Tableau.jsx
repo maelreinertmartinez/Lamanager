@@ -22,28 +22,45 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
 
     const handleCellClick = (rowIndex, colIndex) => {
         const key = `${rowIndex}-${colIndex}`;
-        
+        const params = new URLSearchParams(window.location.search);
+        const enseignant = params.get('enseignant') || 'Inconnu';
+    
         setClickedCells((prev) => {
-            const params = new URLSearchParams(window.location.search);
-            const enseignant = params.get('enseignant') || 'Inconnu';
-        
             const updatedCells = { ...prev };
-            
-            if (!updatedCells[key]) {
-                updatedCells[key] = { clicked: false, text: "" };
-            }
-        
-            const cell = updatedCells[key];
-        
-            if (cell.text === "") {
-                updatedCells[key] = { clicked: true, text: "2h - "+enseignant };
+    
+            if (colIndex === 0) {
+                // Gérer la sélection de la ligne entière
+                const isRowFullyColored = [1, 2, 3, 4, 5, 6, 7].every(
+                    (col) => updatedCells[`${rowIndex}-${col}`] && updatedCells[`${rowIndex}-${col}`].clicked
+                );
+    
+                if (isRowFullyColored) {
+                    // Si toute la ligne est colorée, on réinitialise toutes les cases
+                    for (let i = 1; i <= 7; i++) {
+                        updatedCells[`${rowIndex}-${i}`] = { clicked: false, text: "" };
+                    }
+                } else {
+                    // Sinon, on colore toutes les cases de cette ligne
+                    for (let i = 1; i <= 7; i++) {
+                        updatedCells[`${rowIndex}-${i}`] = { clicked: true, text: `2h - ${enseignant}` };
+                    }
+                }
             } else {
-                updatedCells[key] = { clicked: false, text: "" };
+                // Inverser l'état de la cellule spécifique
+                if (!updatedCells[key]) {
+                    updatedCells[key] = { clicked: false, text: "" };
+                }
+    
+                const cell = updatedCells[key];
+                if (cell.text === "") {
+                    updatedCells[key] = { clicked: true, text: `2h - ${enseignant}` };
+                } else {
+                    updatedCells[key] = { clicked: false, text: "" };
+                }
             }
-        
+    
             return updatedCells;
         });
-        
     };
 
     const getColorClass = (colIndex) => {
