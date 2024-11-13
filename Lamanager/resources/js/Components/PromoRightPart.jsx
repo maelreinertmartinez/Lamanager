@@ -41,7 +41,7 @@ function PromoRightPart({ selectedAnnee }) {
             <ul className="promos-list">
                 {promos.map((promo) => (
                     <li key={promo.id}>
-                        <Link href={`/test?promo=${promo.nom}&annee_id=${selectedAnnee.id}`}>
+                        <Link href={`/test?promo_id=${promo.id}&annee_id=${selectedAnnee.id}`}>
                             <ChoixPromo className="but-class" title={promo.nom} />
                         </Link>
                     </li>

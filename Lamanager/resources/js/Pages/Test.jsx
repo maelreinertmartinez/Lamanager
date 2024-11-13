@@ -12,9 +12,10 @@ export default function Test() {
     
     // Récupérer le paramètre BUT depuis l'URL
     const urlParams = new URLSearchParams(window.location.search);
-    const butLevel = urlParams.get('promo')?.split(' ')[1]; // Extrait le numéro de "BUT 1"
+    const promoId = urlParams.get('promo_id');
     const anneeId = urlParams.get('annee_id');
-
+    console.log(promoId);
+    console.log(anneeId);
     const handleEnseignementSelect = (enseignement) => {
         if (enseignement && !selectedEnseignements.find(e => e.id === enseignement.id)) {
             setSelectedEnseignements([...selectedEnseignements, enseignement]);
@@ -27,7 +28,7 @@ export default function Test() {
 
     const ListeEnseignementsWithProps = () => (
         <ListeEnseignements 
-            butLevel={butLevel} 
+            promoId={promoId} 
             anneeId={anneeId}
             onEnseignementSelect={handleEnseignementSelect} 
         />
