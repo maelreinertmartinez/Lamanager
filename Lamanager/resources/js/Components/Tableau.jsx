@@ -3,11 +3,12 @@ import { CircleX } from "lucide-react";
 
 function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) {
     const [clickedCells, setClickedCells] = useState({});
+    const [activeTableau, setActiveTableau] = useState(null);
+    const [semaines, setSemaines] = useState([]);
+
     if (!selectedEnseignements || selectedEnseignements.length === 0) {
         return <h1 className="Select-enseignement">Veuillez selectionner un enseignement</h1>;
     }
-
-    const [activeTableau, setActiveTableau] = useState(null);
 
     useEffect(() => {
         if (selectedEnseignements.length > 0) {
@@ -20,6 +21,26 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
             setActiveTableau(nom);
     };
 
+    useEffect(() => {
+        const fetchSemaines = async () => {
+            try {
+                const response = await fetch('/api/semaines');
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des semaines');
+                }
+                const data = await response.json();
+                console.log("Données des semaines:", data);
+                
+                const numerosSemaines = data.map((semaine) => semaine.numero);
+                setSemaines(numerosSemaines);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des semaines :", error);
+            }
+        };
+    
+        fetchSemaines();
+    }, []);
+
     const handleCellClick = (rowIndex, colIndex) => {
         const key = `${rowIndex}-${colIndex}`;
         const params = new URLSearchParams(window.location.search);
@@ -29,24 +50,20 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
             const updatedCells = { ...prev };
     
             if (colIndex === 0) {
-                // Gérer la sélection de la ligne entière
                 const isRowFullyColored = [1, 2, 3, 4, 5, 6, 7].every(
                     (col) => updatedCells[`${rowIndex}-${col}`] && updatedCells[`${rowIndex}-${col}`].clicked
                 );
     
                 if (isRowFullyColored) {
-                    // Si toute la ligne est colorée, on réinitialise toutes les cases
                     for (let i = 1; i <= 7; i++) {
                         updatedCells[`${rowIndex}-${i}`] = { clicked: false, text: "" };
                     }
                 } else {
-                    // Sinon, on colore toutes les cases de cette ligne
                     for (let i = 1; i <= 7; i++) {
                         updatedCells[`${rowIndex}-${i}`] = { clicked: true, text: `2h - ${enseignant}` };
                     }
                 }
             } else {
-                // Inverser l'état de la cellule spécifique
                 if (!updatedCells[key]) {
                     updatedCells[key] = { clicked: false, text: "" };
                 }
@@ -107,21 +124,21 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10'].map((row, rowIndex) => (
-                                        <tr key={row}>
+                                    {semaines.map((semaine, rowIndex) => (
+                                        <tr key={semaine}>
                                             <td
                                                 className="border border-black p-2"
-                                                style={{ height: '70px', cursor: row !== 'Total' ? 'pointer' : 'default' }}
-                                                onClick={row !== 'Total' ? () => handleCellClick(rowIndex, 0): null}
+                                                style={{ height: '70px', cursor: 'pointer' }}
+                                                onClick={() => handleCellClick(rowIndex, 0)}
                                             >
-                                                {row}
+                                                {semaine}
                                             </td>
                                             {[1, 2, 3, 4, 5, 6, 7].map((colIndex) => (
                                                 <td
                                                     key={colIndex}
                                                     className={`border border-black p-2 ${clickedCells[`${rowIndex}-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''} `}
-                                                    style={{ cursor: row !== 'Total' ? 'pointer' : 'default', width: '13%' }}
-                                                    onClick={row !== 'Total' ? () => handleCellClick(rowIndex, colIndex): null}
+                                                    style={{ cursor: 'pointer', width: '13%' }}
+                                                    onClick={() => handleCellClick(rowIndex, colIndex)}
                                                 >
                                                     {clickedCells[`${rowIndex}-${colIndex}`]?.text && <h3>{clickedCells[`${rowIndex}-${colIndex}`].text}</h3>}
                                                 </td>
