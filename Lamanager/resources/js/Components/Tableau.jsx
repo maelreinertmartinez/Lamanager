@@ -9,6 +9,8 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     const [nbTP, setNbTP] = useState(0);
     const [nbTD, setNbTD] = useState(0);
     const [nbGroupe, setNbGroupe] = useState(0);
+    const [groupNames, setGroupNames] = useState([]);
+    
 
     if (!selectedEnseignements || selectedEnseignements.length === 0) {
         return <h1 className="Select-enseignement">Veuillez selectionner un enseignement</h1>;
@@ -28,19 +30,26 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     useEffect(() => {
         const fetchGroupes = async () => {
             try {
-                console.log("promo_id:", promoId);
                 const response = await fetch(`/api/groupes/${promoId}`);
                 const data = await response.json();
-                console.log("Données des groupes:", data);
 
-                // Compter les types "TP" et "TD"
                 const countTP = data.filter((groupe) => groupe.type === 'TP').length;
                 const countTD = data.filter((groupe) => groupe.type === 'TD').length;
                 const countGroupe = data.length;
-                // Mettez à jour les états
+
                 setNbTP(countTP);
                 setNbTD(countTD);
                 setNbGroupe(countGroupe);
+
+                const names = data
+                .sort((a, b) => {
+                  if (a.type === 'TD' && b.type === 'TP') return -1;
+                  if (a.type === 'TP' && b.type === 'TD') return 1;
+                  return a.nom.localeCompare(b.nom, 'fr', { numeric: true });
+                })
+                .map((groupe) => groupe.nom);
+
+                setGroupNames(names);
 
             } catch (error) {
                 console.error("Erreur lors de la récupération des groupes:", error);
@@ -146,11 +155,21 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                             <table className="w-full border-collapse border border-black">
                                 <thead>
                                     <tr>
-                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%`, height: '70px' }}>{enseignement.nom}</th>
-                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%` }}>CM</th>
+                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%`, height: '70px' }} rowSpan="2">{enseignement.nom}</th>
+                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%` }} rowSpan="2">CM</th>
                                         <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTD)}%` }} colSpan={nbTD}>TD</th>
                                         <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTP)}%` }} colSpan={nbTP}>TP</th>
                                     </tr>
+                                        {groupNames.map((nom, index) => (
+                                            <th
+                                                key={index}
+                                                className="border border-black p-2"
+                                                style={{ height: '70px', width: `${100 / (nbGroupe + 2)}%` }}
+                                            >
+                                                {nom}
+                                            </th>
+                                        ))}
+                                
                                 </thead>
                                 <tbody>
                                     {semaines.map((semaine, rowIndex) => (
