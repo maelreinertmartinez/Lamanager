@@ -155,7 +155,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                             <table className="w-full border-collapse border border-black">
                                 <thead>
                                     <tr>
-                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%`, height: '70px' }} rowSpan="2">{enseignement.nom}</th>
+                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%`, height: '100px' }} rowSpan="2">{enseignement.nom}</th>
                                         <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%` }} rowSpan="2">CM</th>
                                         <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTD)}%` }} colSpan={nbTD}>TD</th>
                                         <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTP)}%` }} colSpan={nbTP}>TP</th>
@@ -164,7 +164,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                             <th
                                                 key={index}
                                                 className="border border-black p-2"
-                                                style={{ height: '70px', width: `${100 / (nbGroupe + 2)}%` }}
+                                                style={{ height: '50px', width: `${100 / (nbGroupe + 2)}%` }}
                                             >
                                                 {nom}
                                             </th>
