@@ -26,6 +26,10 @@ Route::get('/test', function () {
     return Inertia::render('Test');
 })->name('test');
 
+Route::get('/loginapp', function () {
+    return Inertia::render('LoginApp');
+})->name('login');
+
 require __DIR__.'/auth.php';
 
 Route::get('/api/enseignements/{promo_id?}', [EnseignementController::class, 'index'])->name('api.enseignements');
