@@ -6,6 +6,10 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     const [activeTableau, setActiveTableau] = useState(null);
     const [semaines, setSemaines] = useState([]);
 
+    const [nbTP, setNbTP] = useState(0);
+    const [nbTD, setNbTD] = useState(0);
+    const [nbGroupe, setNbGroupe] = useState(0);
+
     if (!selectedEnseignements || selectedEnseignements.length === 0) {
         return <h1 className="Select-enseignement">Veuillez selectionner un enseignement</h1>;
     }
@@ -28,6 +32,16 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                 const response = await fetch(`/api/groupes/${promoId}`);
                 const data = await response.json();
                 console.log("Données des groupes:", data);
+
+                // Compter les types "TP" et "TD"
+                const countTP = data.filter((groupe) => groupe.type === 'TP').length;
+                const countTD = data.filter((groupe) => groupe.type === 'TD').length;
+                const countGroupe = data.length;
+                // Mettez à jour les états
+                setNbTP(countTP);
+                setNbTD(countTD);
+                setNbGroupe(countGroupe);
+
             } catch (error) {
                 console.error("Erreur lors de la récupération des groupes:", error);
             }
@@ -43,7 +57,6 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                     throw new Error('Erreur lors de la récupération des semaines');
                 }
                 const data = await response.json();
-                console.log("Données des semaines:", data);
                 
                 const numerosSemaines = data.map((semaine) => semaine.numero);
                 setSemaines(numerosSemaines);
@@ -66,16 +79,16 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
             const updatedCells = { ...prev };
     
             if (colIndex === 0) {
-                const isRowFullyColored = [1, 2, 3, 4, 5, 6, 7].every(
+                const isRowFullyColored = Array.from({ length: nbGroupe + 1 }, (_, index) => index + 1).every(
                     (col) => updatedCells[`${rowIndex}-${col}`] && updatedCells[`${rowIndex}-${col}`].clicked
                 );
     
                 if (isRowFullyColored) {
-                    for (let i = 1; i <= 7; i++) {
+                    for (let i = 1; i <= nbGroupe+1; i++) {
                         updatedCells[`${rowIndex}-${i}`] = { clicked: false, text: "" };
                     }
                 } else {
-                    for (let i = 1; i <= 7; i++) {
+                    for (let i = 1; i <= nbGroupe+1; i++) {
                         updatedCells[`${rowIndex}-${i}`] = { clicked: true, text: `2h - ${enseignant}` };
                     }
                 }
@@ -98,8 +111,8 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
 
     const getColorClass = (colIndex) => {
         if (colIndex === 1) return 'bg-yellow-300';
-        if (colIndex === 2 || colIndex === 3) return 'bg-red-300';
-        if (colIndex >= 4 && colIndex <= 7) return 'bg-blue-300';
+        if (colIndex >= 2 && colIndex <= nbTD+1) return 'bg-red-300';
+        if (colIndex >= nbTD+2 && colIndex <= nbGroupe+1) return 'bg-blue-300';
         return '';
     };
 
@@ -133,10 +146,10 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                             <table className="w-full border-collapse border border-black">
                                 <thead>
                                     <tr>
-                                        <th className="border border-black p-2" style={{ width: '70px', height: '70px' }}>{enseignement.nom}</th>
-                                        <th className="border border-black p-2" style={{ width: '13%' }}>CM</th>
-                                        <th className="border border-black p-2" style={{ width: '26%' }} colSpan="2">TD</th>
-                                        <th className="border border-black p-2" style={{ width: '52%' }} colSpan="4">TP</th>
+                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%`, height: '70px' }}>{enseignement.nom}</th>
+                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%` }}>CM</th>
+                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTD)}%` }} colSpan={nbTD}>TD</th>
+                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTP)}%` }} colSpan={nbTP}>TP</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,11 +162,11 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                             >
                                                 {semaine}
                                             </td>
-                                            {[1, 2, 3, 4, 5, 6, 7].map((colIndex) => (
+                                            {Array.from({ length: nbGroupe + 1 }, (_, index) => index + 1).map((colIndex) => (
                                                 <td
                                                     key={colIndex}
                                                     className={`border border-black p-2 ${clickedCells[`${rowIndex}-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''} `}
-                                                    style={{ cursor: 'pointer', width: '13%' }}
+                                                    style={{ cursor: 'pointer', width: `${100 / (nbGroupe+2)}%` }}
                                                     onClick={() => handleCellClick(rowIndex, colIndex)}
                                                 >
                                                     {clickedCells[`${rowIndex}-${colIndex}`]?.text && <h3>{clickedCells[`${rowIndex}-${colIndex}`].text}</h3>}
@@ -165,10 +178,10 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                             </table>
                             <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
                                 <colgroup>
-                                    <col style={{ width: '70px' }} />
-                                    <col style={{ width: '13%' }} />
-                                    <col style={{ width: '26%' }} />
-                                    <col style={{ width: '52%' }} />
+                                    <col style={{ width: `${100 / (nbGroupe + 2)}%` }} />
+                                    <col style={{ width: `${100 / (nbGroupe + 2)}%`}} />
+                                    <col style={{ width: `${100 / (nbGroupe + 2)*(nbTD)}%`  }} />
+                                    <col style={{ width: `${100 / (nbGroupe + 2)*(nbTP)}%`  }} />
                                 </colgroup>
                                 <tbody>
                                     <tr>
