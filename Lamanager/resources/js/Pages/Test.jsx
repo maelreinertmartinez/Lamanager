@@ -14,8 +14,6 @@ export default function Test() {
     const urlParams = new URLSearchParams(window.location.search);
     const promoId = urlParams.get('promo_id');
     const anneeId = urlParams.get('annee_id');
-    console.log(promoId);
-    console.log(anneeId);
     const handleEnseignementSelect = (enseignement) => {
         if (enseignement && !selectedEnseignements.some(e => e.id === enseignement.id)) {
             setSelectedEnseignements([...selectedEnseignements, enseignement]);
@@ -43,6 +41,7 @@ export default function Test() {
     // Rendu du composant Tableau avec les enseignements sélectionnés
     const TableauWithProps = () => (
         <Tableau 
+            promoId={promoId} 
             selectedEnseignements={selectedEnseignements}
             onRemoveEnseignement={handleRemoveEnseignement}
         />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CircleX } from "lucide-react";
 
-function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) {
+function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseignement }) {
     const [clickedCells, setClickedCells] = useState({});
     const [activeTableau, setActiveTableau] = useState(null);
     const [semaines, setSemaines] = useState([]);
@@ -20,6 +20,20 @@ function EnseignementComponent({ selectedEnseignements, onRemoveEnseignement }) 
     const handleTableauClick = (nom) => {
             setActiveTableau(nom);
     };
+
+    useEffect(() => {
+        const fetchGroupes = async () => {
+            try {
+                console.log("promo_id:", promoId);
+                const response = await fetch(`/api/groupes/${promoId}`);
+                const data = await response.json();
+                console.log("Données des groupes:", data);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des groupes:", error);
+            }
+        }
+        fetchGroupes();
+    }, []);
 
     useEffect(() => {
         const fetchSemaines = async () => {
