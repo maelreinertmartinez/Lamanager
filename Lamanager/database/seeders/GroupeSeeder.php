@@ -18,8 +18,16 @@ protected $liste_ind_tp = [1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,4,4,5,5,5,5,6,6,6
 16,16,16,16,16,16,17,17,17,17,18,18,18,18];
     public function run(): void
     {
+        // Create CM groups (1 per promo)
+        Groupe::factory()
+            ->count(18)  // 18 promos
+            ->state(new Sequence(fn($sequence) => [
+                'promo_id' => $sequence->index + 1,
+                'type' => 'CM',
+            ]))
+            ->create();
 
-        // Create Enseignant
+        // Create TD groups (existing code)
         Groupe::factory()
             ->count(42)
             ->state(new Sequence(fn()=>

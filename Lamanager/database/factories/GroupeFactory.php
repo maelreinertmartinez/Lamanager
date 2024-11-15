@@ -28,22 +28,24 @@ protected $td_liste = [
     "G7",
 ];
 
-    protected $tp_liste = [
-        "G1A",
-        "G1B",
-        "G2A",
-        "G2B",
-        "G3A",
-        "G3B",
-        "G4A",
-        "G4B",
-        "G5A",
-        "G5B",
-        "G6A",
-        "G6B",
-        "G7A",
-        "G7B",
-    ];
+protected $cm_liste = ["CM"];
+
+protected $tp_liste = [
+    "G1A",
+    "G1B",
+    "G2A",
+    "G2B",
+    "G3A",
+    "G3B",
+    "G4A",
+    "G4B",
+    "G5A",
+    "G5B",
+    "G6A",
+    "G6B",
+    "G7A",
+    "G7B",
+];
     /**
      * @throws RandomException
      */
@@ -68,6 +70,13 @@ protected $td_liste = [
                         $this->tp_liste=["G1A", "G1B", "G2A", "G2B", "G3A", "G3B", "G4A", "G4B", "G5A", "G5B", "G6A", "G6B", "G7A", "G7B"];
                     }
                     return $td;
+                }
+                if ($type=="CM"){
+                    $cm = array_pop($this->cm_liste);
+                    if (empty($this->cm_liste)){
+                        $this->cm_liste=["CM"];
+                    }
+                    return $cm;
                 }
                 return 0;
             }

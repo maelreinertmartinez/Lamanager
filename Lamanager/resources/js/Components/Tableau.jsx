@@ -14,6 +14,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     const [nbGroupe, setNbGroupe] = useState(0);
     const [groupNames, setGroupNames] = useState([]);
     const [enseignantCode, setEnseignantCode] = useState('');
+    const [nbCM, setNbCM] = useState(0);
     
 
     if (!selectedEnseignements || selectedEnseignements.length === 0) {
@@ -38,26 +39,27 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
             try {
                 const response = await fetch(`/api/groupes/${promoId}`);
                 const data = await response.json();
-
+    
+                const countCM = data.filter((groupe) => groupe.type === 'CM').length;
                 const countTP = data.filter((groupe) => groupe.type === 'TP').length;
                 const countTD = data.filter((groupe) => groupe.type === 'TD').length;
                 const countGroupe = data.length;
-                const ids = data.map((groupe) => groupe.id);
-                ids.unshift(0);
-                ids.unshift(0);
-
+    
+                const cmGroups = data.filter((groupe) => groupe.type === 'CM');
+                const tdGroups = data.filter((groupe) => groupe.type === 'TD');
+                const tpGroups = data.filter((groupe) => groupe.type === 'TP');
+    
+                // Supprimer les unshift(0) qui causent le problème
+                const ids = [...cmGroups.map(g => g.id), ...tdGroups.map(g => g.id), ...tpGroups.map(g => g.id)];
+                const names = [...cmGroups.map(g => g.nom), ...tdGroups.map(g => g.nom), ...tpGroups.map(g => g.nom)];
+    
+                setNbCM(countCM);
                 setNbTP(countTP);
                 setNbTD(countTD);
                 setNbGroupe(countGroupe);
                 setGroupesID(ids);
-
-                const names = data.map((groupe) => groupe.nom);
-
                 setGroupNames(names);
-
-
-                console.log(ids);
-
+    
             } catch (error) {
                 console.error("Erreur lors de la récupération des groupes:", error);
             }
@@ -116,56 +118,48 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
         fetchEnseignant();
     }, []);
 
-    const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantId, enseignementId, groupeID ) => {
+    const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantId, enseignementId, groupeID) => {
         const key = `${rowIndex}-${colIndex}`;
-
         const enseignantIdInt = Number(enseignantId);
 
         setClickedCells((prev) => {
             const updatedCells = { ...prev };
-    
-            if (colIndex === 0) {
-                const isRowFullyColored = Array.from({ length: nbGroupe + 1 }, (_, index) => index + 1).every(
-                    (col) => updatedCells[`${rowIndex}-${col}`] && updatedCells[`${rowIndex}-${col}`].clicked
-                );
-    
-                if (isRowFullyColored) {
-                    for (let i = 1; i <= nbGroupe + 1; i++) {
-                        updatedCells[`${rowIndex}-${i}`] = { clicked: false, text: "" };
-                        // Si on décoche toute la ligne, on doit supprimer la ligne de la BDD
-                        deleteCellFromDatabase(rowIndex, i);
-                    }
-                } else {
-                    for (let i = 1; i <= nbGroupe + 1; i++) {
-                        updatedCells[`${rowIndex}-${i}`] = { clicked: true, text: `2h - ${enseignantCode}` };
-                        // Si on coche une cellule, on doit l'ajouter à la BDD
-                        addCellToDatabase(rowIndex, i, enseignantCode);
-                    }
-                }
-            } else {
-                if (!updatedCells[key]) {
-                    updatedCells[key] = { clicked: false, text: "" };
-                }
-    
-                const cell = updatedCells[key];
-                if (cell.text === "") {
-                    updatedCells[key] = { clicked: true, text: `2h - ${enseignantCode}` };
-                    // Ajouter la cellule à la BDD
-                    addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupeID[colIndex]);
-                } else {
-                    updatedCells[key] = { clicked: false, text: "" };
-                    // Supprimer la cellule de la BDD
-                    deleteCellFromDatabase(rowIndex, colIndex);
-                }
+
+            if (!updatedCells[key]) {
+                updatedCells[key] = { clicked: false, text: "" };
             }
-    
+
+            const cell = updatedCells[key];
+            if (cell.text === "") {
+                updatedCells[key] = { clicked: true, text: `2h - ${enseignantCode}` };
+                // Ajouter la cellule à la BDD
+                addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupeID);
+            } else {
+                updatedCells[key] = { clicked: false, text: "" };
+                // Supprimer la cellule de la BDD
+                deleteCellFromDatabase(rowIndex, colIndex);
+            }
+
             return updatedCells;
         });
     };
     
     const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupeId) => {
         try {
-            console.log(semaineID, enseignantId, enseignementId, groupeId);
+            if (!semaineID || !enseignantId || !enseignementId || !groupeId) {
+                console.error('Paramètres invalides:', {
+                    semaineID,
+                    enseignantId,
+                    enseignementId,
+                    groupeId,
+                    'semaineID valide?': Boolean(semaineID),
+                    'enseignantId valide?': Boolean(enseignantId),
+                    'enseignementId valide?': Boolean(enseignementId),
+                    'groupeId valide?': Boolean(groupeId)
+                });
+                throw new Error('Tous les paramètres sont requis et doivent être non nuls');
+            }
+    
             const response = await axios.post('/api/cases', {
                 semaine_id: semaineID,
                 enseignant_id: enseignantId,
@@ -174,16 +168,17 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                 nombre_heure: 2,
             });
     
-            console.log('Cellule ajoutée à la BDD:', response.data);
+            return response.data;
         } catch (error) {
             console.error('Erreur lors de l\'ajout à la base de données:', error);
+            throw error;
         }
     };
 
     const getColorClass = (colIndex) => {
-        if (colIndex === 1) return 'bg-yellow-300';
-        if (colIndex >= 2 && colIndex <= nbTD+1) return 'bg-red-300';
-        if (colIndex >= nbTD+2 && colIndex <= nbGroupe+1) return 'bg-blue-300';
+        if (colIndex < nbCM) return 'bg-yellow-300';  // CM en jaune
+        if (colIndex >= nbCM && colIndex < nbCM + nbTD) return 'bg-red-300';  // TD
+        if (colIndex >= nbCM + nbTD) return 'bg-blue-300';  // TP
         return '';
     };
 
@@ -219,10 +214,11 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                 <thead>
                                     <tr>
                                         <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%`, height: '100px' }} rowSpan="2">{enseignement.nom}</th>
-                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%` }} rowSpan="2">CM</th>
+                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbCM)}%` }} colSpan={nbCM}>CM</th>
                                         <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTD)}%` }} colSpan={nbTD}>TD</th>
                                         <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTP)}%` }} colSpan={nbTP}>TP</th>
                                     </tr>
+                                    <tr>
                                         {groupNames.map((nom, index) => (
                                             <th
                                                 key={index}
@@ -232,7 +228,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                                 {nom}
                                             </th>
                                         ))}
-                                
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {semaines.map((semaine, rowIndex) => (
@@ -244,14 +240,21 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                             >
                                                 {semaine}
                                             </td>
-                                            {Array.from({ length: nbGroupe + 1 }, (_, index) => index + 1).map((colIndex) => (
+                                            {Array.from({ length: nbGroupe }, (_, index) => (
                                                 <td
-                                                    key={colIndex}
-                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''}`}
+                                                    key={index}
+                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${index}`]?.clicked ? getColorClass(index) : ''}`}
                                                     style={{ cursor: 'pointer', width: `${100 / (nbGroupe+2)}%` }}
-                                                    onClick={() => handleCellClick(rowIndex, colIndex, semainesID, enseignantId, enseignement.id, groupesID)}
+                                                    onClick={() => handleCellClick(
+                                                        rowIndex, 
+                                                        index, 
+                                                        semainesID[rowIndex], 
+                                                        enseignantId, 
+                                                        enseignement.id, 
+                                                        groupesID[index]
+                                                    )}
                                                 >
-                                                    {clickedCells[`${rowIndex}-${colIndex}`]?.text && <h3>{clickedCells[`${rowIndex}-${colIndex}`].text}</h3>}
+                                                    {clickedCells[`${rowIndex}-${index}`]?.text && <h3>{clickedCells[`${rowIndex}-${index}`].text}</h3>}
                                                 </td>
                                             ))}
                                         </tr>

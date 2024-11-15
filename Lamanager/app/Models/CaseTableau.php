@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CaseTableau extends Model
 {
+
+    protected $table = 'case_tableau';
+
     protected $fillable = [
         'semaine_id',
         'enseignant_id',
