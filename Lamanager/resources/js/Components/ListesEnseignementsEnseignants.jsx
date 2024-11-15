@@ -47,7 +47,7 @@ function ListesEnseignementsEnseignants({ promoId, anneeId, onEnseignementSelect
 
     const updateUrlWithEnseignant = (enseignant) => {
         const url = new URL(window.location);
-        url.searchParams.set('enseignant', enseignant.code);
+        url.searchParams.set('enseignant', enseignant.id);
         window.history.pushState({}, '', url);
     };
 

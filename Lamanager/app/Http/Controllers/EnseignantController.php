@@ -9,9 +9,17 @@ class EnseignantController extends Controller
 {
     public function index(): JsonResponse
     {
-        // Récupère tous les enseignants avec seulement les colonnes nécessaires
         $enseignants = Enseignant::select('id', 'code', 'nom', 'prenom')->get();
 
         return response()->json($enseignants);
     }
+    public function showCode($id): JsonResponse
+    {
+        $enseignant = Enseignant::where('id', $id)
+                                ->select('code')
+                                ->first();
+    
+        return response()->json($enseignant);
+    }
+    
 }
