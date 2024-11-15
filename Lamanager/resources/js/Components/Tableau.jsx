@@ -125,19 +125,48 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
         setClickedCells((prev) => {
             const updatedCells = { ...prev };
 
-            if (!updatedCells[key]) {
-                updatedCells[key] = { clicked: false, text: "" };
-            }
+            // Si on clique sur une semaine (première colonne)
+            if (colIndex === 0) {
+                // Vérifie si la ligne est déjà entièrement cochée
+                const isRowFullyColored = Array.from({ length: nbGroupe }, (_, index) => index).every(
+                    (col) => prev[`${rowIndex}-${col}`]?.clicked
+                );
 
-            const cell = updatedCells[key];
-            if (cell.text === "") {
-                updatedCells[key] = { clicked: true, text: `2h - ${enseignantCode}` };
-                // Ajouter la cellule à la BDD
-                addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                // Pour chaque groupe (CM, TD, TP)
+                for (let i = 0; i < groupesID.length; i++) {
+                    const cellKey = `${rowIndex}-${i}`;
+                    if (isRowFullyColored) {
+                        // Décocher et supprimer de la BDD
+                        updatedCells[cellKey] = { clicked: false, text: "" };
+                        try {
+                            deleteCellFromDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i]);
+                        } catch (error) {
+                            console.error('Erreur lors de la suppression:', error);
+                        }
+                    } else {
+                        // Cocher et ajouter à la BDD
+                        updatedCells[cellKey] = { clicked: true, text: `2h - ${enseignantCode}` };
+                        try {
+                            addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i]);
+                        } catch (error) {
+                            console.error('Erreur lors de l\'ajout:', error);
+                        }
+                    }
+                }
             } else {
-                updatedCells[key] = { clicked: false, text: "" };
-                // Supprimer la cellule de la BDD en utilisant les mêmes paramètres que pour l'ajout
-                deleteCellFromDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                // Logique existante pour le clic sur une cellule individuelle
+                if (!updatedCells[key]) {
+                    updatedCells[key] = { clicked: false, text: "" };
+                }
+
+                const cell = updatedCells[key];
+                if (cell.text === "") {
+                    updatedCells[key] = { clicked: true, text: `2h - ${enseignantCode}` };
+                    addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                } else {
+                    updatedCells[key] = { clicked: false, text: "" };
+                    deleteCellFromDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                }
             }
 
             return updatedCells;
@@ -165,7 +194,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                 enseignant_id: enseignantId,
                 enseignement_id: enseignementId,
                 groupe_id: groupeId,
-                nombre_heure: 2,
+                nombre_heure: 2 // Ajout du nombre d'heures
             });
     
             return response.data;
