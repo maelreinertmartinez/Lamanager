@@ -32,4 +32,15 @@ class CaseController extends Controller
 
         return response()->json($case);
     }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $case = CaseTableau::where('semaine_id', $request->semaine_id)
+                          ->where('enseignant_id', $request->enseignant_id)
+                          ->where('enseignement_id', $request->enseignement_id)
+                          ->where('groupe_id', $request->groupe_id)
+                          ->delete();
+
+        return response()->json(['message' => 'Case supprimée avec succès']);
+    }
 }

@@ -45,3 +45,5 @@ Route::get('/api/cases/{semaine_id}/{enseignant_id}/{groupe_id}', [CaseControlle
 
 Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
 Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
+
+Route::delete('/api/cases', [CaseController::class, 'destroy']);

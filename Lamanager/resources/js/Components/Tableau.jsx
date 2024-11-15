@@ -133,11 +133,11 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
             if (cell.text === "") {
                 updatedCells[key] = { clicked: true, text: `2h - ${enseignantCode}` };
                 // Ajouter la cellule à la BDD
-                addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupeID);
+                addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
             } else {
                 updatedCells[key] = { clicked: false, text: "" };
-                // Supprimer la cellule de la BDD
-                deleteCellFromDatabase(rowIndex, colIndex);
+                // Supprimer la cellule de la BDD en utilisant les mêmes paramètres que pour l'ajout
+                deleteCellFromDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
             }
 
             return updatedCells;
@@ -171,6 +171,23 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
             return response.data;
         } catch (error) {
             console.error('Erreur lors de l\'ajout à la base de données:', error);
+            throw error;
+        }
+    };
+
+    const deleteCellFromDatabase = async (semaineId, enseignantId, enseignementId, groupeId) => {
+        try {
+            const response = await axios.delete('/api/cases', {
+                data: {
+                    semaine_id: semaineId,
+                    enseignant_id: enseignantId,
+                    enseignement_id: enseignementId,
+                    groupe_id: groupeId
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la suppression de la base de données:', error);
             throw error;
         }
     };
