@@ -39,3 +39,5 @@ Route::get('/api/promos/{annee_id}', [PromoController::class, 'index'])->name('a
 Route::get('/api/enseignements/{promo_id}/{annee_id}', [EnseignementController::class, 'index']);
 Route::get('/api/promo/{id}', [PromoController::class, 'getPromo'])->name('api.promo.get');
 Route::get('/api/groupes/{promo_id}', [GroupeController::class, 'index'])->name('api.groupes');
+
+Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
