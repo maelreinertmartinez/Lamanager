@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EnseignementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -26,8 +27,8 @@ Route::get('/test', function () {
     return Inertia::render('Test');
 })->name('test');
 
-Route::get('/loginapp', function () {
-    return Inertia::render('LoginApp');
+Route::get('/login', function () {
+    return Inertia::render('Login');
 })->name('login');
 
 require __DIR__.'/auth.php';
@@ -35,3 +36,7 @@ require __DIR__.'/auth.php';
 Route::get('/api/enseignements/{promo_id?}', [EnseignementController::class, 'index'])->name('api.enseignements');
 Route::get('/api/annees', [AnneeController::class, 'index'])->name('api.annees');
 Route::get('/api/promos/{annee_id}', [PromoController::class, 'index'])->name('api.promos');
+
+Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
+
+

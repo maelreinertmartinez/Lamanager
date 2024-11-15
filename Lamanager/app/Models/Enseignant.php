@@ -1,14 +1,14 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 
-class Enseignant extends Model
+class Enseignant extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
 
     protected $fillable = [
         'role_id',
@@ -18,6 +18,10 @@ class Enseignant extends Model
         'nom',
         'prenom',
         'mail',
+    ];
+
+    protected $hidden = [
+        'mot_de_passe',
     ];
 
     public function role(): BelongsTo
