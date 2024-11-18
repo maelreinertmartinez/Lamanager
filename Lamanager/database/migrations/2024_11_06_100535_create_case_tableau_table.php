@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('enseignement_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('groupe_id')->nullable()->constrained()->onDelete('set null');
             $table->integer('nombre_heure');
+            $table->integer('nombre_minute');
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ class CaseController extends Controller
                                 ->where('enseignement_id', $enseignement_id)
                                 ->where('groupe_id', $groupe_id)
                                 ->select('nombre_heure')
+                                ->select('nombre_minute')
                                 ->get();
 
         return response()->json($case);
@@ -28,6 +29,7 @@ class CaseController extends Controller
         $case->enseignement_id = $request->enseignement_id;
         $case->groupe_id = $request->groupe_id;
         $case->nombre_heure = $request->nombre_heure;
+        $case->nombre_minute = $request->nombre_minute;
         $case->save();
 
         return response()->json($case);
