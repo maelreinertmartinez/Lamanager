@@ -3,8 +3,13 @@ import logo from '../../img/testlogo.png';
 import { Link } from '@inertiajs/react';
 import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUser, Download } from "lucide-react";
 import axios from 'axios';
+import ImportPopup from "@/Components/ImportPopup.jsx";
 
 function BarreOutils() {
+    const [showCustomPopup, setShowCustomPopup] = useState(false);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [showEditPopup, setShowEditPopup] = useState(false);
+    const [showAddPopup, setShowAddPopup] = useState(false);
     const [promoName, setPromoName] = useState('');
     const params = new URLSearchParams(window.location.search);
     const promoId = params.get('promo_id');
@@ -37,7 +42,7 @@ function BarreOutils() {
             </div>
             <div className="BarreOutils">
                 <ul className="barre-outils-list">
-                    <li><Table /></li>
+                    <li onClick={() => setShowCustomPopup(true)}><Table/></li>
                     <li><ChartColumnIncreasing /></li>
                     <li><MousePointer2 /></li>
                     <li><Settings /></li>
@@ -46,6 +51,43 @@ function BarreOutils() {
                     <li><Download /></li>
                 </ul>
             </div>
+            {showCustomPopup && (
+                <ImportPopup
+                    onClose={() => setShowCustomPopup(false)}
+                />
+            )}
+            {/* Popup de suppression */}
+        {showDeletePopup && (
+            <div className="popup-overlay">
+            <div className="popup-content">
+                <h2>Suppression</h2>
+                <p>Message de test pour la suppression</p>
+                <button onClick={() => setShowDeletePopup(false)}>Fermer</button>
+            </div>
+            </div>
+        )}
+
+        {/* Popup d'édition */}
+        {showEditPopup && (
+            <div className="popup-overlay">
+            <div className="popup-content">
+                <h2>Édition</h2>
+                <p>Message de test pour l'édition</p>
+                <button onClick={() => setShowEditPopup(false)}>Fermer</button>
+            </div>
+            </div>
+        )}
+
+            {/* Popup d'ajout */}
+            {showAddPopup && (
+                <div className="popup-overlay">
+                <div className="popup-content">
+                    <h2>Ajout</h2>
+                    <p>Message de test pour l'ajout</p>
+                    <button onClick={() => setShowAddPopup(false)}>Fermer</button>
+                </div>
+                </div>
+        )}
         </>
     );
 }
