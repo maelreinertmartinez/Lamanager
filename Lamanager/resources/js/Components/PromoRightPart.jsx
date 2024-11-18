@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import ChoixPromo from "./ChoixPromo";
+import CustomPopup from "@/Components/CustomPopup.jsx";
 import BoutonModificationsPromos from "./BoutonsModificationsPromos";
 import { Trash2, Edit } from "lucide-react";
 import { Link } from '@inertiajs/react';
@@ -12,11 +13,12 @@ function PromoRightPart({ selectedAnnee }) {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [showAddPopup, setShowAddPopup] = useState(false);
+    const [showCustomPopup, setShowCustomPopup] = useState(false);
 
     useEffect(() => {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
-            
+
             try {
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
                 setPromos(response.data);
@@ -44,23 +46,27 @@ function PromoRightPart({ selectedAnnee }) {
                         </Link>
                     </li>
                 ))}
-                <li onClick={() => setShowAddPopup(true)}>
-                    <ChoixPromo className="but-class" title="+"/>
-                </li>
+                <li onClick={() => setShowCustomPopup(true)}><ChoixPromo className="but-class" title="+"/></li>
             </ul>
         </div>
         <div className="ModificationsPromos">
-            <BoutonModificationsPromos 
-            className="btn-modif-class" 
-            Icon={Trash2} 
+            <BoutonModificationsPromos
+            className="btn-modif-class"
+            Icon={Trash2}
             onClick={() => setShowDeletePopup(true)}
             />
-            <BoutonModificationsPromos 
-            className="btn-modif-class" 
-            Icon={Edit} 
+            <BoutonModificationsPromos
+            className="btn-modif-class"
+            Icon={Edit}
             onClick={() => setShowEditPopup(true)}
             />
         </div>
+
+            {showCustomPopup && (
+                <CustomPopup
+                    onClose={() => setShowCustomPopup(false)}
+                />
+            )}
 
         {/* Popup de suppression */}
         {showDeletePopup && (

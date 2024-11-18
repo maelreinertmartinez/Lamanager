@@ -26,6 +26,8 @@ Route::get('/test', function () {
     return Inertia::render('Test');
 })->name('test');
 
+
+
 require __DIR__.'/auth.php';
 
 Route::get('/api/enseignements/{promo_id?}', [EnseignementController::class, 'index'])->name('api.enseignements');
