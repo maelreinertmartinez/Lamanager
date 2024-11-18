@@ -7,8 +7,8 @@
     margin: 0 auto;
     text-align: center;
   }
-  
-  
+
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -376,14 +376,14 @@ p {
     display: flex;
     position: absolute;
     top: 0;
-    left: 0;  
+    left: 0;
     flex-wrap: wrap;
-    gap: 10px;               
+    gap: 10px;
 }
 
 .liste-ressources div {
-    display: flex;         
-    align-items: center;     
+    display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 14px 20px;
     border-bottom-left-radius: 2vh;
@@ -403,7 +403,7 @@ p {
   transition: background-color 0.3s ease;
 }
 .tab-item.active {
-  background-color: #e0e0e0; 
+  background-color: #e0e0e0;
 }
 
 .circle-x {
@@ -412,4 +412,122 @@ p {
 
 .circle-x:hover {
   color: #564787;
+}
+
+
+
+.custom-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.custom-popup-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 500px;
+    width: 900px;
+    border: 2px solid #000000;
+}
+
+.custom-popup-content h2 {
+    margin-top: 0;
+    color: #564787;
+}
+
+.custom-popup-content button {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #564787;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-popup-content button:hover {
+    background-color: #453a6b;
+}
+
+.custom-promo-name-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10%;
+}
+
+.custom-promo-name-container input {
+    width: 200px;
+    padding: 5px;
+    border-radius: 12px;
+    border: 2px solid #564787;
+    height: 50px;
+
+}
+
+.custom-input-container {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.custom-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.custom-input-group label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.custom-input-group input[type="checkbox"] {
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.custom-input-group input {
+    width: 200px;
+    padding: 5px;
+    border-radius: 12px;
+    border: 2px solid #564787;
+}
+
+.custom-button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.custom-button-container button {
+    margin-top: 12%;
+    padding: 8px 16px;
+    background-color: #564787;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+}
+
+.custom-button-container button:hover {
+    background-color: #453a6b;
 }
