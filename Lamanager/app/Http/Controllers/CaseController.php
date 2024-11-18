@@ -8,15 +8,11 @@ use Illuminate\Http\JsonResponse;
 
 class CaseController extends Controller
 {
-    public function index($semaine_id, $enseignant_id, $enseignement_id, $groupe_id): JsonResponse
+    public function index($enseignement_id): JsonResponse
     {
-        $case = CaseTableau::where('semaine_id', $semaine_id)
-                                ->where('enseignant_id', $enseignant_id)
-                                ->where('enseignement_id', $enseignement_id)
-                                ->where('groupe_id', $groupe_id)
-                                ->select('nombre_heure')
-                                ->select('nombre_minute')
-                                ->get();
+        $case = CaseTableau::where('enseignement_id', $enseignement_id)
+            ->select('semaine_id', 'enseignant_id', 'groupe_id', 'nombre_heure', 'nombre_minute')
+            ->get();
 
         return response()->json($case);
     }

@@ -16,6 +16,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     const [nbCM, setNbCM] = useState(0);
     const [heures, setHeures] = useState(0);
     const [minutes, setMinutes] = useState(0);
+    const [casesData, setCasesData] = useState([]);
 
     useEffect(() => {
         if (selectedTime) {
@@ -160,12 +161,6 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                     } else {
                         // Cocher et ajouter à la BDD
                         updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
-                        console.log("Ajout dans la BDD:", {
-                            semaineId: semainesID[rowIndex],
-                            enseignantId: enseignantIdInt,
-                            enseignementId,
-                            groupeId: groupesID[i]
-                        });
                         try {
                             addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i]);
                         } catch (error) {
@@ -176,24 +171,23 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
             } else {
                 // Clic sur une cellule individuelle (CM, TD, TP)
                 const key = `${rowIndex}-${colIndex}`;
-                if (!updatedCells[key]) {
-                    updatedCells[key] = { clicked: false, text: "" };
-                }
+                const isCurrentlyClicked = prev[key]?.clicked;
     
-                const cell = updatedCells[key];
-                if (cell.text === "") {
-                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
-                    try {
-                        addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
-                    } catch (error) {
-                        console.error('Erreur lors de l\'ajout:', error);
-                    }
-                } else {
+                if (isCurrentlyClicked) {
+                    // Si la cellule est déjà cochée, on la décoche
                     updatedCells[key] = { clicked: false, text: "" };
                     try {
                         deleteCellFromDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
                     } catch (error) {
                         console.error('Erreur lors de la suppression:', error);
+                    }
+                } else {
+                    // Si la cellule n'est pas cochée, on la coche
+                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
+                    try {
+                        addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                    } catch (error) {
+                        console.error('Erreur lors de l\'ajout:', error);
                     }
                 }
             }
@@ -211,17 +205,12 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                     semaineID,
                     enseignantId,
                     enseignementId,
-                    groupeId,
-                    'semaineID valide?': Boolean(semaineID),
-                    'enseignantId valide?': Boolean(enseignantId),
-                    'enseignementId valide?': Boolean(enseignementId),
-                    'groupeId valide?': Boolean(groupeId)
+                    groupeId
                 });
                 throw new Error('Tous les paramètres sont requis et doivent être non nuls');
             }
     
-    
-            const response = await axios.post('/api/cases', {
+            const response = await axios.post('api/cases', {
                 semaine_id: semaineID,
                 enseignant_id: enseignantId,
                 enseignement_id: enseignementId,
@@ -261,6 +250,52 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
         return '';
     };
 
+    useEffect(() => {
+        const fetchCases = async () => {
+            if (selectedEnseignements.length > 0) {
+                try {
+                    const enseignementId = selectedEnseignements.find(e => e.nom === activeTableau)?.id;
+                    if (enseignementId) {
+                        const response = await axios.get(`/cases/${enseignementId}`);
+                        if (response.data) {
+                            setCasesData(response.data);
+                            // Update clickedCells state based on the fetched data
+                            const newClickedCells = {};
+                            
+                            // Récupérer tous les codes des enseignants en une seule fois
+                            const enseignantIds = [...new Set(response.data.map(item => item.enseignant_id))];
+                            const codesResponse = await Promise.all(
+                                enseignantIds.map(id => axios.get(`/api/enseignant/${id}`))
+                            );
+                            const enseignantCodes = Object.fromEntries(
+                                enseignantIds.map((id, index) => [id, codesResponse[index].data.code])
+                            );
+
+                            response.data.forEach(caseItem => {
+                                const semaineIndex = semainesID.indexOf(caseItem.semaine_id);
+                                const groupeIndex = groupesID.indexOf(caseItem.groupe_id);
+                                if (semaineIndex !== -1 && groupeIndex !== -1) {
+                                    const key = `${semaineIndex}-${groupeIndex}`;
+                                    newClickedCells[key] = {
+                                        clicked: true,
+                                        text: `${caseItem.nombre_heure}h${caseItem.nombre_minute ? caseItem.nombre_minute : ''}  - ${enseignantCodes[caseItem.enseignant_id]}`
+                                    };
+                                }
+                            });
+                            setClickedCells(newClickedCells);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Erreur lors de la récupération des cases:", error);
+                    if (error.response?.status === 404) {
+                        console.log("Aucune case trouvée pour cet enseignement");
+                    }
+                }
+            }
+        };
+
+        fetchCases();
+    }, [activeTableau, semainesID, groupesID, enseignantCode, selectedEnseignements]);
 
     return (
         <>
