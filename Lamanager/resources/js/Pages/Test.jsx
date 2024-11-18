@@ -9,7 +9,7 @@ import BarreOutils from '@/Components/BarreOutils';
 export default function Test() {
     const [selectedEnseignements, setSelectedEnseignements] = React.useState([]);
     const [selectedEnseignant, setSelectedEnseignant] = React.useState(null);
-
+    const [selectedTime, setSelectedTime] = React.useState('02:00');
     // Récupérer le paramètre BUT depuis l'URL
     const urlParams = new URLSearchParams(window.location.search);
     const promoId = urlParams.get('promo_id');
@@ -28,6 +28,11 @@ export default function Test() {
     const handleEnseignantSelect = (enseignant) => {
         setSelectedEnseignant(enseignant);
     };
+
+    const handleTimeSelect = (time) => {
+        setSelectedTime(time);
+    };;
+
     const ListesEnseignementsEnseignantsWithProps = () => (
         <ListesEnseignementsEnseignants 
             promoId={promoId} 
@@ -35,6 +40,8 @@ export default function Test() {
             onEnseignementSelect={handleEnseignementSelect} 
             selectedEnseignant={selectedEnseignant}
             onEnseignantSelect={handleEnseignantSelect}
+            onTimeSelect={handleTimeSelect}
+            defaultTime={selectedTime}
         />
     );
 
@@ -44,6 +51,7 @@ export default function Test() {
             promoId={promoId} 
             selectedEnseignements={selectedEnseignements}
             onRemoveEnseignement={handleRemoveEnseignement}
+            selectedTime={selectedTime}
         />
     );
 

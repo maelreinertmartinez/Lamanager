@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CircleX } from "lucide-react";
 
-function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseignement }) {
+function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseignement, selectedTime }) {
     const [clickedCells, setClickedCells] = useState({});
     const [activeTableau, setActiveTableau] = useState(null);
     const [semainesID, setSemainesID] = useState([]);
     const [semaines, setSemaines] = useState([]);
-
     const [groupesID, setGroupesID] = useState(0);
     const [nbTP, setNbTP] = useState(0);
     const [nbTD, setNbTD] = useState(0);
@@ -15,6 +14,16 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     const [groupNames, setGroupNames] = useState([]);
     const [enseignantCode, setEnseignantCode] = useState('');
     const [nbCM, setNbCM] = useState(0);
+    const [heures, setHeures] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+
+    useEffect(() => {
+        if (selectedTime) {
+            const [h, m] = selectedTime.split(':').map(Number);
+            setHeures(h);
+            setMinutes(m);
+        }
+    }, [selectedTime]);
     
 
     if (!selectedEnseignements || selectedEnseignements.length === 0) {
@@ -150,7 +159,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                         }
                     } else {
                         // Cocher et ajouter à la BDD
-                        updatedCells[cellKey] = { clicked: true, text: `2h - ${enseignantCode}` };
+                        updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
                         console.log("Ajout dans la BDD:", {
                             semaineId: semainesID[rowIndex],
                             enseignantId: enseignantIdInt,
@@ -173,7 +182,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     
                 const cell = updatedCells[key];
                 if (cell.text === "") {
-                    updatedCells[key] = { clicked: true, text: `2h - ${enseignantCode}` };
+                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
                     try {
                         addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
                     } catch (error) {
@@ -211,12 +220,14 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                 throw new Error('Tous les paramètres sont requis et doivent être non nuls');
             }
     
+    
             const response = await axios.post('/api/cases', {
                 semaine_id: semaineID,
                 enseignant_id: enseignantId,
                 enseignement_id: enseignementId,
                 groupe_id: groupeId,
-                nombre_heure: 2 // Ajout du nombre d'heures
+                nombre_heure: heures,
+                nombre_minute: minutes
             });
     
             return response.data;
