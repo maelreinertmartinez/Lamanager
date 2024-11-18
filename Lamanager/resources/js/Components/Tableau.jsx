@@ -154,7 +154,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                         // Décocher et supprimer de la BDD
                         updatedCells[cellKey] = { clicked: false, text: "" };
                         try {
-                            deleteCellFromDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i]);
+                            deleteCellFromDatabase(semainesID[rowIndex], enseignementId, groupesID[i]);
                         } catch (error) {
                             console.error('Erreur lors de la suppression:', error);
                         }
@@ -177,7 +177,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                     // Si la cellule est déjà cochée, on la décoche
                     updatedCells[key] = { clicked: false, text: "" };
                     try {
-                        deleteCellFromDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                        deleteCellFromDatabase(semaineId, enseignementId, groupeID);
                     } catch (error) {
                         console.error('Erreur lors de la suppression:', error);
                     }
@@ -226,12 +226,11 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
         }
     };
 
-    const deleteCellFromDatabase = async (semaineId, enseignantId, enseignementId, groupeId) => {
+    const deleteCellFromDatabase = async (semaineId, enseignementId, groupeId) => {
         try {
             const response = await axios.delete('/api/cases', {
                 data: {
                     semaine_id: semaineId,
-                    enseignant_id: enseignantId,
                     enseignement_id: enseignementId,
                     groupe_id: groupeId
                 }
