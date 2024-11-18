@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CircleX } from "lucide-react";
+import { getColorClass} from '@/utils';
+import { handleCellClick } from '@/utils';
 
 function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseignement, selectedTime }) {
     const [clickedCells, setClickedCells] = useState({});
@@ -30,8 +32,6 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     if (!selectedEnseignements || selectedEnseignements.length === 0) {
         return <h1 className="Select-enseignement">Veuillez selectionner un enseignement</h1>;
     }
-
-    const idEnseignements = selectedEnseignements.map((enseignement) => enseignement.id);
 
     useEffect(() => {
         if (selectedEnseignements.length > 0) {
@@ -127,133 +127,6 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     
         fetchEnseignant();
     }, []);
-
-    const handleCellClick = async (
-        rowIndex, 
-        colIndex, 
-        semaineId, 
-        enseignantId, 
-        enseignementId, 
-        groupeID, 
-        isSemaineColumn
-    ) => {
-        const enseignantIdInt = Number(enseignantId);
-    
-        setClickedCells((prev) => {
-            const updatedCells = { ...prev };
-    
-            if (isSemaineColumn) {
-                // Clic sur la colonne semaine
-                const isRowFullyColored = Array.from({ length: nbGroupe }, (_, index) => index).every(
-                    (col) => prev[`${rowIndex}-${col}`]?.clicked
-                );
-
-                for (let i = 0; i < groupesID.length; i++) {
-                    try {
-                        deleteCellFromDatabase(semainesID[rowIndex], enseignementId, groupesID[i]);
-                    } catch (error) {
-                    }
-                }
-                
-                for (let i = 0; i < groupesID.length; i++) {
-                    const cellKey = `${rowIndex}-${i}`;
-                    if (isRowFullyColored) {
-                        // Décocher et supprimer de la BDD
-                        updatedCells[cellKey] = { clicked: false, text: "" };
-                        try {
-                        } catch (error) {
-                            console.error('Erreur lors de la suppression:', error);
-                        }
-                    } else {
-                        // Cocher et ajouter à la BDD
-                        updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
-                        try {
-                            addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i]);
-                        } catch (error) {
-                            console.error('Erreur lors de l\'ajout:', error);
-                        }
-                    }
-                }
-            } else {
-                // Clic sur une cellule individuelle (CM, TD, TP)
-                const key = `${rowIndex}-${colIndex}`;
-                const isCurrentlyClicked = prev[key]?.clicked;
-    
-                if (isCurrentlyClicked) {
-                    // Si la cellule est déjà cochée, on la décoche
-                    updatedCells[key] = { clicked: false, text: "" };
-                    try {
-                        deleteCellFromDatabase(semaineId, enseignementId, groupeID);
-                    } catch (error) {
-                        console.error('Erreur lors de la suppression:', error);
-                    }
-                } else {
-                    // Si la cellule n'est pas cochée, on la coche
-                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
-                    try {
-                        addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
-                    } catch (error) {
-                        console.error('Erreur lors de l\'ajout:', error);
-                    }
-                }
-            }
-    
-            return updatedCells;
-        });
-    };
-    
-    
-    
-    const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupeId) => {
-        try {
-            if (!semaineID || !enseignantId || !enseignementId || !groupeId) {
-                console.error('Paramètres invalides:', {
-                    semaineID,
-                    enseignantId,
-                    enseignementId,
-                    groupeId
-                });
-                throw new Error('Tous les paramètres sont requis et doivent être non nuls');
-            }
-    
-            const response = await axios.post('api/cases', {
-                semaine_id: semaineID,
-                enseignant_id: enseignantId,
-                enseignement_id: enseignementId,
-                groupe_id: groupeId,
-                nombre_heure: heures,
-                nombre_minute: minutes
-            });
-    
-            return response.data;
-        } catch (error) {
-            console.error('Erreur lors de l\'ajout à la base de données:', error);
-            throw error;
-        }
-    };
-
-    const deleteCellFromDatabase = async (semaineId, enseignementId, groupeId) => {
-        try {
-            const response = await axios.delete('/api/cases', {
-                data: {
-                    semaine_id: semaineId,
-                    enseignement_id: enseignementId,
-                    groupe_id: groupeId
-                }
-            });
-            return response.data;
-        } catch (error) {
-            console.error('Erreur lors de la suppression de la base de données:', error);
-            throw error;
-        }
-    };
-
-    const getColorClass = (colIndex) => {
-        if (colIndex < nbCM) return 'bg-yellow-300';  // CM en jaune
-        if (colIndex >= nbCM && colIndex < nbCM + nbTD) return 'bg-red-300';  // TD
-        if (colIndex >= nbCM + nbTD) return 'bg-blue-300';  // TP
-        return '';
-    };
 
     useEffect(() => {
         const fetchCases = async () => {
@@ -355,24 +228,17 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                             <td
                                                 className="border border-black p-2"
                                                 style={{ height: '70px', cursor: 'pointer' }}
-                                                onClick={() => handleCellClick(rowIndex, 0, null, enseignantId, enseignement.id, null, true)}
+                                                onClick={() => handleCellClick(rowIndex, 0, null, enseignantId, enseignement.id, null, true, nbGroupe, groupesID, semainesID, enseignantCode, heures, minutes, setClickedCells)}
                                             >
                                                 {semaine}
                                             </td>
                                             {Array.from({ length: nbGroupe }, (_, index) => (
                                                 <td
                                                     key={index}
-                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${index}`]?.clicked ? getColorClass(index) : ''}`}
+                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${index}`]?.clicked ? getColorClass(index, nbCM, nbTD) : ''}`}
                                                     style={{ cursor: 'pointer', width: `${100 / (nbGroupe+2)}%` }}
-                                                    onClick={() => handleCellClick(
-                                                        rowIndex, 
-                                                        index, 
-                                                        semainesID[rowIndex], 
-                                                        enseignantId, 
-                                                        enseignement.id, 
-                                                        groupesID[index],
-                                                        false
-                                                    )}
+                                                    onClick={() =>
+                                                        handleCellClick(rowIndex, index, semainesID[rowIndex], enseignantId, enseignement.id, groupesID[index], false, nbGroupe, groupesID, semainesID, enseignantCode, heures,minutes, setClickedCells)}
                                                 >
                                                     {clickedCells[`${rowIndex}-${index}`]?.text && <h3>{clickedCells[`${rowIndex}-${index}`].text}</h3>}
                                                 </td>
