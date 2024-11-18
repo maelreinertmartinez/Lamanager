@@ -147,14 +147,20 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                 const isRowFullyColored = Array.from({ length: nbGroupe }, (_, index) => index).every(
                     (col) => prev[`${rowIndex}-${col}`]?.clicked
                 );
-    
+
+                for (let i = 0; i < groupesID.length; i++) {
+                    try {
+                        deleteCellFromDatabase(semainesID[rowIndex], enseignementId, groupesID[i]);
+                    } catch (error) {
+                    }
+                }
+                
                 for (let i = 0; i < groupesID.length; i++) {
                     const cellKey = `${rowIndex}-${i}`;
                     if (isRowFullyColored) {
                         // Décocher et supprimer de la BDD
                         updatedCells[cellKey] = { clicked: false, text: "" };
                         try {
-                            deleteCellFromDatabase(semainesID[rowIndex], enseignementId, groupesID[i]);
                         } catch (error) {
                             console.error('Erreur lors de la suppression:', error);
                         }
