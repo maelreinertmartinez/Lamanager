@@ -118,21 +118,26 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
         fetchEnseignant();
     }, []);
 
-    const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantId, enseignementId, groupeID) => {
-        const key = `${rowIndex}-${colIndex}`;
+    const handleCellClick = async (
+        rowIndex, 
+        colIndex, 
+        semaineId, 
+        enseignantId, 
+        enseignementId, 
+        groupeID, 
+        isSemaineColumn
+    ) => {
         const enseignantIdInt = Number(enseignantId);
-
+    
         setClickedCells((prev) => {
             const updatedCells = { ...prev };
-
-            // Si on clique sur une semaine (première colonne)
-            if (colIndex === 0) {
-                // Vérifie si la ligne est déjà entièrement cochée
+    
+            if (isSemaineColumn) {
+                // Clic sur la colonne semaine
                 const isRowFullyColored = Array.from({ length: nbGroupe }, (_, index) => index).every(
                     (col) => prev[`${rowIndex}-${col}`]?.clicked
                 );
-
-                // Pour chaque groupe (CM, TD, TP)
+    
                 for (let i = 0; i < groupesID.length; i++) {
                     const cellKey = `${rowIndex}-${i}`;
                     if (isRowFullyColored) {
@@ -146,6 +151,12 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                     } else {
                         // Cocher et ajouter à la BDD
                         updatedCells[cellKey] = { clicked: true, text: `2h - ${enseignantCode}` };
+                        console.log("Ajout dans la BDD:", {
+                            semaineId: semainesID[rowIndex],
+                            enseignantId: enseignantIdInt,
+                            enseignementId,
+                            groupeId: groupesID[i]
+                        });
                         try {
                             addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i]);
                         } catch (error) {
@@ -154,24 +165,35 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                     }
                 }
             } else {
-                // Logique existante pour le clic sur une cellule individuelle
+                // Clic sur une cellule individuelle (CM, TD, TP)
+                const key = `${rowIndex}-${colIndex}`;
                 if (!updatedCells[key]) {
                     updatedCells[key] = { clicked: false, text: "" };
                 }
-
+    
                 const cell = updatedCells[key];
                 if (cell.text === "") {
                     updatedCells[key] = { clicked: true, text: `2h - ${enseignantCode}` };
-                    addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                    try {
+                        addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                    } catch (error) {
+                        console.error('Erreur lors de l\'ajout:', error);
+                    }
                 } else {
                     updatedCells[key] = { clicked: false, text: "" };
-                    deleteCellFromDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                    try {
+                        deleteCellFromDatabase(semaineId, enseignantIdInt, enseignementId, groupeID);
+                    } catch (error) {
+                        console.error('Erreur lors de la suppression:', error);
+                    }
                 }
             }
-
+    
             return updatedCells;
         });
     };
+    
+    
     
     const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupeId) => {
         try {
@@ -282,7 +304,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                             <td
                                                 className="border border-black p-2"
                                                 style={{ height: '70px', cursor: 'pointer' }}
-                                                onClick={() => handleCellClick(rowIndex, 0)}
+                                                onClick={() => handleCellClick(rowIndex, 0, null, enseignantId, enseignement.id, null, true)}
                                             >
                                                 {semaine}
                                             </td>
@@ -297,7 +319,8 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                                         semainesID[rowIndex], 
                                                         enseignantId, 
                                                         enseignement.id, 
-                                                        groupesID[index]
+                                                        groupesID[index],
+                                                        false
                                                     )}
                                                 >
                                                     {clickedCells[`${rowIndex}-${index}`]?.text && <h3>{clickedCells[`${rowIndex}-${index}`].text}</h3>}
