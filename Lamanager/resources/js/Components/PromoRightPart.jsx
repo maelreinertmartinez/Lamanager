@@ -74,11 +74,10 @@ function PromoRightPart({ selectedAnnee }) {
             </div>
         )}
 
-        {/* Popup d'édition */}
-
             {showEditPopup && (
                 <PopupModifPromo
-                    onClose={() => setShowCustomPopup(false)}
+                    onClose={() => setShowEditPopup(false)}
+                    promos={promos}
                 />
             )}
 
