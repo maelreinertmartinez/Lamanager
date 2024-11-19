@@ -492,6 +492,17 @@ p {
     color: #564787;
 }
 
+.circle-user {
+    position: absolute;
+    right: 0;
+    margin-right: 2vh;
+    color: #ffffff;
+}
+
+.circle-user:hover {
+    color: #DBCBD8;
+}
+
 .tab-item {
     padding: 10px;
     cursor: pointer;

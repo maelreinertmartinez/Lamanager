@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import logo from '../../img/testlogo.png';
 import { Link } from '@inertiajs/react';
-import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUser, Download } from "lucide-react";
+import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUser, Download, CircleUser } from "lucide-react";
 import axios from 'axios';
 
 function BarreOutils() {
@@ -46,6 +46,7 @@ function BarreOutils() {
                     <li><Download /></li>
                 </ul>
             </div>
+            <CircleUser size={35} className="circle-user"/>
         </>
     );
 }
