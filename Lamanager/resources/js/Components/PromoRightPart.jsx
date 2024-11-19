@@ -4,6 +4,7 @@ import ChoixPromo from "./ChoixPromo";
 import BoutonModificationsPromos from "./BoutonsModificationsPromos";
 import { Trash2, Edit } from "lucide-react";
 import { Link } from '@inertiajs/react';
+import PopupModifPromo from "@/Components/PopupModifPromo.jsx";
 
 function PromoRightPart({ selectedAnnee }) {
     const [promos, setPromos] = useState([]);
@@ -16,7 +17,7 @@ function PromoRightPart({ selectedAnnee }) {
     useEffect(() => {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
-            
+
             try {
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
                 setPromos(response.data);
@@ -50,14 +51,14 @@ function PromoRightPart({ selectedAnnee }) {
             </ul>
         </div>
         <div className="ModificationsPromos">
-            <BoutonModificationsPromos 
-            className="btn-modif-class" 
-            Icon={Trash2} 
+            <BoutonModificationsPromos
+            className="btn-modif-class"
+            Icon={Trash2}
             onClick={() => setShowDeletePopup(true)}
             />
-            <BoutonModificationsPromos 
-            className="btn-modif-class" 
-            Icon={Edit} 
+            <BoutonModificationsPromos
+            className="btn-modif-class"
+            Icon={Edit}
             onClick={() => setShowEditPopup(true)}
             />
         </div>
@@ -74,15 +75,12 @@ function PromoRightPart({ selectedAnnee }) {
         )}
 
         {/* Popup d'édition */}
-        {showEditPopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Édition</h2>
-                <p>Message de test pour l'édition</p>
-                <button onClick={() => setShowEditPopup(false)}>Fermer</button>
-            </div>
-            </div>
-        )}
+
+            {showEditPopup && (
+                <PopupModifPromo
+                    onClose={() => setShowCustomPopup(false)}
+                />
+            )}
 
         {/* Popup d'ajout */}
         {showAddPopup && (
