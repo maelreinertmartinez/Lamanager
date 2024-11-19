@@ -34,7 +34,7 @@ const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupe
     }
 };
 
-export const deleteCellFromDatabase = async (semaineId, enseignementId, groupeId) => {
+const deleteCellFromDatabase = async (semaineId, enseignementId, groupeId) => {
     try {
         const response = await axios.delete('/api/cases', {
             data: {

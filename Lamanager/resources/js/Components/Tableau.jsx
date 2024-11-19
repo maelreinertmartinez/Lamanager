@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CircleX } from "lucide-react";
-import { getColorClass} from '@/utils';
-import { handleCellClick } from '@/utils';
+import { handleCellClick, getColorClass } from '../utils';
+
 
 function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseignement, selectedTime }) {
     const [clickedCells, setClickedCells] = useState({});
@@ -19,6 +19,11 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     const [heures, setHeures] = useState(0);
     const [minutes, setMinutes] = useState(0);
     const [casesData, setCasesData] = useState([]);
+
+    const longueurSemaines = semaines.length;
+
+    const params = new URLSearchParams(window.location.search);
+    const enseignantId = params.get('enseignant');
 
     useEffect(() => {
         if (selectedTime) {
@@ -97,11 +102,6 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     
         fetchSemaines();
     }, []);
-
-    const longueurSemaines = semaines.length;
-
-    const params = new URLSearchParams(window.location.search);
-    const enseignantId = params.get('enseignant');
 
     useEffect(() => {
         const fetchEnseignant = async () => {
@@ -260,7 +260,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                         {[1, 2, 3].map((colIndex) => (
                                             <td
                                                 key={colIndex}
-                                                className={`border border-black p-2 ${clickedCells[`${longueurSemaines}-${colIndex}`]?.clicked ? getColorClass(colIndex) : ''}`}
+                                                className={`border border-black p-2 ${clickedCells[`${longueurSemaines}-${colIndex}`]?.clicked ? getColorClass(colIndex, nbCM, nbTP) : ''}`}
                                             >
                                                 {clickedCells[`${longueurSemaines}-${colIndex}`]?.text && <span>{clickedCells[`${longueurSemaines}-${colIndex}`].text}</span>}
                                             </td>
