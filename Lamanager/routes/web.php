@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EnseignementController;
+use App\Http\Controllers\GroupeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -33,3 +34,7 @@ require __DIR__.'/auth.php';
 Route::get('/api/enseignements/{promo_id?}', [EnseignementController::class, 'index'])->name('api.enseignements');
 Route::get('/api/annees', [AnneeController::class, 'index'])->name('api.annees');
 Route::get('/api/promos/{annee_id}', [PromoController::class, 'index'])->name('api.promos');
+
+
+Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
+Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.groupes.store');

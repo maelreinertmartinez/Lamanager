@@ -14,7 +14,6 @@ function PromoRightPart({ selectedAnnee }) {
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [showAddPopup, setShowAddPopup] = useState(false);
     const [showCustomPopup, setShowCustomPopup] = useState(false);
-
     useEffect(() => {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
@@ -64,7 +63,8 @@ function PromoRightPart({ selectedAnnee }) {
 
             {showCustomPopup && (
                 <CustomPopup
-                    onClose={() => setShowCustomPopup(false)}
+                    selectedAnnee={selectedAnnee}
+                    onClose={() => setShowCustomPopup(false )}
                 />
             )}
 
