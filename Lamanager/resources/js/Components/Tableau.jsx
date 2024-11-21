@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CircleX } from "lucide-react";
 import { handleCellClick, getColorClass } from '../utils';
+import TableHeader from './TableauComponents/TableHeader';
+import TableTotal from './TableauComponents/TableTotal';
 
 
 function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseignement, selectedTime }) {
@@ -9,7 +11,7 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     const [activeTableau, setActiveTableau] = useState(null);
     const [semainesID, setSemainesID] = useState([]);
     const [semaines, setSemaines] = useState([]);
-    const [groupesID, setGroupesID] = useState(0);
+    const [groupesID, setGroupesID] = useState([]);
     const [nbTP, setNbTP] = useState(0);
     const [nbTD, setNbTD] = useState(0);
     const [nbGroupe, setNbGroupe] = useState(0);
@@ -204,23 +206,14 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                         <div className="mb-4 relative">
                             <table className="w-full border-collapse border border-black">
                                 <thead>
-                                    <tr>
-                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)}%`, height: '100px' }} rowSpan="2">{enseignement.nom}</th>
-                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbCM)}%` }} colSpan={nbCM}>CM</th>
-                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTD)}%` }} colSpan={nbTD}>TD</th>
-                                        <th className="border border-black p-2" style={{ width: `${100 / (nbGroupe + 2)*(nbTP)}%` }} colSpan={nbTP}>TP</th>
-                                    </tr>
-                                    <tr>
-                                        {groupNames.map((nom, index) => (
-                                            <th
-                                                key={index}
-                                                className="border border-black p-2"
-                                                style={{ height: '50px', width: `${100 / (nbGroupe + 2)}%` }}
-                                            >
-                                                {nom}
-                                            </th>
-                                        ))}
-                                    </tr>
+                                <TableHeader 
+                                    enseignement={enseignement}
+                                    nbGroupe={nbGroupe}
+                                    nbCM={nbCM}
+                                    nbTD={nbTD}
+                                    nbTP={nbTP}
+                                    groupNames={groupNames}
+                                />
                                 </thead>
                                 <tbody>
                                     {semaines.map((semaine, rowIndex) => (
@@ -248,25 +241,14 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                 </tbody>
                             </table>
                             <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
-                                <colgroup>
-                                    <col style={{ width: `${100 / (nbGroupe + 2)}%` }} />
-                                    <col style={{ width: `${100 / (nbGroupe + 2)}%`}} />
-                                    <col style={{ width: `${100 / (nbGroupe + 2)*(nbTD)}%`  }} />
-                                    <col style={{ width: `${100 / (nbGroupe + 2)*(nbTP)}%`  }} />
-                                </colgroup>
-                                <tbody>
-                                    <tr>
-                                        <td className="border border-black p-2" style={{ height: '70px' }}>Total</td>
-                                        {[1, 2, 3].map((colIndex) => (
-                                            <td
-                                                key={colIndex}
-                                                className={`border border-black p-2 ${clickedCells[`${longueurSemaines}-${colIndex}`]?.clicked ? getColorClass(colIndex, nbCM, nbTP) : ''}`}
-                                            >
-                                                {clickedCells[`${longueurSemaines}-${colIndex}`]?.text && <span>{clickedCells[`${longueurSemaines}-${colIndex}`].text}</span>}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                </tbody>
+                            <TableTotal 
+                                    nbGroupe={nbGroupe}
+                                    nbCM={nbCM}
+                                    nbTD={nbTD}
+                                    nbTP={nbTP}
+                                    longueurSemaines={longueurSemaines}
+                                    clickedCells={clickedCells}
+                                />
                             </table>
                         </div>
                     </div>
