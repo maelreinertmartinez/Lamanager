@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../Components/Header';
-import ListesEnseignementsEnseignants from '@/Components/ListesEnseignementsEnseignants';
+import ListesEnseignementsEnseignants from '../Components/TableauLeftPart/ListesEnseignementsEnseignants';
 import LeftPart from '@/Components/LeftPart';
 import RightPart from '@/Components/RightPart';
 import Tableau from '@/Components/Tableau';
