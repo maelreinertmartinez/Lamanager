@@ -27,156 +27,109 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
     const params = new URLSearchParams(window.location.search);
     const enseignantId = params.get('enseignant');
 
-    useEffect(() => {
-        if (selectedTime) {
-            const [h, m] = selectedTime.split(':').map(Number);
-            setHeures(h);
-            setMinutes(m);
-        }
-    }, [selectedTime]);
-    
-
     if (!selectedEnseignements || selectedEnseignements.length === 0) {
         return <h1 className="Select-enseignement">Veuillez selectionner un enseignement</h1>;
     }
 
-    useEffect(() => {
-        if (selectedEnseignements.length > 0) {
-            const dernierEnseignement = selectedEnseignements[selectedEnseignements.length - 1];
-            setActiveTableau(dernierEnseignement.nom);
-        }
-    }, [selectedEnseignements]);
-
     const handleTableauClick = (nom) => {
-            setActiveTableau(nom);
+        setActiveTableau(nom);
     };
 
     useEffect(() => {
-        const fetchGroupes = async () => {
+        const fetchData = async () => {
             try {
-                const response = await fetch(`/api/groupes/${promoId}`);
-                const data = await response.json();
+                if (selectedTime) {
+                    const [h, m] = selectedTime.split(':').map(Number);
+                    setHeures(h);
+                    setMinutes(m);
+                }
     
-                const countCM = data.filter((groupe) => groupe.type === 'CM').length;
-                const countTP = data.filter((groupe) => groupe.type === 'TP').length;
-                const countTD = data.filter((groupe) => groupe.type === 'TD').length;
-                const countGroupe = data.length;
+                if (!selectedEnseignements || selectedEnseignements.length === 0) {
+                    return;
+                }
+
+                if (selectedEnseignements.length > 0 && !activeTableau) {
+                    const dernierEnseignement = selectedEnseignements[selectedEnseignements.length - 1];
+                    setActiveTableau(dernierEnseignement.nom);
+                }
     
-                const cmGroups = data.filter((groupe) => groupe.type === 'CM');
-                const tdGroups = data.filter((groupe) => groupe.type === 'TD');
-                const tpGroups = data.filter((groupe) => groupe.type === 'TP');
+                const groupesResponse = await fetch(`/api/groupes/${promoId}`);
+                const groupesData = await groupesResponse.json();
     
-                // Supprimer les unshift(0) qui causent le problème
-                const ids = [...cmGroups.map(g => g.id), ...tdGroups.map(g => g.id), ...tpGroups.map(g => g.id)];
-                const names = [...cmGroups.map(g => g.nom), ...tdGroups.map(g => g.nom), ...tpGroups.map(g => g.nom)];
+                const countCM = groupesData.filter((g) => g.type === 'CM').length;
+                const countTP = groupesData.filter((g) => g.type === 'TP').length;
+                const countTD = groupesData.filter((g) => g.type === 'TD').length;
+    
+                const cmGroups = groupesData.filter((g) => g.type === 'CM');
+                const tdGroups = groupesData.filter((g) => g.type === 'TD');
+                const tpGroups = groupesData.filter((g) => g.type === 'TP');
+    
+                const ids = [...cmGroups.map((g) => g.id), ...tdGroups.map((g) => g.id), ...tpGroups.map((g) => g.id)];
+                const names = [...cmGroups.map((g) => g.nom), ...tdGroups.map((g) => g.nom), ...tpGroups.map((g) => g.nom)];
     
                 setNbCM(countCM);
                 setNbTP(countTP);
                 setNbTD(countTD);
-                setNbGroupe(countGroupe);
+                setNbGroupe(groupesData.length);
                 setGroupesID(ids);
                 setGroupNames(names);
     
-            } catch (error) {
-                console.error("Erreur lors de la récupération des groupes:", error);
-            }
-        }
-        fetchGroupes();
-    }, []);
-
-    useEffect(() => {
-        const fetchSemaines = async () => {
-            try {
-                const response = await fetch('/api/semaines');
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des semaines');
-                }
-                const data = await response.json();
-                
-                const numerosSemaines = data.map((semaine) => semaine.numero);
-                const idsSemaines = data.map((semaine) => semaine.id);
-                setSemainesID(idsSemaines);
-                setSemaines(numerosSemaines);
-            } catch (error) {
-                console.error("Erreur lors de la récupération des semaines :", error);
-            }
-        };
+                const semainesResponse = await fetch('/api/semaines');
+                const semainesData = await semainesResponse.json();
     
-        fetchSemaines();
-    }, []);
-
-    useEffect(() => {
-        const fetchEnseignant = async () => {
-            try {
-                
-                const response = await fetch(`/api/enseignant/${enseignantId}`);
-                
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération de l\'enseignant');
-                }
-                
-                const data = await response.json();
-                
-                if (data && data.code) {
-                    setEnseignantCode(data.code);
-                } else {
-                    throw new Error('Code non trouvé pour l\'enseignant');
-                }
-            } catch (error) {
-                console.error("Erreur lors de la récupération de l'enseignant :", error);
-            }
-        };
+                setSemainesID(semainesData.map((s) => s.id));
+                setSemaines(semainesData.map((s) => s.numero));
     
-        fetchEnseignant();
-    }, []);
-
-    useEffect(() => {
-        const fetchCases = async () => {
-            if (selectedEnseignements.length > 0) {
-                try {
-                    const enseignementId = selectedEnseignements.find(e => e.nom === activeTableau)?.id;
+                const enseignantResponse = await fetch(`/api/enseignant/${enseignantId}`);
+                const enseignantData = await enseignantResponse.json();
+    
+                if (enseignantData && enseignantData.code) {
+                    setEnseignantCode(enseignantData.code);
+                }
+    
+                if (activeTableau) {
+                    const enseignementId = selectedEnseignements.find((e) => e.nom === activeTableau)?.id;
+    
                     if (enseignementId) {
-                        const response = await axios.get(`/cases/${enseignementId}`);
-                        if (response.data) {
-                            setCasesData(response.data);
-                            // Update clickedCells state based on the fetched data
-                            const newClickedCells = {};
-                            
-                            // Récupérer tous les codes des enseignants en une seule fois
-                            const enseignantIds = [...new Set(response.data.map(item => item.enseignant_id))];
-                            const codesResponse = await Promise.all(
-                                enseignantIds.map(id => axios.get(`/api/enseignant/${id}`))
-                            );
-                            const enseignantCodes = Object.fromEntries(
-                                enseignantIds.map((id, index) => [id, codesResponse[index].data.code])
-                            );
-
-                            response.data.forEach(caseItem => {
-                                const semaineIndex = semainesID.indexOf(caseItem.semaine_id);
-                                const groupeIndex = groupesID.indexOf(caseItem.groupe_id);
-                                if (semaineIndex !== -1 && groupeIndex !== -1) {
-                                    const key = `${semaineIndex}-${groupeIndex}`;
-                                    newClickedCells[key] = {
-                                        clicked: true,
-                                        text: `${caseItem.nombre_heure}h${caseItem.nombre_minute ? caseItem.nombre_minute : ''}  - ${enseignantCodes[caseItem.enseignant_id]}`
-                                    };
-                                }
-                            });
-                            setClickedCells(newClickedCells);
-                        }
-                    }
-                } catch (error) {
-                    console.error("Erreur lors de la récupération des cases:", error);
-                    if (error.response?.status === 404) {
-                        console.log("Aucune case trouvée pour cet enseignement");
+                        const casesResponse = await axios.get(`/cases/${enseignementId}`);
+                        const casesData = casesResponse.data;
+    
+                        const enseignantIds = [...new Set(casesData.map((item) => item.enseignant_id))];
+                        const codesResponse = await Promise.all(
+                            enseignantIds.map((id) => axios.get(`/api/enseignant/${id}`))
+                        );
+                        const enseignantCodes = Object.fromEntries(
+                            enseignantIds.map((id, index) => [id, codesResponse[index].data.code])
+                        );
+    
+                        const newClickedCells = {};
+                        casesData.forEach((caseItem) => {
+                            const semaineIndex = semainesData.findIndex((s) => s.id === caseItem.semaine_id);
+                            const groupeIndex = ids.findIndex((g) => g === caseItem.groupe_id);
+    
+                            if (semaineIndex !== -1 && groupeIndex !== -1) {
+                                const key = `${semaineIndex}-${groupeIndex}`;
+                                newClickedCells[key] = {
+                                    clicked: true,
+                                    text: `${caseItem.nombre_heure}h${caseItem.nombre_minute || ''} - ${
+                                        enseignantCodes[caseItem.enseignant_id]
+                                    }`,
+                                };
+                            }
+                        });
+    
+                        setCasesData(casesData);
+                        setClickedCells(newClickedCells);
                     }
                 }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des données:', error);
             }
         };
-
-        fetchCases();
-    }, [activeTableau, semainesID, groupesID, enseignantCode, selectedEnseignements]);
-
+    
+        fetchData();
+    }, [selectedTime, selectedEnseignements, activeTableau, promoId, enseignantId]);
+    
     return (
         <>
             <div className="liste-ressources">
