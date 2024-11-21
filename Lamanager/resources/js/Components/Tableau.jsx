@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CircleX } from "lucide-react";
-import { handleCellClick, getColorClass } from '../utils';
 import TableHeader from './TableauComponents/TableHeader';
 import TableTotal from './TableauComponents/TableTotal';
+import TableBody from './TableauComponents/TableBody';
 
 
 function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseignement, selectedTime }) {
@@ -215,30 +215,21 @@ function EnseignementComponent({promoId, selectedEnseignements, onRemoveEnseigne
                                     groupNames={groupNames}
                                 />
                                 </thead>
-                                <tbody>
-                                    {semaines.map((semaine, rowIndex) => (
-                                        <tr key={semaine}>
-                                            <td
-                                                className="border border-black p-2"
-                                                style={{ height: '70px', cursor: 'pointer' }}
-                                                onClick={() => handleCellClick(rowIndex, 0, null, enseignantId, enseignement.id, null, true, nbGroupe, groupesID, semainesID, enseignantCode, heures, minutes, setClickedCells)}
-                                            >
-                                                {semaine}
-                                            </td>
-                                            {Array.from({ length: nbGroupe }, (_, index) => (
-                                                <td
-                                                    key={index}
-                                                    className={`border border-black p-2 ${clickedCells[`${rowIndex}-${index}`]?.clicked ? getColorClass(index, nbCM, nbTD) : ''}`}
-                                                    style={{ cursor: 'pointer', width: `${100 / (nbGroupe+2)}%` }}
-                                                    onClick={() =>
-                                                        handleCellClick(rowIndex, index, semainesID[rowIndex], enseignantId, enseignement.id, groupesID[index], false, nbGroupe, groupesID, semainesID, enseignantCode, heures,minutes, setClickedCells)}
-                                                >
-                                                    {clickedCells[`${rowIndex}-${index}`]?.text && <h3>{clickedCells[`${rowIndex}-${index}`].text}</h3>}
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </tbody>
+                                <TableBody 
+                                    semaines={semaines}
+                                    semainesID={semainesID}
+                                    nbGroupe={nbGroupe}
+                                    nbCM={nbCM}
+                                    nbTD={nbTD}
+                                    clickedCells={clickedCells}
+                                    enseignantId={enseignantId}
+                                    enseignement={enseignement}
+                                    groupesID={groupesID}
+                                    enseignantCode={enseignantCode}
+                                    heures={heures}
+                                    minutes={minutes}
+                                    setClickedCells={setClickedCells}   
+                                />
                             </table>
                             <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
                             <TableTotal 
