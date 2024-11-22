@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Groupe;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\Http\Request;
 class GroupeController extends Controller
 {
     public function index($promo_id): JsonResponse
@@ -15,4 +15,15 @@ class GroupeController extends Controller
         
         return response()->json($groupes);
     }
+    public function store(Request $request): JsonResponse
+    {
+        $case = new Groupe();
+        $case->promo_id = $request->promo_id;
+        $case->nom = $request->nom;
+        $case->type = $request->type;
+        $case->save();
+
+        return response()->json($case);
+    }
 }
+

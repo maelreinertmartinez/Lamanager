@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EnseignementController;
+use App\Http\Controllers\GroupeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\SemaineController;
@@ -31,6 +32,8 @@ Route::get('/test', function () {
     return Inertia::render('Test');
 })->name('test');
 
+
+
 require __DIR__.'/auth.php';
 
 Route::get('/api/enseignants', [EnseignantController::class, 'index'])->name('api.enseignants');
@@ -38,6 +41,11 @@ Route::get('/api/enseignant/{id}', [EnseignantController::class, 'showCode'])->n
 Route::get('/api/semaines', [SemaineController::class, 'index'])->name('api.semaines');
 Route::get('/api/annees', [AnneeController::class, 'index'])->name('api.annees');
 Route::get('/api/promos/{annee_id}', [PromoController::class, 'index'])->name('api.promos');
+
+
+Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
+Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.groupes.store');
+
 Route::get('/api/enseignements/{promo_id}/{annee_id}', [EnseignementController::class, 'index']);
 Route::get('/api/promo/{id}', [PromoController::class, 'getPromo'])->name('api.promo.get');
 Route::get('/api/groupes/{promo_id}', [GroupeController::class, 'index'])->name('api.groupes');

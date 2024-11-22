@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import ChoixPromo from "./ChoixPromo";
+import CustomPopup from "@/Components/CustomPopup.jsx";
 import BoutonModificationsPromos from "./BoutonsModificationsPromos";
 import { Trash2, Edit } from "lucide-react";
 import { Link } from '@inertiajs/react';
@@ -14,10 +15,11 @@ function PromoRightPart({ selectedAnnee }) {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [showAddPopup, setShowAddPopup] = useState(false);
-
+    const [showCustomPopup, setShowCustomPopup] = useState(false);
     useEffect(() => {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
+
 
             try {
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
@@ -61,11 +63,14 @@ function PromoRightPart({ selectedAnnee }) {
             onClick={() => setShowEditPopup(true)}
             />
         </div>
+
             {showCustomPopup && (
                 <CustomPopup
-                    onClose={() => setShowCustomPopup(false)}
+                    selectedAnnee={selectedAnnee}
+                    onClose={() => setShowCustomPopup(false )}
                 />
             )}
+
         {/* Popup de suppression */}
         {showDeletePopup && (
             <div className="popup-overlay">
@@ -103,3 +108,4 @@ function PromoRightPart({ selectedAnnee }) {
 }
 
 export default PromoRightPart;
+
