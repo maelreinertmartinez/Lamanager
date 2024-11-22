@@ -3,7 +3,7 @@ import { CircleX } from "lucide-react";
 import TableHeader from './TableauComponents/TableHeader';
 import TableTotal from './TableauComponents/TableTotal';
 import TableBody from './TableauComponents/TableBody';
-import useFetchData from './../useFetchData';
+import useFetchData from './../hooks/useFetchData';
 
 function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseignement, selectedTime }) {
     const [activeTableau, setActiveTableau] = useState(null);
