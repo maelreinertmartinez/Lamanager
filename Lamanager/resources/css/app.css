@@ -158,6 +158,7 @@ p {
 }
 
 .Promos {
+    overflow-y: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -183,6 +184,7 @@ p {
 }
 
 .but-class {
+    margin-top: 5vh;
     display: flex;
     justify-content: center;
     align-items: center;
