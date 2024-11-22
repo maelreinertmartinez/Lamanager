@@ -519,3 +519,18 @@ p {
     height: 6%;
 }
 
+
+.input-with-icon {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.input-with-icon input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.icon-right {
+    cursor: pointer;
+}
