@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\EnseignementController;
-use App\Http\Controllers\GroupeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\SemaineController;

@@ -5,13 +5,11 @@ import CustomPopup from "@/Components/CustomPopup.jsx";
 import BoutonModificationsPromos from "./BoutonsModificationsPromos";
 import { Trash2, Edit } from "lucide-react";
 import { Link } from '@inertiajs/react';
-import CustomPopup from "@/Components/CustomPopup.jsx";
 
 function PromoRightPart({ selectedAnnee }) {
     const [promos, setPromos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [showCustomPopup, setShowCustomPopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [showAddPopup, setShowAddPopup] = useState(false);
