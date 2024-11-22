@@ -1,100 +1,84 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import React, { useState } from 'react';
+import logo from '../../../img/testlogo.png';
+import InputLabel from "@/Components/InputLabel.jsx";
+import axios from 'axios';
+import unilim from "../../../img/logo_universite.png";
+import { LogIn } from 'lucide-react';
+import { UserRound } from 'lucide-react';
+import { Lock } from 'lucide-react';
+export default function LoginApp() {
+    {
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+        const [error, setError] = useState('');
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            try {
+                const response = await axios.post('/login', {email, password});
+                if (response.status === 200) {
+                    window.location.href = '/';
+                }
+                console.log(response.status)
+            } catch (err) {
+                console.log(err);
+                setError('Invalid credentials');
+            }
+        };
 
-export default function Login({ status, canResetPassword }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-        remember: false,
-    });
+        return (
+            <div className="login-container" onSubmit={handleSubmit}>
+                <img src={logo} alt="Logo" className="login-logo"/>
 
-    const submit = (e) => {
-        e.preventDefault();
+                <h1 className="login-title">Lamanager</h1>
+                <h2 className="login-subtitle">Crachez proprement vos prévisionels</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group-login">
+                        <div className="input-block">
+                            <UserRound size={48} className="input-logo"/>
 
-        post(route('login'), {
-            onFinish: () => reset('password'),
-        });
-    };
+                            <div className="label-input-container">
 
-    return (
-        <GuestLayout>
-            <Head title="Log in" />
+                                <InputLabel htmlFor="email" value="Identifiant"/>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="input-rounded"
+                                />
+                            </div>
+                        </div>
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+                        <div className="input-block">
+                            <Lock size={48} className="input-logo"/>
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                            <div className="label-input-container">
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
+                                <InputLabel htmlFor="password" value="Mot de passe"/>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="input-rounded"
+                                    required={true}
+                                    autoComplete={"current-password"}
+                                />
+                            </div>
+                        </div>
+                        {error && <p>{error}</p>}
+                    </div>
 
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
+                    <div className="button-container">
+                        <button type="submit" className="login-button" onClick={handleSubmit}>
+                            <LogIn/>
+                            Se connecter
+                        </button>
+                    </div>
+                </form>
+                <img src={unilim} alt="Unilim" className="unilim-logo"/>
+            </div>
+        );
+    }
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
-    );
 }
