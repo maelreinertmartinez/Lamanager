@@ -450,6 +450,7 @@ p {
 }
 
 .button-container button {
+    margin-right: 15px;
     margin-top: 15px;
     padding: 8px 16px;
     background-color: #564787;
@@ -508,12 +509,23 @@ p {
 }
 
 .tab-item {
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .tab-item.active {
+    background-color: #e0e0e0; 
+  }
+
+.tableau-import{
+    margin-top: 1%;
+    overflow-y: scroll;
+    height: 400vh;
 }
-.tab-item.active {
-  background-color: #e0e0e0;
+
+.champ{
+    height: 40px;
+    width: 70px;
 }
 
 .circle-x {

@@ -58,3 +58,6 @@ Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.
 Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.groupes.store');
 
 Route::delete('/api/cases', [CaseController::class, 'destroy'])->name('api.cases.destroy');
+
+
+Route::post('/api/enseignements', [EnseignementController::class, 'store'])->name('api.enseignements.store');
