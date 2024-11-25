@@ -24,6 +24,7 @@ function TimeSelector({ defaultTime, onTimeSelect }) {
         }
     
         setSelectedTime(cleanValue);
+        setError(null);
     };
 
     return (
@@ -45,13 +46,11 @@ function TimeSelector({ defaultTime, onTimeSelect }) {
                     if (selectedTime) {
                         if (validateTimeFormat(selectedTime)) {
                             onTimeSelect(selectedTime);
-                            setError('');
                         } else {
-                            setError('Format invalide. Utilisez HH:mm (ex: 02:00)');
+                            setError('Format invalide (ex: 02:00)');
                         }
                     }
                 }}
-                disabled={!!error}
             >
                 Valider
             </button>
