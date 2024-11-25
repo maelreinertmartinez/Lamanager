@@ -6,7 +6,7 @@ import TableBody from './TableauComponents/TableBody';
 import useFetchData from './../hooks/useFetchData';
 import { traitementNom } from '../utils';
 
-function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseignement, selectedTime }) {
+function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseignement, selectedTime, onCellClick }) {
     const [activeTableau, setActiveTableau] = useState(null);
     const enseignantId = new URLSearchParams(window.location.search).get('enseignant');
 
@@ -87,7 +87,8 @@ function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseign
                                     enseignantCode={enseignantCode}
                                     heures={heures}
                                     minutes={minutes}
-                                    setClickedCells={setClickedCells}   
+                                    setClickedCells={setClickedCells}
+                                    onCellClick={onCellClick}
                                 />
                             </table>
                             <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
