@@ -446,6 +446,7 @@ p {
 }
 
 .button-container button {
+    margin-right: 15px;
     margin-top: 15px;
     padding: 8px 16px;
     background-color: #564787;
@@ -504,5 +505,10 @@ p {
 .tableau-import{
     margin-top: 1%;
     overflow-y: scroll;
-    height: 400px;
+    height: 400vh;
+}
+
+.champ{
+    height: 40px;
+    width: 70px;
 }

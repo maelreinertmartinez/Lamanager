@@ -21,6 +21,9 @@ return new class extends Migration
             $table->integer('nombre_heures_td');
             $table->integer('nombre_heures_tp');
             $table->integer('semestre');
+            // Potentiellement le total des heures OU
+            // les heures projet
+            // Dans la base c'est les heures projet pour l'instant
             $table->integer('nombre_heures_max');
             $table->timestamps();
         });
