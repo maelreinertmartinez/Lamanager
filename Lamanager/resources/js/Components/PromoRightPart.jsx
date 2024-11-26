@@ -5,6 +5,7 @@ import CustomPopup from "@/Components/CustomPopup.jsx";
 import BoutonModificationsPromos from "./BoutonsModificationsPromos";
 import { Trash2, Edit } from "lucide-react";
 import { Link } from '@inertiajs/react';
+import PopupModifPromo from "@/Components/PopupModifPromo.jsx";
 
 function PromoRightPart({ selectedAnnee }) {
     const [promos, setPromos] = useState([]);
@@ -80,16 +81,12 @@ function PromoRightPart({ selectedAnnee }) {
             </div>
         )}
 
-        {/* Popup d'édition */}
-        {showEditPopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Édition</h2>
-                <p>Message de test pour l'édition</p>
-                <button onClick={() => setShowEditPopup(false)}>Fermer</button>
-            </div>
-            </div>
-        )}
+            {showEditPopup && (
+                <PopupModifPromo
+                    onClose={() => setShowEditPopup(false)}
+                    promos={promos}
+                />
+            )}
 
         {/* Popup d'ajout */}
         {showAddPopup && (
@@ -106,4 +103,3 @@ function PromoRightPart({ selectedAnnee }) {
 }
 
 export default PromoRightPart;
-
