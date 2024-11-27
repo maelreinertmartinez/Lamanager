@@ -11,11 +11,13 @@ function PopupModifPromo({ onClose, promos }) {
         const fetchGroupes = async () => {
             try {
                 const response = await axios.get(`/api/groupes/${promos[0].id}`);
+                console.log(response.data);
                 setGroupes(response.data);
             } catch (error) {
                 console.error("Error fetching groupes:", error);
             }
         };
+
 
         if (showBouttonVoirPopup) {
             fetchGroupes();

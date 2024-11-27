@@ -10,9 +10,9 @@ class GroupeController extends Controller
     public function index($promo_id): JsonResponse
     {
         $groupes = Groupe::where('promo_id', $promo_id)
-                      ->select('id', 'nom', 'type')
-                      ->get();
-        
+                    ->select('id', 'nom', 'type', 'promo_id')
+                    ->get();
+
         return response()->json($groupes);
     }
     public function store(Request $request): JsonResponse
@@ -29,7 +29,7 @@ class GroupeController extends Controller
     public function show($promo_id): JsonResponse
     {
         $groupes = Groupe::where('promo_id', $promo_id)
-
+            ->select('id', 'nom', 'type', 'promo_id')
             ->get();
 
 

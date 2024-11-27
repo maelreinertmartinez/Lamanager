@@ -2,6 +2,7 @@ import React from "react";
 import { Pencil } from "lucide-react";
 
 function BouttonVoir({ onClose, promos, groupes }) {
+
     return (
         <div className="custom-popup-overlay" onClick={onClose}>
             <div className="custom-popup-content" onClick={(e) => e.stopPropagation()}>
@@ -12,12 +13,19 @@ function BouttonVoir({ onClose, promos, groupes }) {
                             value={promo.nom}
                             readOnly
                         />
-                        <input
-                            type="text"
-                            value={groupes.filter(groupe => groupe.promo_id === promo.id).map(groupe => groupe.nom).join(', ')}
-                            readOnly
-                        />
-                        <Pencil className="icon-right" />
+
+                        {groupes.filter(groupe => groupe.promo_id === promo.id && groupe.type === 'TP').map((groupe, i) => {
+                           // console.log(groupe); // Log the groupe object
+                            return (
+                                <input
+                                    key={i}
+                                    type="text"
+                                    value={groupe.nom}
+                                    readOnly
+                                />
+                            );
+                        })}
+                                                <Pencil className="icon-right" />
                     </div>
                 ))}
                 <div className="custom-button-container">
