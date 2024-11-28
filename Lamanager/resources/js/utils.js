@@ -1,4 +1,6 @@
 
+import axios from 'axios';
+
 export const getColorClass = (colIndex, nbCM, nbTD) => {
     if (colIndex < nbCM) return 'bg-yellow-300';
     if (colIndex >= nbCM && colIndex < nbCM + nbTD) return 'bg-red-300';
