@@ -15,10 +15,10 @@ function PromoRightPart({ selectedAnnee }) {
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [showAddPopup, setShowAddPopup] = useState(false);
     const [showCustomPopup, setShowCustomPopup] = useState(false);
+
     useEffect(() => {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
-
 
             try {
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
@@ -38,67 +38,66 @@ function PromoRightPart({ selectedAnnee }) {
 
     return (
         <>
-        <div className="Promos">
-            <ul className="promos-list">
-                {promos.map((promo) => (
-                    <li key={promo.id}>
-                        <Link href={`/test?promo_id=${promo.id}&annee_id=${selectedAnnee.id}`}>
-                            <ChoixPromo className="but-class" title={promo.nom} />
-                        </Link>
-                    </li>
-                ))}
-                <li onClick={() => setShowCustomPopup(true)}><ChoixPromo className="but-class" title="+"/></li>
-            </ul>
-        </div>
-        <div className="ModificationsPromos">
-            <BoutonModificationsPromos
-            className="btn-modif-class"
-            Icon={Trash2}
-            onClick={() => setShowDeletePopup(true)}
-            />
-            <BoutonModificationsPromos
-            className="btn-modif-class"
-            Icon={Edit}
-            onClick={() => setShowEditPopup(true)}
-            />
-        </div>
+            <div className="Promos">
+                <ul className="promos-list">
+                    {promos.map((promo) => (
+                        <li key={promo.id}>
+                            <Link href={`/test?promo_id=${promo.id}&annee_id=${selectedAnnee.id}`}>
+                                <ChoixPromo className="but-class" title={promo.nom} />
+                            </Link>
+                        </li>
+                    ))}
+                    <li onClick={() => setShowCustomPopup(true)}><ChoixPromo className="but-class" title="+" /></li>
+                </ul>
+            </div>
+            <div className="ModificationsPromos">
+                <BoutonModificationsPromos
+                    className="btn-modif-class"
+                    Icon={Trash2}
+                    onClick={() => setShowDeletePopup(true)}
+                />
+                <BoutonModificationsPromos
+                    className="btn-modif-class"
+                    Icon={Edit}
+                    onClick={() => setShowEditPopup(true)}
+                />
+            </div>
 
             {showCustomPopup && (
                 <CustomPopup
                     selectedAnnee={selectedAnnee}
-                    onClose={() => setShowCustomPopup(false )}
+                    onClose={() => setShowCustomPopup(false)}
                 />
             )}
 
-        {/* Popup de suppression */}
-        {showDeletePopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Suppression</h2>
-                <p>Message de test pour la suppression</p>
-                <button onClick={() => setShowDeletePopup(false)}>Fermer</button>
-            </div>
-            </div>
-        )}
+            {showDeletePopup && (
+                <div className="popup-overlay">
+                    <div className="popup-content">
+                        <h2>Suppression</h2>
+                        <p>Message de test pour la suppression</p>
+                        <button onClick={() => setShowDeletePopup(false)}>Fermer</button>
+                    </div>
+                </div>
+            )}
 
             {showEditPopup && (
                 <PopupModifPromo
                     onClose={() => setShowEditPopup(false)}
                     promos={promos}
+                    selectedYear={selectedAnnee.annee}
                 />
             )}
 
-        {/* Popup d'ajout */}
-        {showAddPopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Ajout</h2>
-                <p>Message de test pour l'ajout</p>
-                <button onClick={() => setShowAddPopup(false)}>Fermer</button>
-            </div>
-            </div>
-        )}
-    </>
+            {showAddPopup && (
+                <div className="popup-overlay">
+                    <div className="popup-content">
+                        <h2>Ajout</h2>
+                        <p>Message de test pour l'ajout</p>
+                        <button onClick={() => setShowAddPopup(false)}>Fermer</button>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }
 

@@ -10,7 +10,7 @@ class GroupeController extends Controller
     public function index($promo_id): JsonResponse
     {
         $groupes = Groupe::where('promo_id', $promo_id)
-                    ->select('id', 'nom', 'type', 'promo_id')
+
                     ->get();
 
         return response()->json($groupes);
@@ -25,6 +25,22 @@ class GroupeController extends Controller
 
         return response()->json($case);
     }
+
+    public function update(Request $request)
+    {
+        $groupes = $request->input('groupes');
+
+        foreach ($groupes as $groupeData) {
+            $groupe = Groupe::find($groupeData['id']);
+            if ($groupe) {
+                $groupe->nom = $groupeData['nom'];
+                $groupe->save();
+            }
+        }
+
+        return response()->json(['message' => 'Groupes updated successfully']);
+    }
+
 
     public function show($promo_id): JsonResponse
     {

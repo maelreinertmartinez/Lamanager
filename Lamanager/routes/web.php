@@ -55,7 +55,7 @@ Route::post('/update-promos', function (Request $request) {
     return response()->json(['message' => 'Promos updated successfully']);
 });
 
-
+Route::post('/update-groupes', [GroupeController::class, 'update']);
 
 
 

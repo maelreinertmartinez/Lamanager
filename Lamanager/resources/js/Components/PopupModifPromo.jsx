@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import BouttonVoir from "./BouttonVoir";
+import PopupModifBut1 from "./PopupModifBut1.jsx";
+import PopupModifBut2 from "./PopupModifBut2.jsx";
+import PopupModifBut3 from "./PopupModifBut3.jsx";
 
-function PopupModifPromo({ onClose, promos }) {
+function PopupModifPromo({ onClose, promos, selectedYear }) {
     const [promoData, setPromoData] = useState(promos);
-    const [showBouttonVoirPopup, setShowBouttonVoirPopup] = useState(false);
+    const [showBouttonVoirPopup1, setShowBouttonVoirPopup1] = useState(false);
+    const [showBouttonVoirPopup2, setShowBouttonVoirPopup2] = useState(false);
+    const [showBouttonVoirPopup3, setShowBouttonVoirPopup3] = useState(false);
     const [groupes, setGroupes] = useState([]);
 
     useEffect(() => {
         const fetchGroupes = async () => {
             try {
-                const response = await axios.get(`/api/groupes/${promos[0].id}`);
-                console.log(response.data);
-                setGroupes(response.data);
+                const responses = await Promise.all(promos.slice(0, 3).map(promo => axios.get(`/api/groupes/${promo.id}`)));
+                const allGroupes = responses.flatMap(response => response.data);
+                console.log(allGroupes);
+                setGroupes(allGroupes);
             } catch (error) {
                 console.error("Error fetching groupes:", error);
             }
         };
 
-
-        if (showBouttonVoirPopup) {
+        if (showBouttonVoirPopup1 || showBouttonVoirPopup2 || showBouttonVoirPopup3) {
             fetchGroupes();
         }
-    }, [showBouttonVoirPopup, promos]);
+    }, [showBouttonVoirPopup1, showBouttonVoirPopup2, showBouttonVoirPopup3, promos]);
 
     const handleInputChange = (index, field, value) => {
         const newPromoData = [...promoData];
@@ -40,8 +44,8 @@ function PopupModifPromo({ onClose, promos }) {
     };
 
     return (
-        <div className="custom-popup-overlay" onClick={onClose}>
-            <div className="custom-popup-content" onClick={(e) => e.stopPropagation()}>
+        <div className="custom-popup-overlay-modif" onClick={onClose}>
+            <div className="custom-popup-content-modif" onClick={(e) => e.stopPropagation()}>
                 <div className="modif-promo-name-container">
                     <label>Nom de la promo :</label>
                     {promoData.map((promo, index) => (
@@ -64,7 +68,6 @@ function PopupModifPromo({ onClose, promos }) {
                             onChange={(e) => handleInputChange(index, 'nombre_td', e.target.value)}
                         />
                     ))}
-                    <button onClick={() => setShowBouttonVoirPopup(true)}>Voir</button>
                 </div>
 
                 <div className="modif-promo-numbertp-container">
@@ -77,18 +80,41 @@ function PopupModifPromo({ onClose, promos }) {
                             onChange={(e) => handleInputChange(index, 'nombre_tp', e.target.value)}
                         />
                     ))}
-                    <button onClick={() => setShowBouttonVoirPopup(true)}>Voir</button>
+                </div>
+
+                <div className="custom-button-modif-container">
+                    <button onClick={() => setShowBouttonVoirPopup3(true)}>Modifier But3</button>
+                    <button onClick={() => setShowBouttonVoirPopup2(true)}>Modifier But2</button>
+                    <button onClick={() => setShowBouttonVoirPopup1(true)}>Modifier But1</button>
+
                 </div>
 
                 <div className="custom-button-container">
                     <button onClick={handleSubmit}>Valider</button>
                 </div>
 
-                {showBouttonVoirPopup && (
-                    <BouttonVoir
-                        onClose={() => setShowBouttonVoirPopup(false)}
+                {showBouttonVoirPopup1 && (
+                    <PopupModifBut1
+                        onClose={() => setShowBouttonVoirPopup1(false)}
                         promos={promoData}
                         groupes={groupes}
+                        selectedYear={selectedYear}
+                    />
+                )}
+                {showBouttonVoirPopup2 && (
+                    <PopupModifBut2
+                        onClose={() => setShowBouttonVoirPopup2(false)}
+                        promos={promoData}
+                        groupes={groupes}
+                        selectedYear={selectedYear}
+                    />
+                )}
+                {showBouttonVoirPopup3 && (
+                    <PopupModifBut3
+                        onClose={() => setShowBouttonVoirPopup3(false)}
+                        promos={promoData}
+                        groupes={groupes}
+                        selectedYear={selectedYear}
                     />
                 )}
             </div>
