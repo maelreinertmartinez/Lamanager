@@ -18,6 +18,7 @@ function PopupModifBut2({ onClose, promos }) {
         fetchGroupes();
     }, [but2Promo.id]);
 
+
     const handleInputChange = (id, field, value) => {
         const newGroupesData = groupesData.map(groupe =>
             groupe.id === id ? { ...groupe, [field]: value } : groupe
