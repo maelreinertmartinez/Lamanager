@@ -55,10 +55,10 @@ const deleteCellFromDatabase = async (semaineId, enseignementId, groupeId) => {
 export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantId, enseignementId, groupeID, isSemaineColumn, nbGroupe, groupesID, semainesID, enseignantCode, heures, minutes, setClickedCells
     ) => {
         const enseignantIdInt = Number(enseignantId);
-
+    
         setClickedCells((prev) => {
             const updatedCells = { ...prev };
-
+    
             if (isSemaineColumn) {
                 // Clic sur la colonne semaine
                 const isRowFullyColored = Array.from({ length: nbGroupe }, (_, index) => index).every(
@@ -71,7 +71,7 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                     } catch (error) {
                     }
                 }
-
+                
                 for (let i = 0; i < groupesID.length; i++) {
                     const cellKey = `${rowIndex}-${i}`;
                     if (isRowFullyColored) {
@@ -95,7 +95,7 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                 // Clic sur une cellule individuelle (CM, TD, TP)
                 const key = `${rowIndex}-${colIndex}`;
                 const isCurrentlyClicked = prev[key]?.clicked;
-
+    
                 if (isCurrentlyClicked) {
                     // Si la cellule est déjà cochée, on la décoche
                     updatedCells[key] = { clicked: false, text: "" };
@@ -114,7 +114,7 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                     }
                 }
             }
-
+    
             return updatedCells;
         });
     };
