@@ -1,36 +1,56 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import PopupModifBut1 from "./PopupModifBut1.jsx";
-import PopupModifBut2 from "./PopupModifBut2.jsx";
-import PopupModifBut3 from "./PopupModifBut3.jsx";
+import PopupModifPromoAdaptative from "./PopupModifPromoAdaptative.jsx";
 
-function PopupModifPromo({ onClose, promos, selectedYear }) {
+function PopupModifPromo({ onClose, promos }) {
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedPromo, setSelectedPromo] = useState(null);
     const [promoData, setPromoData] = useState(promos);
-    const [showBouttonVoirPopup1, setShowBouttonVoirPopup1] = useState(false);
-    const [showBouttonVoirPopup2, setShowBouttonVoirPopup2] = useState(false);
-    const [showBouttonVoirPopup3, setShowBouttonVoirPopup3] = useState(false);
-    const [groupes, setGroupes] = useState([]);
 
     useEffect(() => {
-        const fetchGroupes = async () => {
-            try {
-                const responses = await Promise.all(promos.slice(0, 3).map(promo => axios.get(`/api/groupes/${promo.id}`)));
-                const allGroupes = responses.flatMap(response => response.data);
-                console.log(allGroupes);
-                setGroupes(allGroupes);
-            } catch (error) {
-                console.error("Error fetching groupes:", error);
-            }
+        const fetchGroupesForPromos = async () => {
+            const updatedPromos = await Promise.all(promoData.map(async (promo) => {
+                try {
+                    const response = await axios.get(`/api/groupes/${promo.id}`);
+                    return { ...promo, groupes: response.data };
+                } catch (error) {
+                    console.error(`Error fetching groupes for promo ${promo.id}:`, error);
+                    return { ...promo, groupes: [] };
+                }
+            }));
+            setPromoData(updatedPromos);
         };
 
-        if (showBouttonVoirPopup1 || showBouttonVoirPopup2 || showBouttonVoirPopup3) {
-            fetchGroupes();
-        }
-    }, [showBouttonVoirPopup1, showBouttonVoirPopup2, showBouttonVoirPopup3, promos]);
+        fetchGroupesForPromos();
+    }, []);
+
+    const handleButtonClick = (promoName) => {
+        setSelectedPromo(promoName);
+        setShowPopup(true);
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+        setSelectedPromo(null);
+    };
 
     const handleInputChange = (index, field, value) => {
         const newPromoData = [...promoData];
         newPromoData[index][field] = value;
+        setPromoData(newPromoData);
+    };
+
+    const updatePromoData = (promoId, type, newCount) => {
+        const newPromoData = promoData.map(promo => {
+            if (promo.id === promoId) {
+                if (type === 'TD') {
+                    promo.nombre_td = newCount;
+                } else if (type === 'TP') {
+                    promo.nombre_tp = newCount;
+                }
+            }
+            return promo;
+        });
         setPromoData(newPromoData);
     };
 
@@ -41,6 +61,12 @@ function PopupModifPromo({ onClose, promos, selectedYear }) {
         } catch (error) {
             console.error("Error updating promos:", error);
         }
+    };
+
+    const calculateGroupCounts = (promo) => {
+        const tdCount = promo.groupes ? promo.groupes.filter(groupe => groupe.type === 'TD').length : 0;
+        const tpCount = promo.groupes ? promo.groupes.filter(groupe => groupe.type === 'TP').length : 0;
+        return { tdCount, tpCount };
     };
 
     return (
@@ -60,61 +86,52 @@ function PopupModifPromo({ onClose, promos, selectedYear }) {
 
                 <div className="modif-promo-numbertd-container">
                     <label>Nombre de groupe TD :</label>
-                    {promoData.map((promo, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            value={promo.nombre_td}
-                            onChange={(e) => handleInputChange(index, 'nombre_td', e.target.value)}
-                        />
-                    ))}
+                    {promoData.map((promo, index) => {
+                        const { tdCount } = calculateGroupCounts(promo);
+                        return (
+                            <input
+                                key={index}
+                                type="text"
+                                value={tdCount}
+                                onChange={(e) => handleInputChange(index, 'nombre_td', e.target.value)}
+                            />
+                        );
+                    })}
                 </div>
 
                 <div className="modif-promo-numbertp-container">
                     <label>Nombre de groupe TP :</label>
-                    {promoData.map((promo, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            value={promo.nombre_tp}
-                            onChange={(e) => handleInputChange(index, 'nombre_tp', e.target.value)}
-                        />
-                    ))}
+                    {promoData.map((promo, index) => {
+                        const { tpCount } = calculateGroupCounts(promo);
+                        return (
+                            <input
+                                key={index}
+                                type="text"
+                                value={tpCount}
+                                onChange={(e) => handleInputChange(index, 'nombre_tp', e.target.value)}
+                            />
+                        );
+                    })}
                 </div>
 
                 <div className="custom-button-modif-container">
-                    <button onClick={() => setShowBouttonVoirPopup3(true)}>Modifier But3</button>
-                    <button onClick={() => setShowBouttonVoirPopup2(true)}>Modifier But2</button>
-                    <button onClick={() => setShowBouttonVoirPopup1(true)}>Modifier But1</button>
-
+                    {promos.map((promo, index) => (
+                        <button key={index} onClick={() => handleButtonClick(promo.nom)}>
+                            Modifier {promo.nom}
+                        </button>
+                    ))}
                 </div>
 
                 <div className="custom-button-container">
                     <button onClick={handleSubmit}>Valider</button>
                 </div>
 
-                {showBouttonVoirPopup1 && (
-                    <PopupModifBut1
-                        onClose={() => setShowBouttonVoirPopup1(false)}
-                        promos={promoData}
-                        groupes={groupes}
-                        selectedYear={selectedYear}
-                    />
-                )}
-                {showBouttonVoirPopup2 && (
-                    <PopupModifBut2
-                        onClose={() => setShowBouttonVoirPopup2(false)}
-                        promos={promoData}
-                        groupes={groupes}
-                        selectedYear={selectedYear}
-                    />
-                )}
-                {showBouttonVoirPopup3 && (
-                    <PopupModifBut3
-                        onClose={() => setShowBouttonVoirPopup3(false)}
-                        promos={promoData}
-                        groupes={groupes}
-                        selectedYear={selectedYear}
+                {showPopup && (
+                    <PopupModifPromoAdaptative
+                        onClose={handleClosePopup}
+                        promoName={selectedPromo}
+                        promos={promos}
+                        updatePromoData={updatePromoData}
                     />
                 )}
             </div>
