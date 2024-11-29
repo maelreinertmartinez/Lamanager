@@ -1,4 +1,5 @@
 import React from 'react';
+import { traitementNom } from '../../utils';
 
 function TableHeader({ enseignement, nbGroupe, nbCM, nbTD, nbTP, groupNames }) {
     return (
@@ -9,7 +10,7 @@ function TableHeader({ enseignement, nbGroupe, nbCM, nbTD, nbTP, groupNames }) {
                     style={{ width: `${100 / (nbGroupe + 2)}%`, height: '100px' }} 
                     rowSpan="2"
                 >
-                    {enseignement.nom}
+                    {traitementNom(enseignement.nom)}
                 </th>
                 <th 
                     className="border border-black p-2" 

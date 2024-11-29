@@ -4,6 +4,7 @@ import TableHeader from './TableauComponents/TableHeader';
 import TableTotal from './TableauComponents/TableTotal';
 import TableBody from './TableauComponents/TableBody';
 import useFetchData from './../hooks/useFetchData';
+import { traitementNom } from '../utils';
 
 function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseignement, selectedTime }) {
     const [activeTableau, setActiveTableau] = useState(null);
@@ -44,7 +45,7 @@ function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseign
                         className={`tab-item ${activeTableau === enseignement.nom ? 'active' : ''}`}
                         onClick={() => handleTableauClick(enseignement.nom)}
                     >
-                        <span style={{ display: 'flex', justifyContent: 'center', width: '45px'}} className="mr-2">{enseignement.nom || 'Sans nom'}</span>
+                        <span style={{ display: 'flex', justifyContent: 'center', width: '45px'}} className="mr-2">{traitementNom(enseignement.nom) || 'Sans nom'}</span>
                             <CircleX size={28} className="circle-x" onClick={(e) => {
                                 e.stopPropagation();
                                 onRemoveEnseignement(enseignement.id);

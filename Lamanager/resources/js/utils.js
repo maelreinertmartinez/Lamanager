@@ -7,6 +7,9 @@ export const getColorClass = (colIndex, nbCM, nbTD) => {
     if (colIndex >= nbCM + nbTD) return 'bg-blue-300';
     return '';
 };
+export const traitementNom = (nom) => {
+    return nom.length > 8 ? nom.substring(0, 8) + '...' : nom;
+};
 
 const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupeId, heures, minutes) => {
     try {
