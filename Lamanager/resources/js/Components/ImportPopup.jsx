@@ -8,6 +8,7 @@ function ImportPopup({ onClose }) {
     const [listeHeures, setListeHeures] = useState([]);
     const [isAlternance, setIsAlternance] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const params = new URLSearchParams(window.location.search);
     const promoId = params.get('promo_id');
@@ -31,8 +32,14 @@ function ImportPopup({ onClose }) {
     };
 
     const toggleEditMode = () => {
+        if (isEditing) {
+            handleValidate(); 
+        } else {
+            setIsDisabled(true);
+        }
         setIsEditing(!isEditing);
     };
+    
 
     const handleValidate = async () => {
         if (!selectedFile) {
@@ -55,6 +62,8 @@ function ImportPopup({ onClose }) {
                         nombre_heures_max: listeHeures[index][3], 
                     }); 
                     console.log(response.data);
+                    setIsDisabled(false);
+                    onClose();
                 }
                 
             } catch (error) {
@@ -190,7 +199,7 @@ function ImportPopup({ onClose }) {
                     )}
                 </div>  
                 <div className="button-container">
-                    <button onClick={handleValidate}>Valider</button>
+                    <button onClick={handleValidate} disabled={isDisabled} className={isDisabled ? 'button-disabled' : ''} > Valider </button>
                     <button onClick={toggleEditMode}>{isEditing ? "Terminer" : "Modifier"}</button>
                 </div>     
             </div>

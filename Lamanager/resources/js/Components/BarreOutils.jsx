@@ -42,13 +42,13 @@ function BarreOutils() {
             </div>
             <div className="BarreOutils">
                 <ul className="barre-outils-list">
-                    <li onClick={() => setShowCustomPopup(true)}><Table/></li>
-                    <li><ChartColumnIncreasing /></li>
-                    <li><MousePointer2 /></li>
-                    <li><Settings /></li>
-                    <li><BookUser /></li>
-                    <li><FileUser /></li>
-                    <li><Download /></li>
+                    <li className="barre-outils-item" onClick={() => setShowCustomPopup(true)}><Table/></li>
+                    <li className="barre-outils-item"><ChartColumnIncreasing /></li>
+                    <li className="barre-outils-item"><MousePointer2 /></li>
+                    <li className="barre-outils-item"><Settings /></li>
+                    <li className="barre-outils-item"><BookUser /></li>
+                    <li className="barre-outils-item"><FileUser /></li>
+                    <li className="barre-outils-item"><Download /></li>
                 </ul>
             </div>
             {showCustomPopup && (

@@ -118,6 +118,12 @@ header a {
     border-radius: 1vh;
 }
 
+.barre-outils-item:hover{
+    background-color: #ffffff;
+}
+
+
+
 .app {
     display: flex;
     flex-direction: row;
@@ -462,6 +468,14 @@ p {
 
 .button-container button:hover {
     background-color: #453a6b;
+}
+
+button:disabled,
+button[disabled]
+{ 
+    background-color: grey;
+    color: white;
+    cursor: not-allowed
 }
 
 .liste-ressources {
