@@ -40,25 +40,6 @@ Route::get('/login', function () {
     return Inertia::render('Login');
 })->name('login');
 
-
-Route::post('/update-promos', function (Request $request) {
-    $promos = $request->input('promos');
-    foreach ($promos as $promoData) {
-        $promo = Promo::find($promoData['id']);
-        if ($promo) {
-            $promo->nom = $promoData['nom'];
-            $promo->nombre_td = $promoData['nombre_td'];
-            $promo->nombre_tp = $promoData['nombre_tp'];
-            $promo->save();
-        }
-    }
-    return response()->json(['message' => 'Promos updated successfully']);
-});
-
-Route::post('/update-groupes', [GroupeController::class, 'update']);
-
-
-
 require __DIR__.'/auth.php';
 
 Route::get('/api/enseignants', [EnseignantController::class, 'index'])->name('api.enseignants');
@@ -89,3 +70,8 @@ Route::post('/api/enseignements', [EnseignementController::class, 'store'])->nam
 Route::post('/api/groupes', [GroupeController::class, 'store2'])->name('api.groupes.store');
 // web.php
 Route::delete('/api/groupes/{id}', [GroupeController::class, 'destroy'])->name('api.groupes.destroy');
+
+Route::post('/update-promos', [PromoController::class, 'updatePromos'])->name('api.promos.update');
+
+Route::post('/update-groupes', [GroupeController::class, 'update']);
+
