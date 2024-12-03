@@ -17,8 +17,6 @@ function PromoRightPart({ selectedAnnee }) {
     useEffect(() => {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
-
-
             try {
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
                 setPromos(response.data);
