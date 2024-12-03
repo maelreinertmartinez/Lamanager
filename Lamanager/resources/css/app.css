@@ -577,6 +577,7 @@ p {
 .modif-promo-numbertp-container label {
     flex-shrink: 0;
     width: 12%;
+
 }
 
 .modif-promo-name-container input,
@@ -594,7 +595,8 @@ p {
 
 .custom-button-modif-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center; /* Center the buttons vertically */
     width: 100%;
 }
 
@@ -603,9 +605,10 @@ p {
     color: white;
     border: none;
     border-radius: 4px;
-    width: 32%; /* Adjust the width as needed */
-    height: 200%; /* Adjust the height as needed */
+    width: 40%; /* Same width as inputs */
+    height: 200%; /* Same height as inputs */
     cursor: pointer;
+    margin-left: 4%;
     margin-right: 10%; /* Add space between buttons */
 }
 
@@ -638,20 +641,19 @@ p {
     background-color: #453a6b;
 }
 
-.custom-button-modif-container::before
-{
+.custom-button-modif-container::before {
     content: "";
     display: inline-block;
-    width: 32%;
-    height: 6%;
+    width: 28%; /* Same width as labels */
+    height: 6%; /* Adjust height if needed */
+
 }
 
-.custom-button-modif-container::after
-{
+.custom-button-modif-container::after {
     content: "";
     display: inline-block;
-    width: 20%;
-    height: 6%;
+    width: 25%; /* Same width as ::after pseudo-elements */
+    height: 6%; /* Adjust height if needed */
 }
 
 .modif-promo-name-container::after,
@@ -937,4 +939,117 @@ p {
 }
 
 
+.custom-popup-overlay-unique {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
 
+.custom-popup-content-unique {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 500px;
+    width: 900px;
+    border: 2px solid #000000;
+}
+
+.custom-popup-content-unique h2 {
+    margin-top: 0;
+    color: #564787;
+}
+
+.custom-popup-content-unique button {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #564787;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-popup-content-unique button:hover {
+    background-color: #453a6b;
+}
+
+.custom-promo-name-container-unique {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10%;
+}
+
+.custom-promo-name-container-unique input {
+    width: 200px;
+    padding: 5px;
+    border-radius: 12px;
+    border: 2px solid #564787;
+    height: 50px;
+}
+
+.custom-input-container-unique {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.custom-input-group-unique {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.custom-input-group-unique label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.custom-input-group-unique input[type="checkbox"] {
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.custom-input-group-unique input {
+    width: 200px;
+    padding: 5px;
+    border-radius: 12px;
+    border: 2px solid #564787;
+}
+
+.custom-button-container-unique {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.custom-button-container-unique button {
+    margin-right: 15px;
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #564787;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-button-container-unique button:hover {
+    background-color: #453a6b;
+}
