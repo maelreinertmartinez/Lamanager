@@ -29,7 +29,7 @@ class EnseignementController extends Controller
                 $enseignement->nombre_heures_td = $request->nombre_heures_td; 
                 $enseignement->nombre_heures_tp = $request->nombre_heures_tp; 
                 $enseignement->semestre = $request->semestre;
-                $enseignement->nombre_heures_max = $request->nombre_heures_max;
+                $enseignement->nombre_heures_projet = $request->nombre_heures_projet;
                 $enseignement->save();
 
                 return response()->json($enseignement);

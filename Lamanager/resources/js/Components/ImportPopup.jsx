@@ -59,7 +59,7 @@ function ImportPopup({ onClose }) {
                         nombre_heures_td: listeHeures[index][1], 
                         nombre_heures_tp: listeHeures[index][2], 
                         semestre: semestre, 
-                        nombre_heures_max: listeHeures[index][3], 
+                        nombre_heures_projet: listeHeures[index][3], 
                     }); 
                     console.log(response.data);
                     setIsDisabled(false);

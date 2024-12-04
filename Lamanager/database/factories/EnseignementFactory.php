@@ -27,6 +27,7 @@ class EnseignementFactory extends Factory
         $nombre_heures_cm = rand(10, 30);
         $nombre_heures_td = rand(20, 40);
         $nombre_heures_tp = rand(20, 40);
+        $nombre_heures_projet = rand(20, 40);
 
         return [
 
@@ -51,7 +52,7 @@ class EnseignementFactory extends Factory
                 $semestre =  $r_numbers[$ind_random];
                 return (($semestre + 1) % 2) + 1;
             },
-            'nombre_heures_max' => $nombre_heures_cm + $nombre_heures_td + $nombre_heures_tp,
+            'nombre_heures_projet' => $nombre_heures_projet,
         ];
     }
 }
