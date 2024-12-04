@@ -61,3 +61,13 @@ Route::delete('/api/cases', [CaseController::class, 'destroy'])->name('api.cases
 
 
 Route::post('/api/enseignements', [EnseignementController::class, 'store'])->name('api.enseignements.store');
+
+// web.php
+Route::post('/api/groupes', [GroupeController::class, 'store2'])->name('api.groupes.store');
+// web.php
+Route::delete('/api/groupes/{id}', [GroupeController::class, 'destroy'])->name('api.groupes.destroy');
+
+Route::post('/update-promos', [PromoController::class, 'updatePromos'])->name('api.promos.update');
+
+Route::post('/update-groupes', [GroupeController::class, 'update']);
+
