@@ -9,3 +9,9 @@ if (token) {
 } else {
     console.error('CSRF token not found');
 }
+
+// Add auth token to requests if available
+const authToken = localStorage.getItem('token');
+if (authToken) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+}

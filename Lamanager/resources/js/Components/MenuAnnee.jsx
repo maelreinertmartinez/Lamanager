@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from '@inertiajs/react';
 
-function MenuAnnee({ selectedAnnee, onAnneeSelect }) {
+const MenuAnnee = ({ selectedAnnee, onAnneeSelect }) => {
     const [annees, setAnnees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,7 +14,6 @@ function MenuAnnee({ selectedAnnee, onAnneeSelect }) {
             try {
                 const response = await axios.get('/api/annees');
                 setAnnees(response.data);
-                // Sélectionne par défaut la première année si aucune n'est sélectionnée
                 if (response.data.length > 0 && !selectedAnnee) {
                     onAnneeSelect(response.data[0]);
                 }
@@ -61,6 +61,15 @@ function MenuAnnee({ selectedAnnee, onAnneeSelect }) {
                 >
                     + Ajouter une année
                 </button>
+                
+                <Link
+                    href={route('logout')}
+                    method="post"
+                    as="button"
+                    className="menu-item cursor-pointer hover:bg-red-100 text-red-600"
+                >
+                    Déconnexion
+                </Link>
             </div>
 
             {showAddForm && (
@@ -95,6 +104,6 @@ function MenuAnnee({ selectedAnnee, onAnneeSelect }) {
             )}
         </div>
     );
-}
+};
 
 export default MenuAnnee;
