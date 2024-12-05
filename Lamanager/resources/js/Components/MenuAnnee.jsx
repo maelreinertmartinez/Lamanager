@@ -55,13 +55,14 @@ function MenuAnnee({ selectedAnnee, onAnneeSelect }) {
                         {annee.annee_scolaire}
                     </div>
                 ))}
-                <button 
+            </div>
+            <button 
                     onClick={() => setShowAddForm(true)}
-                    className="menu-item cursor-pointer hover:bg-purple-100"
+                    className="cursor-pointer btn-add-year"
+                    style={{ width: '100%', marginTop: '1vh', borderRadius: '10px', padding: '0.5rem 1rem' , boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
                 >
                     + Ajouter une année
-                </button>
-            </div>
+            </button>
 
             {showAddForm && (
                 <div className="popup-overlay">
