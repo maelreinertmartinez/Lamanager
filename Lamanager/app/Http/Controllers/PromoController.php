@@ -35,16 +35,21 @@ class PromoController extends Controller
     
     public function updatePromos(Request $request): JsonResponse
     {
-        $promos = $request->input('promos');
-        foreach ($promos as $promoData) {
-            $promo = Promo::find($promoData['id']);
-            if ($promo) {
-                $promo->nom = $promoData['nom'];
-                $promo->nombre_td = $promoData['nombre_td'];
-                $promo->nombre_tp = $promoData['nombre_tp'];
-                $promo->save();
+        try {
+            $promos = $request->input('promos');
+            foreach ($promos as $promoData) {
+                $promo = Promo::find($promoData['id']);
+                if ($promo) {
+                    $promo->update([
+                        'nom' => $promoData['nom'],
+                        'nombre_td' => $promoData['nombre_td'],
+                        'nombre_tp' => $promoData['nombre_tp']
+                    ]);
+                }
             }
+            return response()->json(['message' => 'Promos updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-        return response()->json(['message' => 'Promos updated successfully']);
     }
 }

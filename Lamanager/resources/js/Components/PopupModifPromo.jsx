@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import PopupModifPromoAdaptative from "./PopupModifPromoAdaptative.jsx";
-
+import axios from "axios";
 function PopupModifPromo({ onClose, promos }) {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedPromo, setSelectedPromo] = useState(null);
@@ -39,7 +38,7 @@ function PopupModifPromo({ onClose, promos }) {
         newPromoData[index][field] = value;
         setPromoData(newPromoData);
     };
-
+    
     const updatePromoData = (promoId, type, newCount) => {
         const newPromoData = promoData.map(promo => {
             if (promo.id === promoId) {
@@ -56,7 +55,8 @@ function PopupModifPromo({ onClose, promos }) {
 
     const handleSubmit = async () => {
         try {
-            await axios.post('/update-promos', { promos: promoData });
+            console.log(promoData);
+            await axios.post('/api/promos/update', { promos: promoData });
             onClose();
         } catch (error) {
             console.error("Error updating promos:", error);

@@ -13,6 +13,8 @@ use App\Http\Controllers\PromoController;
 use App\Http\Controllers\GroupeController;
 use App\Models\Semaine;
 use Inertia\Inertia;
+use App\Models\Promo;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return Inertia::render('Home'); // Assurez-vous que la page Home.jsx existe
@@ -67,7 +69,7 @@ Route::post('/api/groupes', [GroupeController::class, 'store2'])->name('api.grou
 // web.php
 Route::delete('/api/groupes/{id}', [GroupeController::class, 'destroy'])->name('api.groupes.destroy');
 
-Route::post('/update-promos', [PromoController::class, 'updatePromos'])->name('api.promos.update');
+Route::post('/api/promos/update', [PromoController::class, 'updatePromos'])->name('api.promos.update');
 
 Route::post('/update-groupes', [GroupeController::class, 'update']);
 

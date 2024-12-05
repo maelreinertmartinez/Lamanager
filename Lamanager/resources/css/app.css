@@ -1064,3 +1064,121 @@ button[disabled]
 .custom-button-container-unique button:hover {
     background-color: #453a6b;
 }
+.custom-popup-overlay-modif {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.custom-popup-content-modif {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.promo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modif-promo-name-container,
+.modif-promo-numbertd-container,
+.modif-promo-numbertp-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.modif-promo-name-container label,
+.modif-promo-numbertd-container label,
+.modif-promo-numbertp-container label {
+    flex-shrink: 0;
+    width: 12%;
+}
+
+.modif-promo-name-container input,
+.modif-promo-numbertd-container input,
+.modif-promo-numbertp-container input {
+    flex-grow: 1;
+    height: 60%;
+    border: 2px solid #564787;
+    border-radius: 8px;
+    padding: 5px;
+    margin: 2%;
+    width: 20%;
+    box-sizing: border-box;
+}
+
+.custom-button-modif-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.custom-button-modif-container::before {
+    content: "";
+    display: inline-block;
+    width: 12%; /* Same width as labels */
+    height: 6%; /* Adjust height if needed */
+}
+
+.custom-button-modif-container::after {
+    content: "";
+    display: inline-block;
+    width: 6%; /* Same width as ::after pseudo-elements */
+    height: 6%; /* Adjust height if needed */
+}
+
+.custom-button-modif-container button {
+    background-color: #564787;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 20%; /* Same width as inputs */
+    height: 60%; /* Same height as inputs */
+    cursor: pointer;
+    margin-left: 4%;
+    margin-right: 10%; /* Add space between buttons */
+}
+
+.custom-button-modif-container button:last-child {
+    margin-right: 0; /* Remove margin from the last button */
+}
+
+
+.custom-button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.custom-button-container button {
+    margin-right: 15px;
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #564787;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-button-container button:hover {
+    background-color: #453a6b;
+}
