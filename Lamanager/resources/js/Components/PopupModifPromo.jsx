@@ -4,14 +4,26 @@ import axios from "axios";
 function PopupModifPromo({ onClose, promos }) {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedPromo, setSelectedPromo] = useState(null);
-    const [promoData, setPromoData] = useState(promos);
+    const [promoData, setPromoData] = useState(promos.map(promo => ({
+        ...promo,
+        nombre_td: promo.nombre_td || 0,
+        nombre_tp: promo.nombre_tp || 0
+    })));
 
     useEffect(() => {
         const fetchGroupesForPromos = async () => {
             const updatedPromos = await Promise.all(promoData.map(async (promo) => {
                 try {
                     const response = await axios.get(`/api/groupes/${promo.id}`);
-                    return { ...promo, groupes: response.data };
+                    const groupes = response.data;
+                    const tdCount = groupes.filter(groupe => groupe.type === 'TD').length;
+                    const tpCount = groupes.filter(groupe => groupe.type === 'TP').length;
+                    return { 
+                        ...promo, 
+                        groupes,
+                        nombre_td: tdCount,
+                        nombre_tp: tpCount
+                    };
                 } catch (error) {
                     console.error(`Error fetching groupes for promo ${promo.id}:`, error);
                     return { ...promo, groupes: [] };
@@ -35,6 +47,9 @@ function PopupModifPromo({ onClose, promos }) {
 
     const handleInputChange = (index, field, value) => {
         const newPromoData = [...promoData];
+        if (field === 'nombre_td' || field === 'nombre_tp') {
+            value = parseInt(value) || 0;
+        }
         newPromoData[index][field] = value;
         setPromoData(newPromoData);
     };
@@ -86,32 +101,26 @@ function PopupModifPromo({ onClose, promos }) {
 
                 <div className="modif-promo-numbertd-container">
                     <label>Nombre de groupe TD :</label>
-                    {promoData.map((promo, index) => {
-                        const { tdCount } = calculateGroupCounts(promo);
-                        return (
-                            <input
-                                key={index}
-                                type="text"
-                                value={tdCount}
-                                onChange={(e) => handleInputChange(index, 'nombre_td', e.target.value)}
-                            />
-                        );
-                    })}
+                    {promoData.map((promo, index) => (
+                        <input
+                            key={index}
+                            type="text"
+                            value={promo.nombre_td}
+                            onChange={(e) => handleInputChange(index, 'nombre_td', e.target.value)}
+                        />
+                    ))}
                 </div>
 
                 <div className="modif-promo-numbertp-container">
                     <label>Nombre de groupe TP :</label>
-                    {promoData.map((promo, index) => {
-                        const { tpCount } = calculateGroupCounts(promo);
-                        return (
-                            <input
-                                key={index}
-                                type="text"
-                                value={tpCount}
-                                onChange={(e) => handleInputChange(index, 'nombre_tp', e.target.value)}
-                            />
-                        );
-                    })}
+                    {promoData.map((promo, index) => (
+                        <input
+                            key={index}
+                            type="text"
+                            value={promo.nombre_tp}
+                            onChange={(e) => handleInputChange(index, 'nombre_tp', e.target.value)}
+                        />
+                    ))}
                 </div>
 
                 <div className="custom-button-modif-container">
