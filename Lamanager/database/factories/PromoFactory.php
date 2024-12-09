@@ -26,10 +26,6 @@ class PromoFactory extends Factory
     public function definition(): array
     {
 
-
-
-
-
         return [
             'nom' => function(array $attributes) {
                 $nom = array_pop($this->promo);

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Groupe;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\LiaisonGroupe;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
@@ -46,5 +46,6 @@ protected $liste_ind_tp = [1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,4,4,5,5,5,5,6,6,6
 
             ]))
             ->create();
+
     }
 }

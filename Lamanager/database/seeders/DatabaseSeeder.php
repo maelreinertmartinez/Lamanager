@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\LiaisonGroupe;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -10,8 +11,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class,    
-            EnseignantSeeder::class,   
+            RoleSeeder::class,
+            EnseignantSeeder::class,
             SemaineSeeder::class,
             EnseignementSeeder::class,
             GroupeSeeder::class,
@@ -21,5 +22,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+        LiaisonGroupe::factory()
+            ->count(84)
+            ->create();
     }
 }

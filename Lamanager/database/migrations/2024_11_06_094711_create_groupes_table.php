@@ -17,8 +17,6 @@ return new class extends Migration
             $table->foreignIdFor(Promo::class, 'promo_id')->constrained()->onDelete('cascade');
             $table->string('nom' );
             $table->string('type');
-
-
             $table->timestamps();
         });
     }
