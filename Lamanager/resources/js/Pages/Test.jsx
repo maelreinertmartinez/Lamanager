@@ -5,6 +5,7 @@ import LeftPart from '@/Components/LeftPart';
 import RightPart from '@/Components/RightPart';
 import Tableau from '@/Components/Tableau';
 import BarreOutils from '@/Components/BarreOutils';
+import BoutonProfil from '@/Components/BoutonProfil';
 
 export default function Test() {
     const [selectedEnseignements, setSelectedEnseignements] = React.useState([]);

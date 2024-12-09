@@ -5,6 +5,7 @@ import RightPart from '@/Components/RightPart';
 import BarreOutils from '@/Components/BarreOutils';
 import ProfilLeftPart from '@/Components/ProfilLeftPart';
 import ProfilRightPart from '@/Components/ProfilRightPart';
+import BoutonProfil from '@/Components/BoutonProfil';
 
 export default function PageProfil() {
     const userData = {
