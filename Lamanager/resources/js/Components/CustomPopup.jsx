@@ -4,8 +4,8 @@ import axios from "axios";
 function CustomPopup({ onClose, selectedAnnee }) {
     // États pour stocker les données
     const [promoName, setPromoName] = useState("");
-    const [tdName, setTdName] = useState("");
-    const [tpName, setTpName] = useState("");
+    const [tdNbr, setTdNbr] = useState("");
+    const [tpNbr, setTpNbr] = useState("");
     const [isAlternant, setIsAlternant] = useState(false);
 
     // Fonction pour gérer la soumission
@@ -22,8 +22,8 @@ function CustomPopup({ onClose, selectedAnnee }) {
             const reponse = await axios.post('/api/promos', {
                 annee_id: selectedAnnee.id,
                 nom: promoName,
-                nombre_td: tdName,
-                nombre_tp: tpName,
+                nombre_td: tdNbr,
+                nombre_tp: tpNbr,
                 alternant: isAlternant,
             });
             console.log("Promo créée :", reponse.data);
@@ -35,30 +35,39 @@ function CustomPopup({ onClose, selectedAnnee }) {
     };
 
     const handleGroupes = async (promo) => {
-
+        let temp = 0;
         await axios.post('/api/groupes', {
             promo_id: promo.id,
             nom: "CM",
             type: "CM",
         });
-        for (let i = 1; i <= promo.nombre_td; i++) {
+        for (let i = 0; i < promo.nombre_td; i++) {
+
             const nomTD = "TD" + i;
-            await axios.post('/api/groupes', {
+            const td = await axios.post('/api/groupes', {
                 promo_id: promo.id,
                 nom: nomTD,
                 type: "TD",
             });
+            for (let j = 1; j <= promo.nombre_tp/promo.nombre_td; j++) {
+                temp = temp+1;
+                const nomTP = "TP" + temp;
+
+                const tp = await axios.post('/api/groupes', {
+                    promo_id: promo.id,
+                    nom: nomTP,
+                    type: "TP",
+                });
+
+                await axios.post('/api/liaison', {
+                    groupe_td_id: td.data.id,
+                    groupe_tp_id: tp.data.id,
+                });
+
+            }
         }
 
-        for (let j = 1; j <= promo.nombre_tp; j++) {
-            const nomTP = "TP" + j;
 
-            await axios.post('/api/groupes', {
-                promo_id: promo.id,
-                nom: nomTP,
-                type: "TP",
-            });
-        }
 
 
         onClose(); // Fermer la popup après soumission
@@ -81,8 +90,8 @@ function CustomPopup({ onClose, selectedAnnee }) {
                         <label>Nom de groupe TD :</label>
                         <input
                             type="text"
-                            value={tdName}
-                            onChange={(e) => setTdName(e.target.value)} // Mise à jour de l'état
+                            value={tdNbr}
+                            onChange={(e) => setTdNbr(e.target.value)} // Mise à jour de l'état
                         />
                     </div>
 
@@ -90,8 +99,8 @@ function CustomPopup({ onClose, selectedAnnee }) {
                         <label>Nom de groupe TP :</label>
                         <input
                             type="text"
-                            value={tpName}
-                            onChange={(e) => setTpName(e.target.value)} // Mise à jour de l'état
+                            value={tpNbr}
+                            onChange={(e) => setTpNbr(e.target.value)} // Mise à jour de l'état
                         />
                     </div>
                 </div>
