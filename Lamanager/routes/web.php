@@ -34,11 +34,13 @@ Route::get('/test', function () {
     return Inertia::render('Test');
 })->name('test');
 
-
-
 Route::get('/login', function () {
     return Inertia::render('Login');
 })->name('login');
+
+Route::get('/profil', function () {
+    return Inertia::render('PageProfil');
+})->name('profil');
 
 require __DIR__.'/auth.php';
 
