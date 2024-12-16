@@ -11,6 +11,7 @@ export default function Test() {
     const [selectedEnseignant, setSelectedEnseignant] = React.useState(null);
     const [selectedTime, setSelectedTime] = React.useState('02:00');
     const [showNoEnseignantPopup, setShowNoEnseignantPopup] = React.useState(false);
+    const [showIcons, setShowIcons] = React.useState(false); // Ajouter l'état showIcons
     // Récupérer le paramètre BUT depuis l'URL
     const urlParams = new URLSearchParams(window.location.search);
     const promoId = urlParams.get('promo_id');
@@ -32,7 +33,11 @@ export default function Test() {
 
     const handleTimeSelect = (time) => {
         setSelectedTime(time);
-    };;
+    };
+
+    const toggleIcons = () => {
+        setShowIcons(!showIcons);
+    };
 
     const ListesEnseignementsEnseignantsWithProps = () => (
         <ListesEnseignementsEnseignants 
@@ -54,12 +59,13 @@ export default function Test() {
             onRemoveEnseignement={handleRemoveEnseignement}
             selectedTime={selectedTime}
             onCellClick={() => setShowNoEnseignantPopup(true)}
+            showIcons={showIcons} // Passer showIcons en prop à Tableau
         />
     );
 
     return (
         <>
-            <Header ComposantProp={BarreOutils} />
+            <Header ComposantProp={() => <BarreOutils toggleIcons={toggleIcons} />} />
             <div className="app">
                 <LeftPart ComposantProp={ListesEnseignementsEnseignantsWithProps} />
                 <RightPart ComposantProp={TableauWithProps} />
