@@ -43,6 +43,53 @@ function TableBody({
             return;
         }
 
+        if (isSemaineColumn) {
+            if (showIcons) {
+                // Mode sélection activé
+                setClickedCells((prev) => {
+                    const updatedCells = { ...prev };
+                    const semaineKey = `semaine-${rowIndex}`;
+                    const isSelected = !updatedCells[semaineKey]?.selected;
+
+                    updatedCells[semaineKey] = {
+                        ...updatedCells[semaineKey],
+                        selected: isSelected,
+                    };
+
+                    for (let i = 0; i < nbGroupe; i++) {
+                        const cellKey = `${rowIndex}-${i}`;
+                        if (updatedCells[cellKey]?.text) {
+                            updatedCells[cellKey] = {
+                                ...updatedCells[cellKey],
+                                selected: isSelected,
+                            };
+                        }
+                    }
+
+                    return updatedCells;
+                });
+            } else {
+                // Mode sélection désactivé
+                handleCellClick(
+                    rowIndex,
+                    colIndex,
+                    semaineId,
+                    enseignantId,
+                    enseignement.id,
+                    groupeId,
+                    isSemaineColumn,
+                    nbGroupe,
+                    groupesID,
+                    semainesID,
+                    enseignantCode,
+                    heures,
+                    minutes,
+                    setClickedCells
+                );
+            }
+            return;
+        }
+
         if (!showIcons) {
             handleCellClick(
                 rowIndex,
@@ -61,7 +108,6 @@ function TableBody({
                 setClickedCells
             );
         } else if (clickedCells[`${rowIndex}-${colIndex}`]?.text) {
-            // Toggle the selection state of the cell
             setClickedCells((prev) => {
                 const updatedCells = { ...prev };
                 const key = `${rowIndex}-${colIndex}`;
@@ -69,6 +115,17 @@ function TableBody({
                     ...updatedCells[key],
                     selected: !updatedCells[key]?.selected,
                 };
+
+                // Check if all selectable cells in the row are selected
+                const allSelected = Array.from({ length: nbGroupe }, (_, i) => `${rowIndex}-${i}`)
+                    .filter(cellKey => updatedCells[cellKey]?.text)
+                    .every(cellKey => updatedCells[cellKey]?.selected);
+
+                updatedCells[`semaine-${rowIndex}`] = {
+                    ...updatedCells[`semaine-${rowIndex}`],
+                    selected: allSelected,
+                };
+
                 return updatedCells;
             });
         }
@@ -118,10 +175,24 @@ function TableBody({
                     <tr key={semaine}>
                         <td
                             className="border border-black p-2"
-                            style={{ height: '70px', cursor: contextMenu ? 'default' : 'pointer' }}
+                            style={{ height: '70px', cursor: contextMenu ? 'default' : 'pointer', position: 'relative' }}
                             onClick={() => handleClick(rowIndex, 0, null, null, true)}
                         >
                             {semaine}
+                            {showIcons && Object.keys(clickedCells).some(key => key.startsWith(`${rowIndex}-`) && clickedCells[key]?.text) && (
+                                <div 
+                                    style={{ 
+                                        position: 'absolute', 
+                                        top: '4px', 
+                                        right: '4px', 
+                                        width: '8px', 
+                                        height: '8px', 
+                                        borderRadius: '50%', 
+                                        border: '1px solid black', 
+                                        backgroundColor: clickedCells[`semaine-${rowIndex}`]?.selected ? 'black' : 'transparent' 
+                                    }} 
+                                />
+                            )}
                         </td>
                         {Array.from({ length: nbGroupe }, (_, index) => (
                             <td
