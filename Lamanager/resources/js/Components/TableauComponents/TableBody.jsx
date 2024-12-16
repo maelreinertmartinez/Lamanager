@@ -1,5 +1,6 @@
-import React from 'react';
-import { handleCellClick, getColorClass } from '../../utils';
+import React, { useState } from 'react';
+import { handleCellClick } from '../../utils';
+import { getColorClass } from '../../utils';
 
 function TableBody({ 
     semaines,
@@ -14,8 +15,33 @@ function TableBody({
     enseignantCode,
     heures,
     minutes,
-    setClickedCells 
+    setClickedCells,
+    onCellClick 
 }) {
+    const handleClick = (rowIndex, colIndex, semaineId, groupeId, isSemaineColumn) => {
+        if (!enseignantId) {
+            onCellClick();
+            return;
+        }
+        
+        handleCellClick(
+            rowIndex, 
+            colIndex, 
+            semaineId, 
+            enseignantId, 
+            enseignement.id, 
+            groupeId, 
+            isSemaineColumn, 
+            nbGroupe, 
+            groupesID, 
+            semainesID, 
+            enseignantCode, 
+            heures,
+            minutes, 
+            setClickedCells
+        );
+    };
+
     return (
         <tbody>
             {semaines.map((semaine, rowIndex) => (
@@ -23,22 +49,7 @@ function TableBody({
                     <td
                         className="border border-black p-2"
                         style={{ height: '70px', cursor: 'pointer' }}
-                        onClick={() => handleCellClick(
-                            rowIndex, 
-                            0, 
-                            null, 
-                            enseignantId, 
-                            enseignement.id, 
-                            null, 
-                            true, 
-                            nbGroupe, 
-                            groupesID, 
-                            semainesID, 
-                            enseignantCode, 
-                            heures, 
-                            minutes, 
-                            setClickedCells
-                        )}
+                        onClick={() => handleClick(rowIndex, 0, null, null, true)}
                     >
                         {semaine}
                     </td>
@@ -51,21 +62,12 @@ function TableBody({
                                     : ''
                             }`}
                             style={{ cursor: 'pointer', width: `${100 / (nbGroupe+2)}%` }}
-                            onClick={() => handleCellClick(
-                                rowIndex, 
-                                index, 
-                                semainesID[rowIndex], 
-                                enseignantId, 
-                                enseignement.id, 
-                                groupesID[index], 
-                                false, 
-                                nbGroupe, 
-                                groupesID, 
-                                semainesID, 
-                                enseignantCode, 
-                                heures,
-                                minutes, 
-                                setClickedCells
+                            onClick={() => handleClick(
+                                rowIndex,
+                                index,
+                                semainesID[rowIndex],
+                                groupesID[index],
+                                false
                             )}
                         >
                             {clickedCells[`${rowIndex}-${index}`]?.text && (

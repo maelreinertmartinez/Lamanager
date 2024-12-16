@@ -55,22 +55,23 @@ const MenuAnnee = ({ selectedAnnee, onAnneeSelect }) => {
                         {annee.annee_scolaire}
                     </div>
                 ))}
-                <button 
-                    onClick={() => setShowAddForm(true)}
-                    className="menu-item cursor-pointer hover:bg-purple-100"
-                >
-                    + Ajouter une année
-                </button>
-                
-                <Link
-                    href={route('logout')}
-                    method="post"
-                    as="button"
-                    className="menu-item cursor-pointer hover:bg-red-100 text-red-600"
-                >
-                    Déconnexion
-                </Link>
             </div>
+            <button 
+                onClick={() => setShowAddForm(true)}
+                className="cursor-pointer btn-add-year"
+                style={{ width: '100%', marginTop: '1vh', borderRadius: '10px', padding: '0.5rem 1rem' , boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
+            >
+            + Ajouter une année
+            </button>
+            
+            <Link
+                href={route('logout')}
+                method="post"
+                as="button"
+                className="menu-item cursor-pointer hover:bg-red-100 text-red-600"
+            >
+                Déconnexion
+            </Link>
 
             {showAddForm && (
                 <div className="popup-overlay">

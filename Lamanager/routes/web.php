@@ -20,15 +20,24 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home')->middleware('auth');
 
+Route::get('/test', function () {
+    return Inertia::render('Test');
+})->name('test')->middleware('auth');
+
+Route::get('/profil', function () {
+    return Inertia::render('PageProfil');
+})->name('profil')->middleware('auth');
+
+Route::get('/login', function () {
+    return Inertia::render('Login');
+})->name('login');
+
 Route::middleware('auth')->group(function () {
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-Route::get('/test', function () {
-    return Inertia::render('Test');
-})->middleware('auth');
 
 require __DIR__.'/auth.php';
 

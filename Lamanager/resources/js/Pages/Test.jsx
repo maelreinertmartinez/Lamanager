@@ -5,11 +5,13 @@ import LeftPart from '@/Components/LeftPart';
 import RightPart from '@/Components/RightPart';
 import Tableau from '@/Components/Tableau';
 import BarreOutils from '@/Components/BarreOutils';
+import BoutonProfil from '@/Components/BoutonProfil';
 
 export default function Test() {
     const [selectedEnseignements, setSelectedEnseignements] = React.useState([]);
     const [selectedEnseignant, setSelectedEnseignant] = React.useState(null);
     const [selectedTime, setSelectedTime] = React.useState('02:00');
+    const [showNoEnseignantPopup, setShowNoEnseignantPopup] = React.useState(false);
     // Récupérer le paramètre BUT depuis l'URL
     const urlParams = new URLSearchParams(window.location.search);
     const promoId = urlParams.get('promo_id');
@@ -52,6 +54,7 @@ export default function Test() {
             selectedEnseignements={selectedEnseignements}
             onRemoveEnseignement={handleRemoveEnseignement}
             selectedTime={selectedTime}
+            onCellClick={() => setShowNoEnseignantPopup(true)}
         />
     );
 
@@ -59,12 +62,19 @@ export default function Test() {
         <>
             <Header ComposantProp={BarreOutils} />
             <div className="app">
-                {/* Left Part : Liste des enseignements */}
                 <LeftPart ComposantProp={ListesEnseignementsEnseignantsWithProps} />
-
-                {/* Right Part : Tableau des enseignements sélectionnés */}
                 <RightPart ComposantProp={TableauWithProps} />
             </div>
+
+            {showNoEnseignantPopup && (
+                <div className="popup-overlay">
+                    <div className="popup-content">
+                        <h2>Attention</h2>
+                        <p>Veuillez sélectionner un enseignant avant de remplir le tableau.</p>
+                        <button onClick={() => setShowNoEnseignantPopup(false)}>Fermer</button>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

@@ -1,11 +1,9 @@
 import React from "react";
 
-function LeftPart({ComposantProp}) {
+export default function LeftPart({ ComposantProp, ...props }) {
   return (
     <div className="Left">
-      <ComposantProp />
+      {ComposantProp && <ComposantProp {...props} />}
     </div>
   );
 }
-
-export default LeftPart;

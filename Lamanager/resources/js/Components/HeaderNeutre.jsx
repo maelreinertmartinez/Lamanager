@@ -1,6 +1,8 @@
 import React from "react";
 import logo from '../../img/testlogo.png';
 import { Link } from '@inertiajs/react';
+import BoutonProfil from "@/Components/BoutonProfil.jsx";
+
 
 function HeaderNeutre({ }) {
     return (
@@ -11,6 +13,7 @@ function HeaderNeutre({ }) {
             <h1 className="title">Lamanager</h1>
           </div>
         </Link>
+        <BoutonProfil />
       </>
     )
 }

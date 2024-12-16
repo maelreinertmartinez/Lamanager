@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import logo from '../../img/testlogo.png';
 import { Link } from '@inertiajs/react';
-import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUser, Download, CircleUser } from "lucide-react";
+import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUser, Download } from "lucide-react";
 import axios from 'axios';
 import ImportPopup from "@/Components/ImportPopup.jsx";
 
@@ -85,10 +85,9 @@ function BarreOutils() {
                     <h2>Ajout</h2>
                     <p>Message de test pour l'ajout</p>
                     <button onClick={() => setShowAddPopup(false)}>Fermer</button>
+                    </div>
                 </div>
-                </div>
-        )}
-            <CircleUser size={35} className="circle-user"/>
+            )}
         </>
     );
 }
