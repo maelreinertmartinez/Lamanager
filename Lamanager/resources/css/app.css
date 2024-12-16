@@ -472,7 +472,7 @@ p {
 
 button:disabled,
 button[disabled]
-{ 
+{
     background-color: grey;
     color: white;
     cursor: not-allowed
@@ -528,7 +528,7 @@ button[disabled]
     transition: background-color 0.3s ease;
   }
   .tab-item.active {
-    background-color: #e0e0e0; 
+    background-color: #e0e0e0;
   }
 
 .tableau-import{
@@ -611,7 +611,7 @@ button[disabled]
     background-color: #564787;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     width: 40%; /* Same width as inputs */
     height: 200%; /* Same height as inputs */
     cursor: pointer;
@@ -676,14 +676,25 @@ button[disabled]
 
 .custom-popup-content-modif-voir {
     background-color: white;
-    padding: 20px;
-    border-radius: 8px;
+
+    border-radius: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 80%;
     height: 70%;
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.popupmodifpromo-header {
+    background-color: #564787;
+    color: white;
+    padding: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    width: 100%;
+
 }
 
 .input-with-icon {
@@ -1124,6 +1135,19 @@ button[disabled]
     box-sizing: border-box;
 }
 
+.modif-promo-name-container-label{
+    flex-grow: 1;
+    height: 60%;
+    border: 2px solid #564787;
+    border-radius: 8px;
+    padding: 5px;
+    margin: 2%;
+    width: 20%;
+    box-sizing: border-box;
+}
+
+
+
 .custom-button-modif-container {
     display: flex;
     justify-content: center;
@@ -1151,7 +1175,7 @@ button[disabled]
     border: none;
     border-radius: 4px;
     width: 20%; /* Same width as inputs */
-    height: 60%; /* Same height as inputs */
+    height: 200%; /* Same height as inputs */
     cursor: pointer;
     margin-left: 4%;
     margin-right: 10%; /* Add space between buttons */

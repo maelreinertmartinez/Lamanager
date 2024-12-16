@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData }) {
+function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData, refreshPromoData }) {
     const promo = promos.find(promo => promo.nom === promoName);
     const [groupesData, setGroupesData] = useState([]);
 
@@ -15,9 +15,7 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
             }
         };
 
-
         fetchGroupes();
-
     }, [promo.id]);
 
     const handleInputChange = (id, field, value) => {
@@ -38,22 +36,29 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
         }
     };
 
-    const handleDeleteLastGroup = async (type) => {
-        const lastGroup = groupesData.filter(groupe => groupe.type === type).pop();
-        if (lastGroup) {
+    const handleDeleteGroup = async (type) => {
+        const groupNames = groupesData.filter(groupe => groupe.type === type).map(groupe => groupe.nom);
+        const groupsToDelete = prompt(`Entrez le nom des groupes a supprimer (avec un espace entre chaques) :\n${groupNames.join('\n')}`);
+        const groupNamesToDelete = groupsToDelete.split(' ').map(name => name.trim());
+        const groups = groupesData.filter(groupe => groupe.type === type && groupNamesToDelete.includes(groupe.nom));
+
+        if (groups.length > 0) {
             try {
-                await axios.delete(`/api/groupes/${lastGroup.id}`);
-                setGroupesData(groupesData.filter(groupe => groupe.id !== lastGroup.id));
-                updatePromoData(promo.id, type, groupesData.length - 1);
+                await Promise.all(groups.map(group => axios.delete(`/api/groupes/${group.id}`)));
+                setGroupesData(groupesData.filter(groupe => !groupNamesToDelete.includes(groupe.nom)));
+                updatePromoData(promo.id, type, groupesData.length - groups.length);
             } catch (error) {
-                console.error("Error deleting group:", error);
+                console.error("Error deleting groups:", error);
             }
+        } else {
+            alert("No groups found.");
         }
     };
 
     const handleSubmit = async () => {
         try {
             await axios.post('/update-groupes', { groupes: groupesData });
+            refreshPromoData();
             onClose();
         } catch (error) {
             console.error("Error updating groupes:", error);
@@ -65,7 +70,9 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
     return (
         <div className="custom-popup-overlay-modif" onClick={onClose}>
             <div className="custom-popup-content-modif-voir" onClick={(e) => e.stopPropagation()}>
-                <h2>Modification de {promo.nom}</h2>
+                <div className="popupmodifpromo-header">
+                    <h2>Modification de {promo.nom}</h2>
+                </div>
                 {types.map((type, index) => (
                     <div key={index} className="input-with-icon">
                         <label>{type}</label>
@@ -78,8 +85,12 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
                                 />
                             </div>
                         ))}
-                        <button onClick={() => handleAddGroup(type)}>Add</button>
-                        <button onClick={() => handleDeleteLastGroup(type)}>Delete</button>
+                        {type !== 'CM' && (
+                            <>
+                                <button onClick={() => handleAddGroup(type)}>+</button>
+                                <button onClick={() => handleDeleteGroup(type)}>-</button>
+                            </>
+                        )}
                     </div>
                 ))}
                 <div className="custom-button-container-but">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function CustomPopup({ onClose, selectedAnnee }) {
+function AjoutPromo({ onClose, selectedAnnee }) {
     const [promoName, setPromoName] = useState("");
     const [tdName, setTdName] = useState("");
     const [tpName, setTpName] = useState("");
@@ -100,4 +100,4 @@ function CustomPopup({ onClose, selectedAnnee }) {
     );
 }
 
-export default CustomPopup;
+export default AjoutPromo;
