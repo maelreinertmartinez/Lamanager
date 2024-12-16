@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return Inertia::render('Home');
-})->middleware('auth');
+})->name('home')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
