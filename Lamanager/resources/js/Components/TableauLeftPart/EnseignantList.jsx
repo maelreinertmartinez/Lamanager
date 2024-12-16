@@ -11,6 +11,12 @@ function EnseignantList({ selectedEnseignant, onEnseignantSelect }) {
             try {
                 const response = await axios.get('/api/enseignants');
                 setEnseignants(response.data);
+
+                if (!new URL(window.location).searchParams.get('enseignant') && response.data.length > 0) {
+                    const firstEnseignant = response.data[0];
+                    updateUrlWithEnseignant(firstEnseignant);
+                    onEnseignantSelect(firstEnseignant);
+                }
             } catch (err) {
                 setError('Erreur lors du chargement des enseignants');
             } finally {
