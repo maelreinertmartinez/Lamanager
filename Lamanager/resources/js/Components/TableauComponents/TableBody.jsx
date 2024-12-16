@@ -164,7 +164,7 @@ function TableBody({
     };
 
     const handleDelete = () => {
-        // Logique pour supprimer la cellule
+
         handleCloseContextMenu();
     };
 
