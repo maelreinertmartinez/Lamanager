@@ -33,4 +33,24 @@ class Enseignant extends Authenticatable
     {
         return $this->hasMany(CaseTableau::class);
     }
+
+    public function getAuthPassword()
+    {
+        return $this->mot_de_passe;
+    }
+
+    public function getEmailAttribute()
+    {
+        return $this->mail;
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['mail'] = $value;
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['mot_de_passe'] = $value;
+    }
 }

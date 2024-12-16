@@ -17,12 +17,8 @@ use App\Models\Promo;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return Inertia::render('Home'); // Assurez-vous que la page Home.jsx existe
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return Inertia::render('Home');
+})->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,13 +28,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/test', function () {
     return Inertia::render('Test');
-})->name('test');
-
-
-
-Route::get('/login', function () {
-    return Inertia::render('Login');
-})->name('login');
+})->middleware('auth');
 
 require __DIR__.'/auth.php';
 
@@ -55,7 +45,6 @@ Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('
 
 Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
 Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
-Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
 Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
 Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.groupes.store');
 
