@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 export const getColorClass = (colIndex, nbCM, nbTD) => {
@@ -86,7 +85,7 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                         }
                     } else {
                         // Cocher et ajouter à la BDD
-                        updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
+                        updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}` };
                         try {
                             addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i], heures, minutes);
                         } catch (error) {
@@ -109,7 +108,7 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                     }
                 } else {
                     // Si la cellule n'est pas cochée, on la coche
-                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
+                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}` };
                     try {
                         addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID, heures, minutes);
                     } catch (error) {
