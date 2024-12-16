@@ -7,7 +7,7 @@ import Tableau from '@/Components/Tableau';
 import BarreOutils from '@/Components/BarreOutils';
 import BoutonProfil from '@/Components/BoutonProfil';
 
-export default function Test() {
+export default function PageTableau() {
     const [selectedEnseignements, setSelectedEnseignements] = React.useState([]);
     const [selectedEnseignant, setSelectedEnseignant] = React.useState(null);
     const [selectedTime, setSelectedTime] = React.useState('02:00');

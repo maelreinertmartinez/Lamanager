@@ -20,9 +20,9 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home')->middleware('auth');
 
-Route::get('/test', function () {
-    return Inertia::render('Test');
-})->name('test')->middleware('auth');
+Route::get('/tableau', function () {
+    return Inertia::render('PageTableau');
+})->name('tableau')->middleware('auth');
 
 Route::get('/profil', function () {
     return Inertia::render('PageProfil');
@@ -33,7 +33,6 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::middleware('auth')->group(function () {
-    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
