@@ -701,7 +701,8 @@ button[disabled]
 .input-with-icon {
     display: flex;
     align-items: center;
-    width: 70%;
+    height : 12%;
+    width: 99%;
     gap: 10px;
 }
 
@@ -734,24 +735,29 @@ button[disabled]
     box-sizing: border-box;
 }
 
-.custom-button-container-but {
-    margin-top: 4%;
+.custom-button-container-mod {
     display: flex;
     justify-content: flex-end;
-
-    grid-column: span 1;
-
+    padding: 10px;
 }
 
-.custom-button-container-but button {
+.custom-button-container-mod button {
+    margin-right: 15px;
+    margin-top: 15px;
     padding: 8px 16px;
     background-color: #564787;
     color: white;
-
+    border: none;
     border-radius: 4px;
-    margin-left: 2%;
     cursor: pointer;
 }
+
+.custom-button-container-mod button:hover {
+    background-color: #453a6b;
+}
+
+
+
 
 .icon-right {
     cursor: pointer;

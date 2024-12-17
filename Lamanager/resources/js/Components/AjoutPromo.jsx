@@ -1,11 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function AjoutPromo({ onClose, selectedAnnee }) {
     const [promoName, setPromoName] = useState("");
-    const [tdName, setTdName] = useState("");
-    const [tpName, setTpName] = useState("");
+    const [tdCount, setTdCount] = useState(0);
+    const [tpCount, setTpCount] = useState(0);
     const [isAlternant, setIsAlternant] = useState(false);
+
+    useEffect(() => {
+        const fetchGroupCounts = async () => {
+            try {
+                const tdResponse = await axios.get(`/api/groupes/count?type=TD&annee_id=${selectedAnnee.id}`);
+                const tpResponse = await axios.get(`/api/groupes/count?type=TP&annee_id=${selectedAnnee.id}`);
+                setTdCount(tdResponse.data.count);
+                setTpCount(tpResponse.data.count);
+            } catch (error) {
+                console.error("Error fetching group counts:", error);
+            }
+        };
+
+        fetchGroupCounts();
+    }, [selectedAnnee.id]);
 
     async function creationPromo() {
         const newPromo = await handlePromos();
@@ -16,14 +31,14 @@ function AjoutPromo({ onClose, selectedAnnee }) {
 
     const handlePromos = async () => {
         try {
-            const reponse = await axios.post('/api/promos', {
+            const response = await axios.post('/api/promos', {
                 annee_id: selectedAnnee.id,
                 nom: promoName,
-                nombre_td: tdName,
-                nombre_tp: tpName,
+                nombre_td: tdCount,
+                nombre_tp: tpCount,
                 alternant: isAlternant,
             });
-            return reponse.data;
+            return response.data;
         } catch (err) {
             console.error("Erreur lors de la création de la promo", err);
             return null;
@@ -68,19 +83,19 @@ function AjoutPromo({ onClose, selectedAnnee }) {
                 </div>
                 <div className="custom-input-container-unique">
                     <div className="custom-input-group-unique">
-                        <label>Nom de groupe TD :</label>
+                        <label>Nombre de groupes TD :</label>
                         <input
-                            type="text"
-                            value={tdName}
-                            onChange={(e) => setTdName(e.target.value)}
+                            type="number"
+                            value={tdCount}
+                            onChange={(e) => setTdCount(e.target.value)}
                         />
                     </div>
                     <div className="custom-input-group-unique">
-                        <label>Nom de groupe TP :</label>
+                        <label>Nombre de groupes TP :</label>
                         <input
-                            type="text"
-                            value={tpName}
-                            onChange={(e) => setTpName(e.target.value)}
+                            type="number"
+                            value={tpCount}
+                            onChange={(e) => setTpCount(e.target.value)}
                         />
                     </div>
                 </div>
