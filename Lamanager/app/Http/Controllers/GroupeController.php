@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Groupe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+
 class GroupeController extends Controller
 {
     public function index($promo_id): JsonResponse
     {
         $groupes = Groupe::where('promo_id', $promo_id)
-                      ->select('id', 'nom', 'type')
-                      ->get();
-        
+            ->select('id', 'nom', 'type')
+            ->get();
+
         return response()->json($groupes);
     }
+
     public function store(Request $request): JsonResponse
     {
         $case = new Groupe();
@@ -26,43 +28,50 @@ class GroupeController extends Controller
         return response()->json($case);
     }
 
-    // GroupeController.php
-    public function store2(Request $request): JsonResponse
+    public function stored(Request $request): JsonResponse
     {
-        $promoId = $request->input('promo_id');
-        $newGroup = Groupe::create([
-            'nom' => 'amodifier',
-            'type' => $request->input('type'),
-            'promo_id' => $promoId,
+        // Validation des données
+        $validatedData = $request->validate([
+            'promo_id' => 'required|integer',
+            'type' => 'required|string|max:255',
+            'nom' => 'nullable|string|max:255', // Ajout du champ 'nom' optionnel
         ]);
 
-        return response()->json($newGroup);
+        // Création du groupe
+        $groupe = new Groupe();
+        $groupe->promo_id = $validatedData['promo_id'];
+        $groupe->type = $validatedData['type'];
+        $groupe->nom = $validatedData['nom'] ?? 'Nom par défaut'; // Utilisation d'un nom par défaut si non fourni
+        $groupe->save();
+
+        return response()->json($groupe, 201);
+    }
+    public function update(Request $request, $id)
+    {
+        $groupe = Groupe::findOrFail($id);
+        $groupe->nom = $request->input('nom');
+        $groupe->save();
+
+        return response()->json($groupe, 200);
     }
 
-    public function update(Request $request)
+    public function updateGroupes(Request $request)
     {
         $groupes = $request->input('groupes');
-
         foreach ($groupes as $groupeData) {
-            $groupe = Groupe::find($groupeData['id']);
-            if ($groupe) {
-                $groupe->nom = $groupeData['nom'];
-                $groupe->save();
-            }
+            $groupe = Groupe::findOrFail($groupeData['id']);
+            $groupe->nom = $groupeData['nom'];
+            $groupe->save();
         }
 
-        return response()->json(['message' => 'Groupes updated successfully']);
+        return response()->json(['message' => 'Groupes updated successfully'], 200);
     }
 
-    // GroupeController.php
-    public function destroy($id): JsonResponse
+    public function destroy($id)
     {
-        $groupe = Groupe::find($id);
-        if ($groupe) {
-            $groupe->delete();
-            return response()->json(['message' => 'Group deleted successfully']);
-        }
-        return response()->json(['message' => 'Group not found'], 404);
+        $groupe = Groupe::findOrFail($id);
+        $groupe->delete();
+        return response()->json(['message' => 'Group deleted successfully']);
     }
 
     public function show($promo_id): JsonResponse
@@ -71,11 +80,6 @@ class GroupeController extends Controller
             ->select('id', 'nom', 'type', 'promo_id')
             ->get();
 
-
-
         return response()->json($groupes);
     }
 }
-
-
-

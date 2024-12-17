@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EnseignementController;
+use App\Http\Controllers\LiaisonGroupeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\SemaineController;
@@ -17,7 +18,7 @@ use App\Models\Promo;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return Inertia::render('Home'); // Assurez-vous que la page Home.jsx existe
+    return Inertia::render('Home');
 });
 
 Route::get('/dashboard', function () {
@@ -33,8 +34,6 @@ Route::middleware('auth')->group(function () {
 Route::get('/test', function () {
     return Inertia::render('Test');
 })->name('test');
-
-
 
 Route::get('/login', function () {
     return Inertia::render('Login');
@@ -61,15 +60,17 @@ Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.group
 
 Route::delete('/api/cases', [CaseController::class, 'destroy'])->name('api.cases.destroy');
 
-
 Route::post('/api/enseignements', [EnseignementController::class, 'store'])->name('api.enseignements.store');
 
-// web.php
-Route::post('/api/groupes', [GroupeController::class, 'store2'])->name('api.groupes.store');
-// web.php
 Route::delete('/api/groupes/{id}', [GroupeController::class, 'destroy'])->name('api.groupes.destroy');
-
 Route::post('/api/promos/update', [PromoController::class, 'updatePromos'])->name('api.promos.update');
 
-Route::post('/update-groupes', [GroupeController::class, 'update']);
+Route::get('/api/liaison_groupes/{groupe_td_id}', [LiaisonGroupeController::class, 'getSubGroups']);
+Route::get('/api/liaison_groupes', [LiaisonGroupeController::class, 'index']);
+Route::post('/api/liaison_groupes', [LiaisonGroupeController::class, 'store']);
+
+Route::put('/api/groupes/{id}', [GroupeController::class, 'update'])->name('api.groupes.update');
+Route::post('/api/update-groupes', [GroupeController::class, 'updateGroupes'])->name('api.update-groupes');
+
+Route::post('/api/groupes', [GroupeController::class, 'stored'])->name('api.groupes.store');
 
