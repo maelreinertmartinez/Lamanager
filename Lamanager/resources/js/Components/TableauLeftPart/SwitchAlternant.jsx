@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 function SwitchAlternant({ promoId, onSwitchChange }) {
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(() => {
+        // Initialiser avec la valeur du localStorage
+        return localStorage.getItem(`switchState-${promoId}`) === 'true';
+    });
     const [showSwitch, setShowSwitch] = useState(false);
     const [alternantId, setAlternantId] = useState(null);
 
@@ -27,6 +30,8 @@ function SwitchAlternant({ promoId, onSwitchChange }) {
     const handleChange = (e) => {
         const checked = e.target.checked;
         setIsChecked(checked);
+        // Sauvegarder l'état dans localStorage
+        localStorage.setItem(`switchState-${promoId}`, checked);
         onSwitchChange(checked);
     };
 
