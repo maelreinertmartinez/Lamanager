@@ -37,9 +37,13 @@ function BarreOutils() {
                     <h1 className="title">Lamanager</h1>
                 </div>
             </Link>
-            <div className="NomPromo">
-                <h2>{promoName}</h2>
-            </div>
+    
+            {window.location.pathname === '/PageTableau' && (
+                <div className="NomPromo">
+                    <h2>{promoName}</h2>
+                </div>
+            )}
+
             <div className="BarreOutils">
                 <ul className="barre-outils-list">
                     <li className="barre-outils-item" onClick={() => setShowCustomPopup(true)}><Table/></li>
@@ -55,38 +59,6 @@ function BarreOutils() {
                 <ImportPopup
                     onClose={() => setShowCustomPopup(false)}
                 />
-            )}
-            {/* Popup de suppression */}
-        {showDeletePopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Suppression</h2>
-                <p>Message de test pour la suppression</p>
-                <button onClick={() => setShowDeletePopup(false)}>Fermer</button>
-            </div>
-            </div>
-        )}
-
-        {/* Popup d'édition */}
-        {showEditPopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Édition</h2>
-                <p>Message de test pour l'édition</p>
-                <button onClick={() => setShowEditPopup(false)}>Fermer</button>
-            </div>
-            </div>
-        )}
-
-            {/* Popup d'ajout */}
-            {showAddPopup && (
-                <div className="popup-overlay">
-                <div className="popup-content">
-                    <h2>Ajout</h2>
-                    <p>Message de test pour l'ajout</p>
-                    <button onClick={() => setShowAddPopup(false)}>Fermer</button>
-                    </div>
-                </div>
             )}
         </>
     );

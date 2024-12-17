@@ -68,7 +68,7 @@ Route::get('/login', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/api/session', [AuthenticatedSessionController::class, 'index'])->name('api.session');
-    // autres routes protégées par auth
+    Route::post('password-reset', [EnseignantController::class, 'changementMdp'])->name('password-reset');
 });
 
 require __DIR__.'/auth.php';
