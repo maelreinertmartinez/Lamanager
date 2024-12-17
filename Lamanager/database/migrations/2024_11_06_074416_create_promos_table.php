@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('promos', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Annee::class, 'annee_id')->nullable()->constrained('annees')->onDelete('set null');
+            $table->integer('alternant_id')->nullable();
             $table->string('nom');
             $table->integer('nombre_td');
             $table->integer('nombre_tp');

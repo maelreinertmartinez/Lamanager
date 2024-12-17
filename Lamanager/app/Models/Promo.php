@@ -13,6 +13,7 @@ class Promo extends Model
 
     protected $fillable = [
         'annee_id',
+        'alternant_id',
         'nom',
         'nombre_td',
         'nombre_tp',

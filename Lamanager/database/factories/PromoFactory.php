@@ -27,6 +27,7 @@ class PromoFactory extends Factory
     {
 
         return [
+            'alternant_id' => null,
             'nom' => function(array $attributes) {
                 $nom = array_pop($this->promo);
 
@@ -55,7 +56,7 @@ class PromoFactory extends Factory
                 }
                 return $nombre_tp;
             },
-            'alternant' => true,
+            'alternant' => false,
             'annee_id' => Annee::factory(),
         ];
     }

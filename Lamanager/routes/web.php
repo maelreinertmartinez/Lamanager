@@ -56,6 +56,9 @@ Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.
 Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
 Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
+
+Route::post('/api/update-promos/{id}', [PromoController::class, 'updateAlternantId'])->name('api.promos.updateAlternantId');
+
 Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.groupes.store');
 Route::post('/api/liaison', [LiaisonGroupeController::class, 'store'])->name('api.liaison.store');
 

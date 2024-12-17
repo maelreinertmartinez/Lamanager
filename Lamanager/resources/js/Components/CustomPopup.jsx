@@ -19,15 +19,37 @@ function CustomPopup({ onClose, selectedAnnee }) {
 
     const handlePromos = async () => {
         try {
-            const reponse = await axios.post('/api/promos', {
+            const promo = await axios.post('/api/promos', {
                 annee_id: selectedAnnee.id,
+                alternant_id: null,
                 nom: promoName,
                 nombre_td: tdNbr,
                 nombre_tp: tpNbr,
-                alternant: isAlternant,
+                alternant: false,
             });
-            console.log("Promo créée :", reponse.data);
-            return reponse.data; // Retourne la promo créée
+            if(isAlternant){
+                const alternant_promo = await axios.post('/api/promos', {
+                    annee_id: selectedAnnee.id,
+                    alternant_id: promo.data.id,
+                    nom: promoName,
+                    nombre_td: tdNbr,
+                    nombre_tp: tpNbr,
+                    alternant: true,
+                })
+                
+                try{
+                    await axios.post(`/api/update-promos/${promo.data.id}`,  {
+                        alternant_id: alternant_promo.data.id,
+                    });
+
+                }catch(error){
+                    console.log("Erreur dans l'update de la promo");
+                }
+                
+            };
+            
+            console.log("Promo créée :", promo.data);
+            return promo.data; // Retourne la promo créée
         } catch (err) {
             console.error("Erreur lors de la création de la promo", err);
             return null; // En cas d'erreur
