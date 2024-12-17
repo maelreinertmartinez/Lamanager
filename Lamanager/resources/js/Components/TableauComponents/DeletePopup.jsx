@@ -1,54 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function DuplicatePopup({ duplicateOption, setDuplicateOption, customWeeks, setCustomWeeks, handleDuplicateConfirm, setShowDuplicatePopup }) {
+function DeletePopup({ handleDeleteConfirm, setShowDeletePopup }) {
+    const [deleteOption, setDeleteOption] = useState('selection');
+    const [customRows, setCustomRows] = useState('');
+
+    const handleOptionChange = (event) => {
+        setDeleteOption(event.target.value);
+    };
+
+    const handleCustomRowsChange = (event) => {
+        setCustomRows(event.target.value);
+    };
+
+    const handleConfirm = () => {
+        handleDeleteConfirm(deleteOption, customRows);
+    };
+
     return (
         <div className="popup-overlay" style={overlayStyle}>
             <div className="popup-content" style={contentStyle}>
-                <h2>Dupliquer</h2>
+                <h2>Confirmer la suppression</h2>
                 <div style={radioContainerStyle}>
                     <label style={radioLabelStyle}>
                         <input
                             type="radio"
-                            value="pairs"
-                            checked={duplicateOption === 'pairs'}
-                            onChange={() => setDuplicateOption('pairs')}
+                            value="selection"
+                            checked={deleteOption === 'selection'}
+                            onChange={handleOptionChange}
                             style={radioStyle}
                         />
-                        <span style={textStyle}>Semaines paires</span>
-                    </label>
-                    <label style={radioLabelStyle}>
-                        <input
-                            type="radio"
-                            value="impairs"
-                            checked={duplicateOption === 'impairs'}
-                            onChange={() => setDuplicateOption('impairs')}
-                            style={radioStyle}
-                        />
-                        <span style={textStyle}>Semaines impaires</span>
+                        <span style={textStyle}>Supprimer la sélection</span>
                     </label>
                     <label style={radioLabelStyle}>
                         <input
                             type="radio"
                             value="custom"
-                            checked={duplicateOption === 'custom'}
-                            onChange={() => setDuplicateOption('custom')}
+                            checked={deleteOption === 'custom'}
+                            onChange={handleOptionChange}
                             style={radioStyle}
                         />
-                        <span style={textStyle}>Semaines spécifiques</span>
-                        {duplicateOption === 'custom' && (
+                        <span style={textStyle}>Supprimer les lignes suivantes</span>
+                        {deleteOption === 'custom' && (
                             <input
                                 type="text"
-                                value={customWeeks}
-                                onChange={(e) => setCustomWeeks(e.target.value)}
-                                placeholder="Ex: 1,3,5 ou 1-5"
+                                value={customRows}
+                                onChange={handleCustomRowsChange}
+                                placeholder="Ex: 1,3 ou 1-5"
                                 style={inputStyle}
                             />
                         )}
                     </label>
                 </div>
                 <div style={buttonContainerStyle}>
-                    <button onClick={handleDuplicateConfirm} style={buttonStyle}>Confirmer</button>
-                    <button onClick={() => setShowDuplicatePopup(false)} style={buttonStyle}>Annuler</button>
+                    <button onClick={() => setShowDeletePopup(false)} style={buttonStyle}>Annuler</button>
+                    <button onClick={handleConfirm} style={buttonStyle}>Confirmer</button>
                 </div>
             </div>
         </div>
@@ -72,7 +77,7 @@ const contentStyle = {
     padding: '20px',
     borderRadius: '8px',
     boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
-    maxWidth: '600px',
+    maxWidth: '700px',
     width: '100%',
     textAlign: 'center',
 };
@@ -113,7 +118,7 @@ const buttonStyle = {
 const inputStyle = {
     marginLeft: '10px',
     padding: '5px',
-    width: '50%',
+    width: '40%',
 };
 
-export default DuplicatePopup;
+export default DeletePopup;
