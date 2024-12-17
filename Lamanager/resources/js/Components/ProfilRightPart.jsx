@@ -27,20 +27,12 @@ export default function ProfilRightPart({ userData = {} }) {
                     <label className="text-gray-600">Mail</label>
                     <input 
                         type="email" 
-                        value={userData.email || ''} 
+                        value={userData.mail || ''} 
                         readOnly 
                         className="bg-pink-50 p-2 rounded-md"
                     />
                 </div>
-                <div className="flex flex-col">
-                    <label className="text-gray-600">Mot de passe</label>
-                    <input 
-                        type="password" 
-                        value="************" 
-                        readOnly 
-                        className="bg-pink-50 p-2 rounded-md"
-                    />
-                    </div>
+                
                 </div>
             </div>
             <div className="fixed bottom-4 right-4">

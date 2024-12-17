@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { User, LogOut } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 
 export default function ProfilLeftPart({ userName = 'Utilisateur' }) {
     return (
@@ -10,7 +11,14 @@ export default function ProfilLeftPart({ userName = 'Utilisateur' }) {
             <h2 className="text-xl font-semibold mb-6">{userName}</h2>
             <button className="flex items-center gap-2 text-gray-600 hover:text-gray-800">
                 <LogOut className="w-6 h-6" />
-                <span>Se déconnecter</span>
+                <Link
+                href={route('logout')}
+                method="post"
+                as="button"
+                
+                >
+                Déconnexion
+                </Link>
             </button>
         </div>
     );

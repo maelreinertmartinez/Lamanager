@@ -12,61 +12,63 @@ use App\Http\Controllers\AnneeController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\GroupeController;
 use App\Models\Semaine;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Inertia\Inertia;
 use App\Models\Promo;
 use Illuminate\Http\Request;
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-})->name('home')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Home');
+    })->name('home');
 
-Route::get('/tableau', function () {
-    return Inertia::render('PageTableau');
-})->name('tableau')->middleware('auth');
+    Route::get('/tableau', function () {
+        return Inertia::render('PageTableau');
+    })->name('tableau');
 
-Route::get('/profil', function () {
-    return Inertia::render('PageProfil');
-})->name('profil')->middleware('auth');
+    Route::get('/profil', function () {
+        return Inertia::render('PageProfil');
+    })->name('profil');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/api/enseignants', [EnseignantController::class, 'index'])->name('api.enseignants');
+    Route::get('/api/enseignant/{id}', [EnseignantController::class, 'showCode'])->name('api.enseignant.get');
+    Route::get('/api/semaines', [SemaineController::class, 'index'])->name('api.semaines');
+    Route::get('/api/annees', [AnneeController::class, 'index'])->name('api.annees');
+    Route::get('/api/promos/{annee_id}', [PromoController::class, 'index'])->name('api.promos');
+    Route::get('/api/session', [AuthController::class, 'index'])->name('api.session');
+    Route::get('/api/user/{user_id}', [EnseignantController::class, 'avoirInfo'])->name('api.enseignants.get');
+
+    Route::get('/api/enseignements/{promo_id}/{annee_id}', [EnseignementController::class, 'index']);
+    Route::get('/api/promo/{id}', [PromoController::class, 'getPromo'])->name('api.promo.get');
+    Route::get('/api/groupes/{promo_id}', [GroupeController::class, 'index'])->name('api.groupes');
+    Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('api.cases');
+
+    Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
+    Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
+    Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
+    Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.groupes.store');
+
+    Route::delete('/api/cases', [CaseController::class, 'destroy'])->name('api.cases.destroy');
+
+    Route::post('/api/enseignements', [EnseignementController::class, 'store'])->name('api.enseignements.store');
+    Route::delete('/api/groupes/{id}', [GroupeController::class, 'destroy'])->name('api.groupes.destroy');
+
+    Route::post('/api/promos/update', [PromoController::class, 'updatePromos'])->name('api.promos.update');
+
+    Route::post('/update-groupes', [GroupeController::class, 'update']);
+});
 
 Route::get('/login', function () {
     return Inertia::render('Login');
 })->name('login');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/api/session', [AuthenticatedSessionController::class, 'index'])->name('api.session');
+    // autres routes protégées par auth
 });
 
 require __DIR__.'/auth.php';
-
-Route::get('/api/enseignants', [EnseignantController::class, 'index'])->name('api.enseignants');
-Route::get('/api/enseignant/{id}', [EnseignantController::class, 'showCode'])->name('api.enseignant.get');
-Route::get('/api/semaines', [SemaineController::class, 'index'])->name('api.semaines');
-Route::get('/api/annees', [AnneeController::class, 'index'])->name('api.annees');
-Route::get('/api/promos/{annee_id}', [PromoController::class, 'index'])->name('api.promos');
-
-Route::get('/api/enseignements/{promo_id}/{annee_id}', [EnseignementController::class, 'index']);
-Route::get('/api/promo/{id}', [PromoController::class, 'getPromo'])->name('api.promo.get');
-Route::get('/api/groupes/{promo_id}', [GroupeController::class, 'index'])->name('api.groupes');
-Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('api.cases');
-
-Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
-Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
-Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
-Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.groupes.store');
-
-Route::delete('/api/cases', [CaseController::class, 'destroy'])->name('api.cases.destroy');
-
-
-Route::post('/api/enseignements', [EnseignementController::class, 'store'])->name('api.enseignements.store');
-
-// web.php
-Route::post('/api/groupes', [GroupeController::class, 'store2'])->name('api.groupes.store');
-// web.php
-Route::delete('/api/groupes/{id}', [GroupeController::class, 'destroy'])->name('api.groupes.destroy');
-
-Route::post('/api/promos/update', [PromoController::class, 'updatePromos'])->name('api.promos.update');
-
-Route::post('/update-groupes', [GroupeController::class, 'update']);
-

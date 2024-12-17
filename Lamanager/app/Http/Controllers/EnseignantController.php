@@ -13,6 +13,15 @@ class EnseignantController extends Controller
 
         return response()->json($enseignants);
     }
+
+    public function avoirInfo($id): JsonResponse
+    {
+        $enseignant = Enseignant::where('id', $id)
+                                ->select( 'nom', 'prenom','mail')
+                                ->first();
+    
+        return response()->json($enseignant);
+    }
     public function showCode($id): JsonResponse
     {
         $enseignant = Enseignant::where('id', $id)

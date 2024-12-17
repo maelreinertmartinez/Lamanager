@@ -6,20 +6,59 @@ import BarreOutils from '@/Components/BarreOutils';
 import ProfilLeftPart from '@/Components/ProfilLeftPart';
 import ProfilRightPart from '@/Components/ProfilRightPart';
 import BoutonProfil from '@/Components/BoutonProfil';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export default function PageProfil() {
-    const userData = {
-        nom: "Onete",
-        prenom: "Cristina",
-        email: "example.onete@unilim.com"
-    };
+    
+    const [userData, setUserData] = useState(null);
+    const [id, setId] = useState(null);
 
+    useEffect(() => {
+        const fetchSessionData = async () => {
+            try {
+                const response = await axios.get('/api/session');
+                setId(response.data.userId);
+            } catch (err) {
+                console.error('Erreur lors de la récupération de la session');
+            }
+        };
+
+        fetchSessionData();
+    }, []);
+
+    useEffect(() => {
+        if (id) {
+            const fetchUserData = async () => {
+                try {
+                    const response = await axios.get(`/api/user/${id}`);
+                    setUserData(response.data);
+                } catch (err) {
+                    console.error('Erreur lors du chargement des données utilisateur');
+                }
+            };
+
+            fetchUserData();
+        }
+    }, [id]);
+
+    if (!userData) return <div>Chargement...</div>;
+
+    const nom = userData.nom;
+    const prenom = userData.prenom;
+    const mail = userData.mail;
+
+    const userProfile = {
+        nom : nom,
+        prenom : prenom,
+        mail : mail
+    };
     return (
         <>
             <Header ComposantProp={BarreOutils} />
             <div className="app">
-                <LeftPart ComposantProp={ProfilLeftPart} userName="Madame Onete" />
-                <RightPart ComposantProp={ProfilRightPart} userData={userData} />
+                <LeftPart ComposantProp={ProfilLeftPart} userName={nom+" "+prenom} />
+                <RightPart ComposantProp={ProfilRightPart} userData={userProfile} />
             </div>
         </>
     );
