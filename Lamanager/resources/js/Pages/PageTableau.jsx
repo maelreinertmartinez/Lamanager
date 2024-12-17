@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../Components/Header';
 import ListesEnseignementsEnseignants from '../Components/TableauLeftPart/ListesEnseignementsEnseignants';
 import LeftPart from '@/Components/LeftPart';
@@ -8,15 +8,19 @@ import BarreOutils from '@/Components/BarreOutils';
 import BoutonProfil from '@/Components/BoutonProfil';
 
 export default function PageTableau() {
-    const [selectedEnseignements, setSelectedEnseignements] = React.useState([]);
-    const [selectedEnseignant, setSelectedEnseignant] = React.useState(null);
-    const [selectedTime, setSelectedTime] = React.useState('02:00');
-    const [showNoEnseignantPopup, setShowNoEnseignantPopup] = React.useState(false);
-    const [showIcons, setShowIcons] = React.useState(false); // Ajouter l'état showIcons
-    // Récupérer le paramètre BUT depuis l'URL
+    // Déplacer la déclaration de urlParams avant son utilisation
     const urlParams = new URLSearchParams(window.location.search);
     const promoId = urlParams.get('promo_id');
     const anneeId = urlParams.get('annee_id');
+
+    const [selectedEnseignements, setSelectedEnseignements] = useState([]);
+    const [selectedEnseignant, setSelectedEnseignant] = useState(null);
+    const [selectedTime, setSelectedTime] = useState('02:00');
+    const [showNoEnseignantPopup, setShowNoEnseignantPopup] = useState(false);
+    const [showIcons, setShowIcons] = useState(false);
+    const [currentPromoId, setCurrentPromoId] = useState(promoId);
+    const [alternantId, setAlternantId] = useState(null);
+
     const handleEnseignementSelect = (enseignement) => {
         if (enseignement && !selectedEnseignements.some(e => e.id === enseignement.id)) {
             setSelectedEnseignements([...selectedEnseignements, enseignement]);
@@ -40,6 +44,23 @@ export default function PageTableau() {
         setShowIcons(!showIcons);
     };
 
+    useEffect(() => {
+        const fetchPromoData = async () => {
+            try {
+                const response = await fetch(`/api/promo/${promoId}`);
+                const data = await response.json();
+                setAlternantId(data.alternant_id);
+            } catch (error) {
+                console.error('Error fetching promo data:', error);
+            }
+        };
+        fetchPromoData();
+    }, [promoId]);
+
+    const handleAlternantChange = (isChecked) => {
+        setCurrentPromoId(isChecked ? alternantId : promoId);
+    };
+
     const ListesEnseignementsEnseignantsWithProps = () => (
         <ListesEnseignementsEnseignants 
             promoId={promoId} 
@@ -49,13 +70,14 @@ export default function PageTableau() {
             onEnseignantSelect={handleEnseignantSelect}
             onTimeSelect={handleTimeSelect}
             defaultTime={selectedTime}
+            onAlternantChange={handleAlternantChange}
         />
     );
 
     // Rendu du composant Tableau avec les enseignements sélectionnés
     const TableauWithProps = () => (
         <Tableau 
-            promoId={promoId} 
+            promoId={currentPromoId} 
             selectedEnseignements={selectedEnseignements}
             onRemoveEnseignement={handleRemoveEnseignement}
             selectedTime={selectedTime}

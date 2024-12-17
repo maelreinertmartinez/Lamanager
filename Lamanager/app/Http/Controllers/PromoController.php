@@ -10,7 +10,7 @@ class PromoController extends Controller
     public function index($annee_id): JsonResponse
     {
         $promos = Promo::where('annee_id', $annee_id)
-                      ->select('id', 'nom','alternant')
+                      ->select('id', 'nom','alternant','alternant_id')
                       ->get();
 
         return response()->json($promos);

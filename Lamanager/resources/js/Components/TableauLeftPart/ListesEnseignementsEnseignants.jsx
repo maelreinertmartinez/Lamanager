@@ -2,6 +2,7 @@ import React from 'react';
 import EnseignementSelect from './EnseignementSelect';
 import EnseignantList from './EnseignantList';
 import TimeSelector from './TimeSelector';
+import SwitchAlternant from './SwitchAlternant';
 
 function ListesEnseignementsEnseignants({ 
     promoId, 
@@ -10,7 +11,9 @@ function ListesEnseignementsEnseignants({
     selectedEnseignant, 
     onEnseignantSelect, 
     onTimeSelect, 
-    defaultTime 
+    defaultTime,
+    isAlternant,
+    onAlternantChange 
 }) {
     return (
         <>
@@ -26,6 +29,10 @@ function ListesEnseignementsEnseignants({
             <TimeSelector 
                 defaultTime={defaultTime} 
                 onTimeSelect={onTimeSelect} 
+            />
+            <SwitchAlternant 
+                    promoId={promoId}
+                    onSwitchChange={onAlternantChange}
             />
         </>
     );
