@@ -5,7 +5,7 @@ import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUs
 import axios from 'axios';
 import ImportPopup from "@/Components/ImportPopup.jsx";
 
-function BarreOutils() {
+function BarreOutils({ toggleIcons }) {
     const [showCustomPopup, setShowCustomPopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showEditPopup, setShowEditPopup] = useState(false);
@@ -44,7 +44,7 @@ function BarreOutils() {
                 <ul className="barre-outils-list">
                     <li className="barre-outils-item" onClick={() => setShowCustomPopup(true)}><Table/></li>
                     <li className="barre-outils-item"><ChartColumnIncreasing /></li>
-                    <li className="barre-outils-item"><MousePointer2 /></li>
+                    <li className="barre-outils-item" onClick={toggleIcons}><MousePointer2 /></li>
                     <li className="barre-outils-item"><Settings /></li>
                     <li className="barre-outils-item"><BookUser /></li>
                     <li className="barre-outils-item"><FileUser /></li>

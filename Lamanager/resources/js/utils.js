@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 export const getColorClass = (colIndex, nbCM, nbTD) => {
@@ -39,12 +38,11 @@ const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupe
     }
 };
 
-const deleteCellFromDatabase = async (semaineId, enseignementId, groupeId) => {
+const deleteCellFromDatabase = async (semaineId, groupeId) => {
     try {
         const response = await axios.delete('/api/cases', {
             data: {
                 semaine_id: semaineId,
-                enseignement_id: enseignementId,
                 groupe_id: groupeId
             }
         });
@@ -70,7 +68,7 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
 
                 for (let i = 0; i < groupesID.length; i++) {
                     try {
-                        deleteCellFromDatabase(semainesID[rowIndex], enseignementId, groupesID[i]);
+                        deleteCellFromDatabase(semainesID[rowIndex], groupesID[i]);
                     } catch (error) {
                     }
                 }
@@ -86,7 +84,7 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                         }
                     } else {
                         // Cocher et ajouter à la BDD
-                        updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
+                        updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}` };
                         try {
                             addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i], heures, minutes);
                         } catch (error) {
@@ -103,13 +101,13 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                     // Si la cellule est déjà cochée, on la décoche
                     updatedCells[key] = { clicked: false, text: "" };
                     try {
-                        deleteCellFromDatabase(semaineId, enseignementId, groupeID);
+                        deleteCellFromDatabase(semaineId, groupeID);
                     } catch (error) {
                         console.error('Erreur lors de la suppression:', error);
                     }
                 } else {
                     // Si la cellule n'est pas cochée, on la coche
-                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes}  - ${enseignantCode}` };
+                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}` };
                     try {
                         addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID, heures, minutes);
                     } catch (error) {
