@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { handleCellClick } from '../../utils';
+import { handleCellClick, addCellToDatabase, deleteCellFromDatabase } from '../../utils';
 import { getColorClass } from '../../utils';
+import ContextMenu from './ContextMenu';
+import DuplicatePopup from './DuplicatePopup';
 
 function TableBody({ 
     semaines,
@@ -20,6 +22,10 @@ function TableBody({
     showIcons
 }) {
     const [contextMenu, setContextMenu] = useState(null);
+    const [showDuplicatePopup, setShowDuplicatePopup] = useState(false);
+    const [duplicateOption, setDuplicateOption] = useState('pairs');
+    const [customWeeks, setCustomWeeks] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = () => {
@@ -116,7 +122,6 @@ function TableBody({
                     selected: !updatedCells[key]?.selected,
                 };
 
-                // Check if all selectable cells in the row are selected
                 const allSelected = Array.from({ length: nbGroupe }, (_, i) => `${rowIndex}-${i}`)
                     .filter(cellKey => updatedCells[cellKey]?.text)
                     .every(cellKey => updatedCells[cellKey]?.selected);
@@ -134,7 +139,7 @@ function TableBody({
     const handleContextMenu = (event, rowIndex, colIndex) => {
         event.preventDefault();
         event.stopPropagation();
-        if (clickedCells[`${rowIndex}-${colIndex}`]?.text) {
+        if (showIcons && clickedCells[`${rowIndex}-${colIndex}`]?.text) {
             setContextMenu({
                 mouseX: event.clientX,
                 mouseY: event.clientY,
@@ -148,8 +153,77 @@ function TableBody({
         setContextMenu(null);
     };
 
-    const handleDuplicate = () => {
-        // Logique pour dupliquer la cellule
+    const handleDuplicate = async () => {
+        setShowDuplicatePopup(true);
+    };
+
+    const parseWeeks = (weeksString) => {
+        const weeks = [];
+        const ranges = weeksString.split(',');
+        ranges.forEach(range => {
+            if (range.includes('-')) {
+                const [start, end] = range.split('-').map(Number);
+                for (let i = start; i <= end; i++) {
+                    weeks.push(i);
+                }
+            } else {
+                weeks.push(Number(range));
+            }
+        });
+        return weeks;
+    };
+
+    const handleDuplicateConfirm = async () => {
+        setIsLoading(true);
+        const selectedCells = Object.keys(clickedCells).filter(key => clickedCells[key]?.selected && !key.startsWith('semaine-'));
+        const selectedRows = [...new Set(selectedCells.map(key => key.split('-')[0]))];
+
+        let weeksToDuplicate = [];
+
+        if (selectedRows.length === 1) {
+            if (duplicateOption === 'pairs') {
+                weeksToDuplicate = semainesID.filter((_, index) => index % 2 === 0);
+            } else if (duplicateOption === 'impairs') {
+                weeksToDuplicate = semainesID.filter((_, index) => index % 2 !== 0);
+            } else if (duplicateOption === 'custom') {
+                weeksToDuplicate = parseWeeks(customWeeks).map(week => semainesID[week - 1]);
+            }
+        } else {
+            weeksToDuplicate = semainesID.slice(selectedRows[0], selectedRows[selectedRows.length - 1] + 1);
+        }
+
+        for (const cellKey of selectedCells) {
+            const [rowIndex, colIndex] = cellKey.split('-').map(Number);
+
+            for (const week of weeksToDuplicate) {
+                try {
+                    await addCellToDatabase(
+                        week,
+                        enseignantId,
+                        enseignement.id,
+                        groupesID[colIndex],
+                        heures,
+                        minutes
+                    );
+
+                    // Mettre à jour l'état pour afficher les cellules dupliquées
+                    setClickedCells((prev) => {
+                        const updatedCells = { ...prev };
+                        const newCellKey = `${semainesID.indexOf(week)}-${colIndex}`;
+                        updatedCells[newCellKey] = {
+                            clicked: true,
+                            text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}`
+                        };
+                        return updatedCells;
+                    });
+                } catch (error) {
+                    console.error('Erreur lors de l\'ajout à la base de données:', error);
+                }
+            }
+        }
+
+        setIsLoading(false);
+        setShowDuplicatePopup(false);
         handleCloseContextMenu();
     };
 
@@ -163,13 +237,46 @@ function TableBody({
         handleCloseContextMenu();
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
+        const selectedCells = Object.keys(clickedCells).filter(key => clickedCells[key]?.selected && !key.startsWith('semaine-'));
+
+        for (const cellKey of selectedCells) {
+            const [rowIndex, colIndex] = cellKey.split('-').map(Number);
+
+            try {
+                await deleteCellFromDatabase(
+                    semainesID[rowIndex],
+                    groupesID[colIndex]
+                );
+            } catch (error) {
+                console.error('Erreur lors de la suppression de la base de données:', error);
+            }
+        }
+
+        // Mettre à jour l'état pour décocher les cellules supprimées
+        setClickedCells((prev) => {
+            const updatedCells = { ...prev };
+            selectedCells.forEach(cellKey => {
+                updatedCells[cellKey] = {
+                    ...updatedCells[cellKey],
+                    selected: false,
+                    clicked: false,
+                    text: ""
+                };
+            });
+            return updatedCells;
+        });
 
         handleCloseContextMenu();
     };
 
     return (
         <>
+            {isLoading && (
+                <div className="loading-overlay">
+                    <div className="loading-spinner"></div>
+                </div>
+            )}
             <tbody>
                 {semaines.map((semaine, rowIndex) => (
                     <tr key={semaine}>
@@ -235,25 +342,23 @@ function TableBody({
                 ))}
             </tbody>
             {contextMenu && (
-                <div
-                    style={{
-                        position: 'fixed',
-                        top: contextMenu.mouseY,
-                        left: contextMenu.mouseX,
-                        backgroundColor: 'white',
-                        boxShadow: '0px 0px 5px rgba(0,0,0,0.5)',
-                        zIndex: 1000,
-                        cursor: 'pointer'
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <ul style={{ listStyle: 'none', padding: '10px', margin: 0 }}>
-                        <li onClick={handleDuplicate}>Dupliquer</li>
-                        <li onClick={handleEdit}>Modifier</li>
-                        <li onClick={handleMove}>Déplacer</li>
-                        <li onClick={handleDelete}>Supprimer</li>
-                    </ul>
-                </div>
+                <ContextMenu
+                    contextMenu={contextMenu}
+                    handleDuplicate={handleDuplicate}
+                    handleEdit={handleEdit}
+                    handleMove={handleMove}
+                    handleDelete={handleDelete}
+                />
+            )}
+            {showDuplicatePopup && (
+                <DuplicatePopup
+                    duplicateOption={duplicateOption}
+                    setDuplicateOption={setDuplicateOption}
+                    customWeeks={customWeeks}
+                    setCustomWeeks={setCustomWeeks}
+                    handleDuplicateConfirm={handleDuplicateConfirm}
+                    setShowDuplicatePopup={setShowDuplicatePopup}
+                />
             )}
         </>
     );

@@ -10,7 +10,7 @@ export const traitementNom = (nom) => {
     return nom.length > 8 ? nom.substring(0, 8) + '...' : nom;
 };
 
-const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupeId, heures, minutes) => {
+export const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupeId, heures, minutes) => {
     try {
         if (!semaineID || !enseignantId || !enseignementId || !groupeId) {
             console.error('Paramètres invalides:', {
@@ -38,7 +38,7 @@ const addCellToDatabase = async (semaineID, enseignantId, enseignementId, groupe
     }
 };
 
-const deleteCellFromDatabase = async (semaineId, groupeId) => {
+export const deleteCellFromDatabase = async (semaineId, groupeId) => {
     try {
         const response = await axios.delete('/api/cases', {
             data: {
