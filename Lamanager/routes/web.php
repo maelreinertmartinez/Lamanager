@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EnseignementController;
+use App\Http\Controllers\LiaisonGroupeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\SemaineController;
@@ -54,7 +55,11 @@ Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('
 Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
 Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
 Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
+
+Route::post('/api/update-promos/{id}', [PromoController::class, 'updateAlternantId'])->name('api.promos.updateAlternantId');
+
 Route::post('/api/groupes', [GroupeController::class, 'store'])->name('api.groupes.store');
+Route::post('/api/liaison', [LiaisonGroupeController::class, 'store'])->name('api.liaison.store');
 
 Route::delete('/api/cases', [CaseController::class, 'destroy'])->name('api.cases.destroy');
 

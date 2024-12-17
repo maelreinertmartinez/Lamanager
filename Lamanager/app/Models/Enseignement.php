@@ -18,7 +18,7 @@ class Enseignement extends Model
         'nombre_heure_td',
         'nombre_heure_tp',
         'semestre',
-        'nombre_heure_max',
+        'nombre_heures_projet',
     ];
 
     public function promo(): BelongsTo

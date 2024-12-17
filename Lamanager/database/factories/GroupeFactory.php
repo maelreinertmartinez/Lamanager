@@ -27,9 +27,6 @@ protected $td_liste = [
     "G6",
     "G7",
 ];
-
-protected $cm_liste = ["CM"];
-
 protected $tp_liste = [
     "G1A",
     "G1B",
@@ -72,10 +69,7 @@ protected $tp_liste = [
                     return $td;
                 }
                 if ($type=="CM"){
-                    $cm = array_pop($this->cm_liste);
-                    if (empty($this->cm_liste)){
-                        $this->cm_liste=["CM"];
-                    }
+                    $cm = "CM";
                     return $cm;
                 }
                 return 0;

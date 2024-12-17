@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Annee;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('promos', function (Blueprint $table) {
+        Schema::create('alertes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Annee::class, 'annee_id')->nullable()->constrained('annees')->onDelete('set null');
-            $table->integer('alternant_id')->nullable();
+            $table->foreignId('enseignant_id')->nullable()->constrained()->onDelete('set null');
             $table->string('nom');
-            $table->integer('nombre_td');
-            $table->integer('nombre_tp');
-            $table->boolean('alternant');
+            $table->integer('niveau');
+            $table->integer('heure_min')->nullable();
+            $table->integer('heure_max')->nullable();
+            $table->string('couleur')->nullable();
+
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('promos');
+        Schema::dropIfExists('alertes');
     }
 };

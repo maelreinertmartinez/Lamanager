@@ -18,6 +18,7 @@ class Enseignant extends Authenticatable
         'nom',
         'prenom',
         'mail',
+        'admin'
     ];
 
     protected $hidden = [
@@ -52,5 +53,10 @@ class Enseignant extends Authenticatable
     public function setPasswordAttribute($value)
     {
         $this->attributes['mot_de_passe'] = $value;
+    }
+
+    public function alertes()
+    {
+        return $this->hasMany(Alerte::class);
     }
 }

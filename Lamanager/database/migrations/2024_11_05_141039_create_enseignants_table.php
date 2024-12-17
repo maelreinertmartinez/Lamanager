@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('nom', 50);
             $table->string('prenom', 50);
             $table->string('mail', 50);
+            $table->boolean('admin');
             $table->timestamps();
         });
     }

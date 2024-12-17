@@ -30,6 +30,7 @@ class EnseignantFactory extends Factory
         $nom = $this->faker->lastName;
         $code = strtoupper(substr($prenom, 0, 1) . substr($nom, 0, 2));
         $mail = strtolower($prenom . '.' . $nom . '@example.com');
+        $admin = $this->faker->boolean;
 
         return [
             'nom' => $prenom,
@@ -38,6 +39,7 @@ class EnseignantFactory extends Factory
             'actif' => true,
             'mot_de_passe' => static::$password ??= Hash::make('password'),
             'mail' => $mail,
+            'admin' => $admin,
             'role_id' => Role::factory(),
         ];
 

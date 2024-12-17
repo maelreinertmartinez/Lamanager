@@ -19,7 +19,11 @@ function PromoRightPart({ selectedAnnee }) {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
             try {
+                
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
+                
+                
+                //console.log(response.data); 
                 setPromos(response.data);
                 setLoading(false);
             } catch (err) {
@@ -34,11 +38,19 @@ function PromoRightPart({ selectedAnnee }) {
     if (loading) return <div>Chargement...</div>;
     if (error) return <div>{error}</div>;
 
+    var temp = [];
+    for(var i=0;i<promos.length;i++){
+        if(!promos[i].alternant){
+            temp.push(promos[i]);
+            //console.log('temp',temp);
+        }
+    }
+
     return (
         <>
         <div className="Promos">
             <ul className="promos-list">
-                {promos.map((promo) => (
+                {temp.map((promo) => (
                     <li key={promo.id}>
                         <Link href={`/tableau?promo_id=${promo.id}&annee_id=${selectedAnnee.id}`}>
                             <ChoixPromo className="but-class" title={promo.nom} />

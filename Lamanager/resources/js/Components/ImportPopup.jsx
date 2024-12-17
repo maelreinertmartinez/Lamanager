@@ -59,7 +59,7 @@ function ImportPopup({ onClose }) {
                         nombre_heures_td: listeHeures[index][1], 
                         nombre_heures_tp: listeHeures[index][2], 
                         semestre: semestre, 
-                        nombre_heures_max: listeHeures[index][3], 
+                        nombre_heures_projet: listeHeures[index][3], 
                     }); 
                     console.log(response.data);
                     setIsDisabled(false);
@@ -67,7 +67,7 @@ function ImportPopup({ onClose }) {
                 }
                 
             } catch (error) {
-                console.error("Error saving data:", error);
+                console.error("Erreur lors de la sauvegarde des données", error);
             }
         }
     };
@@ -89,7 +89,7 @@ function ImportPopup({ onClose }) {
                         console.log("Parsed CSV:", rows);
 
                         let compteur = 18;
-                        let i =0;
+                        let i = 0;
                         let alternance = false;
 
                         let liste_recherche = [];
@@ -141,7 +141,7 @@ function ImportPopup({ onClose }) {
 
                     reader.readAsText(selectedFile);
                 } catch (error) {
-                    console.error("Error reading file:", error);
+                    console.error("Erreur lors de la lecture du fichier:", error);
                 }
             };
             handleImport();
