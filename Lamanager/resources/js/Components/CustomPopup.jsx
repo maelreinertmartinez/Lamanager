@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-
 function CustomPopup({ onClose, selectedAnnee }) {
     // États pour stocker les données
     const [promoName, setPromoName] = useState("");
@@ -10,88 +9,88 @@ function CustomPopup({ onClose, selectedAnnee }) {
 
     // Fonction pour gérer la soumission
     async function creationPromo() {
-        const newPromo = await handlePromos(); // Obtenir la promo créée
+        const newPromo = await handlePromos(); // Créer la promo normale
         if (newPromo) {
-            await handleGroupes(newPromo); // Passer la promo directement
+            await handleGroupes(newPromo); // Créer les groupes pour la promo normale
+
+            if (isAlternant) {
+                // Créer la promo alternante
+                const alternantPromo = await handlePromosAlternant(newPromo);
+                if (alternantPromo) {
+                    await handleGroupes(alternantPromo); // Créer les groupes pour la promo alternante
+                }
+            }
         }
     }
 
+    async function addPromo(selectedAnnee, alternantId, promoName, tdNbr, tpNbr, alternant) {
+        return await axios.post('/api/promos', {
+            annee_id: selectedAnnee.id,
+            alternant_id: alternantId,
+            nom: promoName,
+            nombre_td: tdNbr,
+            nombre_tp: tpNbr,
+            alternant: alternant,
+        });
+    }
+    async function addGroupe(promo, nom, type) {
+        return await axios.post('/api/groupes', {
+            promo_id: promo.id,
+            nom: nom,
+            type: type,
+        });
+    }
 
     const handlePromos = async () => {
         try {
-            const promo = await axios.post('/api/promos', {
-                annee_id: selectedAnnee.id,
-                alternant_id: null,
-                nom: promoName,
-                nombre_td: tdNbr,
-                nombre_tp: tpNbr,
-                alternant: false,
-            });
-            if(isAlternant){
-                const alternant_promo = await axios.post('/api/promos', {
-                    annee_id: selectedAnnee.id,
-                    alternant_id: promo.data.id,
-                    nom: promoName,
-                    nombre_td: tdNbr,
-                    nombre_tp: tpNbr,
-                    alternant: true,
-                })
-                
-                try{
-                    await axios.post(`/api/update-promos/${promo.data.id}`,  {
-                        alternant_id: alternant_promo.data.id,
-                    });
-
-                }catch(error){
-                    console.log("Erreur dans l'update de la promo");
-                }
-                
-            };
-            
+            const promo = await addPromo(selectedAnnee,null, promoName, tdNbr, tpNbr, false);
             console.log("Promo créée :", promo.data);
-            return promo.data; // Retourne la promo créée
+            return promo.data;
         } catch (err) {
             console.error("Erreur lors de la création de la promo", err);
-            return null; // En cas d'erreur
+            return null;
+        }
+    };
+
+    const handlePromosAlternant = async (promo) => {
+        try {
+            const alternantPromo = await addPromo
+            (selectedAnnee,promo.id, `${promo.nom} Alternant`, promo.nombre_td, promo.nombre_tp, true);
+
+            // Mettre à jour la promo principale avec l'alternant_id
+            await axios.post(`/api/update-promos/${promo.id}`, {
+                alternant_id: alternantPromo.data.id,
+            });
+
+            console.log("Promo alternante créée :", alternantPromo.data);
+            return alternantPromo.data;
+        } catch (err) {
+            console.error("Erreur lors de la création de la promo alternante", err);
+            return null;
         }
     };
 
     const handleGroupes = async (promo) => {
-        let temp = 0;
-        await axios.post('/api/groupes', {
-            promo_id: promo.id,
-            nom: "CM",
-            type: "CM",
-        });
+        let num_td = 0;
+        console.log("promo actuel", promo);
+        await addGroupe(promo, "CM", "CM");
+
         for (let i = 0; i < promo.nombre_td; i++) {
+            const nomTD = "TD" + parseInt(i + 1);
+            const td = await addGroupe(promo, nomTD, "TD");
 
-            const nomTD = "TD" + i;
-            const td = await axios.post('/api/groupes', {
-                promo_id: promo.id,
-                nom: nomTD,
-                type: "TD",
-            });
             for (let j = 1; j <= promo.nombre_tp/promo.nombre_td; j++) {
-                temp = temp+1;
-                const nomTP = "TP" + temp;
-
-                const tp = await axios.post('/api/groupes', {
-                    promo_id: promo.id,
-                    nom: nomTP,
-                    type: "TP",
-                });
+                num_td = num_td+1;
+                const nomTP = "TP" + num_td;
+                const tp = await addGroupe(promo, nomTP, "TP");
+                console.log(td,tp,td.data.id);
 
                 await axios.post('/api/liaison', {
                     groupe_td_id: td.data.id,
                     groupe_tp_id: tp.data.id,
                 });
-
             }
         }
-
-
-
-
         onClose(); // Fermer la popup après soumission
     };
 
