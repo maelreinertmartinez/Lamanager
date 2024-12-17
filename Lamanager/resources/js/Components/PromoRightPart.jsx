@@ -22,7 +22,7 @@ function PromoRightPart({ selectedAnnee }) {
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
                 
                 
-                console.log(response.data); 
+                //console.log(response.data); 
                 setPromos(response.data);
                 setLoading(false);
             } catch (err) {
@@ -41,7 +41,7 @@ function PromoRightPart({ selectedAnnee }) {
     for(var i=0;i<promos.length;i++){
         if(!promos[i].alternant){
             temp.push(promos[i]);
-            console.log('temp',temp);
+            //console.log('temp',temp);
         }
     }
 

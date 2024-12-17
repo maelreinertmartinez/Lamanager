@@ -67,7 +67,7 @@ function ImportPopup({ onClose }) {
                 }
                 
             } catch (error) {
-                console.error("Error saving data:", error);
+                console.error("Erreur lors de la sauvegarde des données", error);
             }
         }
     };
@@ -89,7 +89,7 @@ function ImportPopup({ onClose }) {
                         console.log("Parsed CSV:", rows);
 
                         let compteur = 18;
-                        let i =0;
+                        let i = 0;
                         let alternance = false;
 
                         let liste_recherche = [];
@@ -141,7 +141,7 @@ function ImportPopup({ onClose }) {
 
                     reader.readAsText(selectedFile);
                 } catch (error) {
-                    console.error("Error reading file:", error);
+                    console.error("Erreur lors de la lecture du fichier:", error);
                 }
             };
             handleImport();

@@ -18,6 +18,7 @@ class Enseignant extends Authenticatable
         'nom',
         'prenom',
         'mail',
+        'admin'
     ];
 
     protected $hidden = [
