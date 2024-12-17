@@ -46,22 +46,38 @@ function ImportPopup({ onClose }) {
             setErrorMessage("Veuillez selectionner un fichier CSV en premier.");
         } else {
             setErrorMessage("");
-            console.log("Valeurs modifiées : ", listeHeures);
+            //console.log("Valeurs modifiées : ", listeHeures);
 
             try {
+                const promo = await axios.get(`/api/promo/${promoId}`);
+                console.log("Les valeurs de promo : ", promo);
+
                 for (let index = 0; index < listeRecherche.length; index++) { 
+                    if (promo.data.alternant_id !== null){
+                        const item = listeRecherche[index]; 
+                        const donnes_alternant = await axios.post('api/enseignements', { 
+                            nom: item, 
+                            promo_id: promo.data.alternant_id, 
+                            alternant: isAlternance,
+                            nombre_heures_cm: listeHeures[index][0], 
+                            nombre_heures_td: listeHeures[index][1], 
+                            nombre_heures_tp: listeHeures[index][2], 
+                            semestre: semestre, 
+                            nombre_heures_projet: listeHeures[index][3], 
+                        }); 
+                    };
                     const item = listeRecherche[index]; 
                     const response = await axios.post('api/enseignements', { 
                         nom: item, 
                         promo_id: promoId, 
-                        alternant: isAlternance,
+                        alternant: false,
                         nombre_heures_cm: listeHeures[index][0], 
                         nombre_heures_td: listeHeures[index][1], 
                         nombre_heures_tp: listeHeures[index][2], 
                         semestre: semestre, 
                         nombre_heures_projet: listeHeures[index][3], 
                     }); 
-                    console.log(response.data);
+                    //console.log(response.data);
                     setIsDisabled(false);
                     onClose();
                 }
@@ -83,10 +99,10 @@ function ImportPopup({ onClose }) {
 
                     reader.onload = (event) => {
                         const csvContent = event.target.result;
-                        console.log("CSV Content:", csvContent);
+                        //console.log("CSV Content:", csvContent);
 
                         const rows = csvContent.split('\n').map(row => row.split(','));
-                        console.log("Parsed CSV:", rows);
+                        //console.log("Parsed CSV:", rows);
 
                         let compteur = 18;
                         let i = 0;
@@ -128,9 +144,9 @@ function ImportPopup({ onClose }) {
                             i++;
                         }
                         let semestre = liste_recherche[i][1];
-                        console.log("Liste des heures : ", liste_heures);
-                        console.log("Liste des ressources :", liste_recherche);        
-                        console.log(semestre);
+                        //console.log("Liste des heures : ", liste_heures);
+                        //console.log("Liste des ressources :", liste_recherche);        
+                        //console.log(semestre);
                         
                         setIsAlternance(alternance);
                         setListeRecherche(liste_recherche); 
