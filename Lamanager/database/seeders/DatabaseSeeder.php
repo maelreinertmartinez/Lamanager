@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             SemaineSeeder::class,
             EnseignementSeeder::class,
             GroupeSeeder::class,
+            AlerteSeeder::class,
         ]);
 
         User::factory()->create([

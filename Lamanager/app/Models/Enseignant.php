@@ -34,4 +34,9 @@ class Enseignant extends Authenticatable
     {
         return $this->hasMany(CaseTableau::class);
     }
+
+    public function alertes()
+    {
+        return $this->hasMany(Alerte::class);
+    }
 }

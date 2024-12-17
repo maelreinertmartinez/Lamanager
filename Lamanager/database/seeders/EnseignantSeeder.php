@@ -17,14 +17,16 @@ class EnseignantSeeder extends Seeder
     {
         // Create Role
         $this->call(RoleSeeder::class);
+        $this->call(AlerteSeeder::class);
 
         // Create Enseignant
         Enseignant::factory()
             ->count(10)
             ->state(new Sequence(fn()=>
             [
-                'role_id'=>rand(1,3),            
+                'role_id'=>rand(1,3),
             ]))
             ->create();
+
     }
 }
