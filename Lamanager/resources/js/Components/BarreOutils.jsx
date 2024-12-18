@@ -7,13 +7,13 @@ import ImportPopup from "@/Components/ImportPopup.jsx";
 
 function BarreOutils({ toggleIcons }) {
     const [showCustomPopup, setShowCustomPopup] = useState(false);
-    const [showDeletePopup, setShowDeletePopup] = useState(false);
-    const [showEditPopup, setShowEditPopup] = useState(false);
-    const [showAddPopup, setShowAddPopup] = useState(false);
     const [promoName, setPromoName] = useState('');
     const params = new URLSearchParams(window.location.search);
     const promoId = params.get('promo_id');
 
+    const redirectionGestion = () => {
+        <Link href="/profil"></Link>
+    }
     useEffect(() => {
         const fetchPromoName = async () => {
             if (promoId) {
@@ -37,16 +37,24 @@ function BarreOutils({ toggleIcons }) {
                     <h1 className="title">Lamanager</h1>
                 </div>
             </Link>
-            <div className="NomPromo">
-                <h2>{promoName}</h2>
-            </div>
+    
+            {window.location.pathname === '/tableau' && (
+                <div className="NomPromo">
+                    <h2>{promoName}</h2>
+                </div>
+            )}
+
             <div className="BarreOutils">
                 <ul className="barre-outils-list">
                     <li className="barre-outils-item" onClick={() => setShowCustomPopup(true)}><Table/></li>
                     <li className="barre-outils-item"><ChartColumnIncreasing /></li>
                     <li className="barre-outils-item" onClick={toggleIcons}><MousePointer2 /></li>
                     <li className="barre-outils-item"><Settings /></li>
-                    <li className="barre-outils-item"><BookUser /></li>
+                    <li className="barre-outils-item">
+                        <Link href={"/profil?from=tableau"}>
+                            <BookUser />
+                        </Link>
+                    </li>
                     <li className="barre-outils-item"><FileUser /></li>
                     <li className="barre-outils-item"><Download /></li>
                 </ul>
@@ -55,38 +63,6 @@ function BarreOutils({ toggleIcons }) {
                 <ImportPopup
                     onClose={() => setShowCustomPopup(false)}
                 />
-            )}
-            {/* Popup de suppression */}
-        {showDeletePopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Suppression</h2>
-                <p>Message de test pour la suppression</p>
-                <button onClick={() => setShowDeletePopup(false)}>Fermer</button>
-            </div>
-            </div>
-        )}
-
-        {/* Popup d'édition */}
-        {showEditPopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Édition</h2>
-                <p>Message de test pour l'édition</p>
-                <button onClick={() => setShowEditPopup(false)}>Fermer</button>
-            </div>
-            </div>
-        )}
-
-            {/* Popup d'ajout */}
-            {showAddPopup && (
-                <div className="popup-overlay">
-                <div className="popup-content">
-                    <h2>Ajout</h2>
-                    <p>Message de test pour l'ajout</p>
-                    <button onClick={() => setShowAddPopup(false)}>Fermer</button>
-                    </div>
-                </div>
             )}
         </>
     );

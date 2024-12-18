@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from '@inertiajs/react';
+
 
 const MenuAnnee = ({ selectedAnnee, onAnneeSelect }) => {
     const [annees, setAnnees] = useState([]);
@@ -64,14 +64,6 @@ const MenuAnnee = ({ selectedAnnee, onAnneeSelect }) => {
             + Ajouter une année
             </button>
             
-            <Link
-                href={route('logout')}
-                method="post"
-                as="button"
-                className="menu-item cursor-pointer hover:bg-red-100 text-red-600"
-            >
-                Déconnexion
-            </Link>
 
             {showAddForm && (
                 <div className="popup-overlay">

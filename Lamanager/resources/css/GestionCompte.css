@@ -1,0 +1,126 @@
+.account-manager {
+    display: flex;
+    gap: 1rem;
+    font-family: Arial, sans-serif;
+    background: #f8f9fa;
+    padding: 1rem;
+    flex-wrap: nowrap; /* Ensure no wrapping */
+    width: 100%; /* Ensure the container takes full width */
+    height: 100vh; /* Take full viewport height */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.account-selection,
+.account-modification {
+    background: #e6e0ef;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 48%; /* Adjust width to fit side by side */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.account-selection {
+    flex-grow: 1; /* Allow the container to grow and take available space */
+    max-height: calc(100vh - 6rem); /* Adjust height to take slightly less viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-btn {
+    background-color: #5f4b8b;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.edit-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.status-icon {
+    font-size: 1.2rem;
+}
+
+.status-icon.active {
+    color: green;
+}
+
+.status-icon.inactive {
+    color: red;
+}
+
+.account-modification label {
+    display: block;
+    margin: 0.5rem 0 0.2rem;
+    font-weight: bold;
+}
+
+.account-modification input,
+.account-modification select {
+    width: 100%;
+    padding: 0.4rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.delete-btn {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.validate-btn {
+    background-color: #5cb85c;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.cancel-btn {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 10px;
+}

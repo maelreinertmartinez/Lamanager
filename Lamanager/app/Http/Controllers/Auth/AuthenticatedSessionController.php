@@ -8,8 +8,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\JsonResponse;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -42,6 +44,21 @@ class AuthenticatedSessionController extends Controller
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
+    }
+
+    /**
+     * Display the login view.
+     */
+    public function index(): JsonResponse
+    {
+        $user = Auth::user();
+
+        if ($user) {
+            return response()->json(['userId' => $user->id]);
+        }
+
+        Log::error('User not authenticated');
+        return response()->json(['error' => 'User not authenticated'], 401);
     }
 
     /**
