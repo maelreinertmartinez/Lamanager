@@ -38,7 +38,7 @@ function BarreOutils() {
                 </div>
             </Link>
     
-            {window.location.pathname === '/PageTableau' && (
+            {window.location.pathname === '/tableau' && (
                 <div className="NomPromo">
                     <h2>{promoName}</h2>
                 </div>
