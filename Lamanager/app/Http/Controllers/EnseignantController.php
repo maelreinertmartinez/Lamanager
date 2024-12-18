@@ -92,6 +92,7 @@ class EnseignantController extends Controller
             'mot_de_passe' => Hash::make($request->password),
             'actif' => $request->actif,
             'code' => $code,
+            'admin' => false,
         ]);
 
         return response()->json($enseignant);
