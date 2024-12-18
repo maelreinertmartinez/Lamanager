@@ -15,6 +15,7 @@ const GestionCompte = () => {
     role_id: '',
     password: '',
     actif: 1,
+    admin: false, // Ajoutez le champ admin
   });
 
   useEffect(() => {
@@ -42,7 +43,15 @@ const GestionCompte = () => {
 
   const handleEditClick = (account) => {
     setSelectedAccount(account);
-    setFormAccount(account);
+    setFormAccount({
+      nom: account.nom || '',
+      prenom: account.prenom || '',
+      mail: account.mail || '',
+      role_id: account.role_id || '',
+      password: '', // Ne pas pré-remplir le mot de passe
+      actif: account.actif || 1,
+      admin: account.admin || false,
+    });
     setShowForm(true);
   };
 
@@ -85,14 +94,15 @@ const GestionCompte = () => {
         role_id: '',
         password: '',
         actif: 1,
+        admin: false, // Réinitialisez le champ admin
     });
   };
 
   const handleAccountChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormAccount((prevState) => ({
         ...prevState,
-        [name]: value,
+        [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -105,6 +115,7 @@ const GestionCompte = () => {
         role_id: '',
         password: '',
         actif: 1,
+        admin: false, // Réinitialisez le champ admin
     });
   };
 
@@ -117,6 +128,7 @@ const GestionCompte = () => {
         role_id: '',
         password: '',
         actif: 1,
+        admin: false, // Réinitialisez le champ admin
     });
     setShowForm(true);
   };
@@ -229,6 +241,14 @@ const GestionCompte = () => {
               <option value={1}>Actif</option>
               <option value={0}>Inactif</option>
             </select>
+            <label>Admin</label>
+            <input
+              type="checkbox"
+              name="admin"
+              className="admin-checkbox"
+              checked={formAccount.admin}
+              onChange={handleAccountChange}
+            />
             <div className="action-buttons">
               <button type="submit" className="validate-btn">Valider</button>
               <button type="button" className="cancel-btn" onClick={handleCancel}>Annuler</button>

@@ -28,7 +28,7 @@ class EnseignantController extends Controller
 
     public function listeEnseignant(): JsonResponse
     {
-        $enseignants = Enseignant::select('id', 'nom', 'prenom','mail','role_id','actif',)->get();
+        $enseignants = Enseignant::select('id', 'nom', 'prenom','mail','role_id','actif','admin')->get();
 
         return response()->json($enseignants);
     }
@@ -68,6 +68,7 @@ class EnseignantController extends Controller
             'role_id' => 'required|integer',
             'password' => 'required|string|confirmed',
             'actif' => 'required|boolean',
+            'admin' => 'required|boolean',
         ]);
 
         // Generate unique code
@@ -92,7 +93,7 @@ class EnseignantController extends Controller
             'mot_de_passe' => Hash::make($request->password),
             'actif' => $request->actif,
             'code' => $code,
-            'admin' => false,
+            'admin' => $request->admin,
         ]);
 
         return response()->json($enseignant);
@@ -107,6 +108,7 @@ class EnseignantController extends Controller
             'role_id' => 'required|integer',
             'password' => 'nullable|string|confirmed',
             'actif' => 'required|boolean',
+            'admin' => 'required|boolean',
         ]);
 
         $enseignant = Enseignant::findOrFail($id);
@@ -118,6 +120,7 @@ class EnseignantController extends Controller
             $enseignant->mot_de_passe = Hash::make($request->password);
         }
         $enseignant->actif = $request->actif;
+        $enseignant->admin = $request->admin;
         $enseignant->save();
 
         return response()->json($enseignant);
