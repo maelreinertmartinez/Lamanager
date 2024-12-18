@@ -79,6 +79,10 @@ Route::get('/login', function () {
     return Inertia::render('Login');
 })->name('login');
 
+Route::get('/versionProf', function () {
+    return Inertia::render('PageVersionProf');
+})->name('versionProf')->middleware('auth');
+
 Route::middleware('auth')->group(function () {
     Route::get('/api/session', [AuthenticatedSessionController::class, 'index'])->name('api.session');
     Route::post('password-reset', [EnseignantController::class, 'changementMdp'])->name('password-reset');
