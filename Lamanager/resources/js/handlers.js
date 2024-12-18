@@ -105,11 +105,16 @@ export const handleContextMenu = (event, rowIndex, colIndex, showIcons, clickedC
     event.preventDefault();
     event.stopPropagation();
     if (showIcons && clickedCells[`${rowIndex}-${colIndex}`]?.text) {
+        const selectedCells = Object.keys(clickedCells).filter(key => clickedCells[key]?.selected && !key.startsWith('semaine-'));
+        const selectedRows = [...new Set(selectedCells.map(key => key.split('-')[0]))];
+        const canDuplicate = selectedRows.length === 1;
+
         setContextMenu({
             mouseX: event.clientX,
             mouseY: event.clientY,
             rowIndex,
-            colIndex
+            colIndex,
+            canDuplicate
         });
     }
 };

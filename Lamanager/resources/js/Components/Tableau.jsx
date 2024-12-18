@@ -8,6 +8,7 @@ import { traitementNom } from '../utils';
 
 function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseignement, selectedTime, onCellClick, showIcons }) {
     const [activeTableau, setActiveTableau] = useState(null);
+    const [isLoading, setIsLoading] = useState(false); // Ajout de isLoading et setIsLoading
     const enseignantId = new URLSearchParams(window.location.search).get('enseignant');
 
     const {
@@ -59,7 +60,7 @@ function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseign
                     key={enseignement.id}
                     className="Tableau"
                     id={enseignement.nom}
-                    style={{ display: activeTableau === enseignement.nom ? 'block' : 'none' }}
+                    style={{ display: activeTableau === enseignement.nom && !isLoading ? 'block' : 'none' }} // Modification ici
                 >
                     <div className="flex flex-col">
                         <div className="mb-4 relative">
@@ -90,6 +91,7 @@ function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseign
                                     setClickedCells={setClickedCells}
                                     onCellClick={onCellClick}
                                     showIcons={showIcons}
+                                    setIsLoading={setIsLoading} // Ajout de setIsLoading
                                 />
                             </table>
                             <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
@@ -106,8 +108,34 @@ function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseign
                     </div>
                 </div>
             ))}
+            {isLoading && (
+                <div className="loading-overlay-right" style={loadingOverlayRightStyle}>
+                    <div className="loading-spinner" style={loadingSpinnerStyle}></div>
+                </div>
+            )}
         </>
     );
 }
+
+const loadingOverlayRightStyle = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+};
+
+const loadingSpinnerStyle = {
+    width: '100px',
+    height: '100px',
+    border: '5px solid rgba(0, 0, 0, 0.1)',
+    borderTop: '5px solid #564787', // Changement de couleur en violet
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+};
 
 export default EnseignementComponent;

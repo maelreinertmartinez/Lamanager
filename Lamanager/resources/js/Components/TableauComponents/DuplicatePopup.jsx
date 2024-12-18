@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function DuplicatePopup({ duplicateOption, setDuplicateOption, customWeeks, setCustomWeeks, handleDuplicateConfirm, setShowDuplicatePopup }) {
+    const [pairStart, setPairStart] = useState('');
+    const [pairEnd, setPairEnd] = useState('');
+    const [impairStart, setImpairStart] = useState('');
+    const [impairEnd, setImpairEnd] = useState('');
+
     return (
         <div className="popup-overlay" style={overlayStyle}>
             <div className="popup-content" style={contentStyle}>
@@ -15,6 +20,24 @@ function DuplicatePopup({ duplicateOption, setDuplicateOption, customWeeks, setC
                             style={radioStyle}
                         />
                         <span style={textStyle}>Semaines paires</span>
+                        {duplicateOption === 'pairs' && (
+                            <div style={inputContainerStyle}>
+                                <input
+                                    type="number"
+                                    value={pairStart}
+                                    onChange={(e) => setPairStart(e.target.value)}
+                                    placeholder="Début"
+                                    style={inputStyle}
+                                />
+                                <input
+                                    type="number"
+                                    value={pairEnd}
+                                    onChange={(e) => setPairEnd(e.target.value)}
+                                    placeholder="Fin"
+                                    style={inputStyle}
+                                />
+                            </div>
+                        )}
                     </label>
                     <label style={radioLabelStyle}>
                         <input
@@ -25,6 +48,24 @@ function DuplicatePopup({ duplicateOption, setDuplicateOption, customWeeks, setC
                             style={radioStyle}
                         />
                         <span style={textStyle}>Semaines impaires</span>
+                        {duplicateOption === 'impairs' && (
+                            <div style={inputContainerStyle}>
+                                <input
+                                    type="number"
+                                    value={impairStart}
+                                    onChange={(e) => setImpairStart(e.target.value)}
+                                    placeholder="Début"
+                                    style={inputStyle}
+                                />
+                                <input
+                                    type="number"
+                                    value={impairEnd}
+                                    onChange={(e) => setImpairEnd(e.target.value)}
+                                    placeholder="Fin"
+                                    style={inputStyle}
+                                />
+                            </div>
+                        )}
                     </label>
                     <label style={radioLabelStyle}>
                         <input
@@ -114,6 +155,12 @@ const inputStyle = {
     marginLeft: '10px',
     padding: '5px',
     width: '50%',
+};
+
+const inputContainerStyle = {
+    display: 'flex',
+    gap: '10px',
+    marginTop: '10px',
 };
 
 export default DuplicatePopup;

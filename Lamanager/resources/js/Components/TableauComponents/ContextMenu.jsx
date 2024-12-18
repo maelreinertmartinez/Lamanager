@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ContextMenu({ contextMenu, handleDuplicate, handleEdit, handleMove, handleDelete }) {
+function ContextMenu({ contextMenu, handleDuplicate, handleEdit, handleMove, handleDelete, handleCloseContextMenu }) {
     return (
         <div
             style={{
@@ -15,9 +15,11 @@ function ContextMenu({ contextMenu, handleDuplicate, handleEdit, handleMove, han
             onClick={(e) => e.stopPropagation()}
         >
             <ul style={{ listStyle: 'none', padding: '10px', margin: 0 }}>
-                <li onClick={handleDuplicate}>Dupliquer</li>
                 <li onClick={handleEdit}>Modifier</li>
                 <li onClick={handleMove}>Déplacer</li>
+                {contextMenu.canDuplicate && (
+                    <li onClick={handleDuplicate}>Dupliquer</li>
+                )}
                 <li onClick={handleDelete}>Supprimer</li>
             </ul>
         </div>

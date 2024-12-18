@@ -20,14 +20,15 @@ function TableBody({
     minutes,
     setClickedCells,
     onCellClick,
-    showIcons
+    showIcons,
+    setIsLoading // Ajout de setIsLoading
 }) {
     const [contextMenu, setContextMenu] = useState(null);
     const [showDuplicatePopup, setShowDuplicatePopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [duplicateOption, setDuplicateOption] = useState('pairs');
     const [customWeeks, setCustomWeeks] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoadingState] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = () => {
@@ -46,7 +47,18 @@ function TableBody({
     };
 
     const handleDeleteConfirmClick = (deleteOption, customRows) => {
-        handleDeleteConfirm(clickedCells, semainesID, groupesID, setClickedCells, setShowDeletePopup, deleteOption, customRows);
+        setIsLoading(true); // Début du chargement
+        handleDeleteConfirm(clickedCells, semainesID, groupesID, setClickedCells, setShowDeletePopup, deleteOption, customRows)
+            .finally(() => setIsLoading(false)); // Fin du chargement
+    };
+
+    const handleDuplicateConfirmClick = () => {
+        setIsLoading(true); // Début du chargement
+        handleDuplicateConfirm(
+            clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
+            enseignantCode, setClickedCells, setIsLoading, setShowDuplicatePopup, handleCloseContextMenu, 
+            duplicateOption, customWeeks, parseWeeks
+        ).finally(() => setIsLoading(false)); // Fin du chargement
     };
 
     return (
@@ -56,51 +68,21 @@ function TableBody({
                     <div className="loading-spinner"></div>
                 </div>
             )}
-            <tbody>
-                {semaines.map((semaine, rowIndex) => (
-                    <tr key={semaine}>
-                        <td
-                            className="border border-black p-2"
-                            style={{ height: '70px', cursor: contextMenu ? 'default' : 'pointer', position: 'relative' }}
-                            onClick={() => handleClick(
-                                rowIndex, 0, null, null, true, contextMenu, enseignantId, onCellClick, 
-                                showIcons, setClickedCells, nbGroupe, enseignement, groupesID, semainesID, 
-                                enseignantCode, heures, minutes, clickedCells, handleCellClick
-                            )}
-                        >
-                            {semaine}
-                            {showIcons && Object.keys(clickedCells).some(key => key.startsWith(`${rowIndex}-`) && clickedCells[key]?.text) && (
-                                <div 
-                                    style={{ 
-                                        position: 'absolute', 
-                                        top: '4px', 
-                                        right: '4px', 
-                                        width: '8px', 
-                                        height: '8px', 
-                                        borderRadius: '50%', 
-                                        border: '1px solid black', 
-                                        backgroundColor: clickedCells[`semaine-${rowIndex}`]?.selected ? 'black' : 'transparent' 
-                                    }} 
-                                />
-                            )}
-                        </td>
-                        {Array.from({ length: nbGroupe }, (_, index) => (
+            {!isLoading && (
+                <tbody>
+                    {semaines.map((semaine, rowIndex) => (
+                        <tr key={semaine}>
                             <td
-                                key={index}
-                                className={`border border-black p-2 ${
-                                    clickedCells[`${rowIndex}-${index}`]?.clicked 
-                                        ? getColorClass(index, nbCM, nbTD) 
-                                        : ''
-                                }`}
-                                style={{ cursor: contextMenu ? 'default' : 'pointer', width: `${100 / (nbGroupe+2)}%`, position: 'relative' }}
+                                className="border border-black p-2"
+                                style={{ height: '70px', cursor: contextMenu ? 'default' : 'pointer', position: 'relative' }}
                                 onClick={() => handleClick(
-                                    rowIndex, index, semainesID[rowIndex], groupesID[index], false, contextMenu, 
-                                    enseignantId, onCellClick, showIcons, setClickedCells, nbGroupe, enseignement, 
-                                    groupesID, semainesID, enseignantCode, heures, minutes, clickedCells, handleCellClick
+                                    rowIndex, 0, null, null, true, contextMenu, enseignantId, onCellClick, 
+                                    showIcons, setClickedCells, nbGroupe, enseignement, groupesID, semainesID, 
+                                    enseignantCode, heures, minutes, clickedCells, handleCellClick
                                 )}
-                                onContextMenu={(event) => handleContextMenu(event, rowIndex, index, showIcons, clickedCells, setContextMenu)}
                             >
-                                {showIcons && clickedCells[`${rowIndex}-${index}`]?.text && (
+                                {semaine}
+                                {showIcons && Object.keys(clickedCells).some(key => key.startsWith(`${rowIndex}-`) && clickedCells[key]?.text) && (
                                     <div 
                                         style={{ 
                                             position: 'absolute', 
@@ -110,18 +92,50 @@ function TableBody({
                                             height: '8px', 
                                             borderRadius: '50%', 
                                             border: '1px solid black', 
-                                            backgroundColor: clickedCells[`${rowIndex}-${index}`]?.selected ? 'black' : 'transparent' 
+                                            backgroundColor: clickedCells[`semaine-${rowIndex}`]?.selected ? 'black' : 'transparent' 
                                         }} 
                                     />
                                 )}
-                                {clickedCells[`${rowIndex}-${index}`]?.text && (
-                                    <h3>{clickedCells[`${rowIndex}-${index}`].text}</h3>
-                                )}
                             </td>
-                        ))}
-                    </tr>
-                ))}
-            </tbody>
+                            {Array.from({ length: nbGroupe }, (_, index) => (
+                                <td
+                                    key={index}
+                                    className={`border border-black p-2 ${
+                                        clickedCells[`${rowIndex}-${index}`]?.clicked 
+                                            ? getColorClass(index, nbCM, nbTD) 
+                                            : ''
+                                    }`}
+                                    style={{ cursor: contextMenu ? 'default' : 'pointer', width: `${100 / (nbGroupe+2)}%`, position: 'relative' }}
+                                    onClick={() => handleClick(
+                                        rowIndex, index, semainesID[rowIndex], groupesID[index], false, contextMenu, 
+                                        enseignantId, onCellClick, showIcons, setClickedCells, nbGroupe, enseignement, 
+                                        groupesID, semainesID, enseignantCode, heures, minutes, clickedCells, handleCellClick
+                                    )}
+                                    onContextMenu={(event) => handleContextMenu(event, rowIndex, index, showIcons, clickedCells, setContextMenu)}
+                                >
+                                    {showIcons && clickedCells[`${rowIndex}-${index}`]?.text && (
+                                        <div 
+                                            style={{ 
+                                                position: 'absolute', 
+                                                top: '4px', 
+                                                right: '4px', 
+                                                width: '8px', 
+                                                height: '8px', 
+                                                borderRadius: '50%', 
+                                                border: '1px solid black', 
+                                                backgroundColor: clickedCells[`${rowIndex}-${index}`]?.selected ? 'black' : 'transparent' 
+                                            }} 
+                                        />
+                                    )}
+                                    {clickedCells[`${rowIndex}-${index}`]?.text && (
+                                        <h3>{clickedCells[`${rowIndex}-${index}`].text}</h3>
+                                    )}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            )}
             {contextMenu && (
                 <ContextMenu
                     contextMenu={contextMenu}
@@ -138,17 +152,13 @@ function TableBody({
                     setDuplicateOption={setDuplicateOption}
                     customWeeks={customWeeks}
                     setCustomWeeks={setCustomWeeks}
-                    handleDuplicateConfirm={() => handleDuplicateConfirm(
-                        clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
-                        enseignantCode, setClickedCells, setIsLoading, setShowDuplicatePopup, handleCloseContextMenu, 
-                        duplicateOption, customWeeks, parseWeeks
-                    )}
+                    handleDuplicateConfirm={handleDuplicateConfirmClick} // Modification ici
                     setShowDuplicatePopup={setShowDuplicatePopup}
                 />
             )}
             {showDeletePopup && (
                 <DeletePopup
-                    handleDeleteConfirm={handleDeleteConfirmClick}
+                    handleDeleteConfirm={handleDeleteConfirmClick} // Modification ici
                     setShowDeletePopup={setShowDeletePopup}
                 />
             )}

@@ -1192,3 +1192,8 @@ button[disabled]
 .custom-button-container button:hover {
     background-color: #453a6b;
 }
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
