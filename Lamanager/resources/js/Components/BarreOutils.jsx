@@ -43,7 +43,7 @@ function BarreOutils({ toggleIcons }) {
             <div className="BarreOutils">
                 <ul className="barre-outils-list">
                     <li className="barre-outils-item" onClick={() => setShowCustomPopup(true)}><Table/></li>
-                    <li className="barre-outils-item"><ChartColumnIncreasing /></li>
+                    <li className="barre-outils-item"><Link href="/versionProf"><ChartColumnIncreasing /></Link></li>
                     <li className="barre-outils-item" onClick={toggleIcons}><MousePointer2 /></li>
                     <li className="barre-outils-item"><Settings /></li>
                     <li className="barre-outils-item"><BookUser /></li>
