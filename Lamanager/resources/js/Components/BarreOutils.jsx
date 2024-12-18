@@ -7,13 +7,13 @@ import ImportPopup from "@/Components/ImportPopup.jsx";
 
 function BarreOutils() {
     const [showCustomPopup, setShowCustomPopup] = useState(false);
-    const [showDeletePopup, setShowDeletePopup] = useState(false);
-    const [showEditPopup, setShowEditPopup] = useState(false);
-    const [showAddPopup, setShowAddPopup] = useState(false);
     const [promoName, setPromoName] = useState('');
     const params = new URLSearchParams(window.location.search);
     const promoId = params.get('promo_id');
 
+    const redirectionGestion = () => {
+        <Link href="/profil"></Link>
+    }
     useEffect(() => {
         const fetchPromoName = async () => {
             if (promoId) {
@@ -50,7 +50,11 @@ function BarreOutils() {
                     <li className="barre-outils-item"><ChartColumnIncreasing /></li>
                     <li className="barre-outils-item"><MousePointer2 /></li>
                     <li className="barre-outils-item"><Settings /></li>
-                    <li className="barre-outils-item"><BookUser /></li>
+                    <li className="barre-outils-item">
+                        <Link href={"/profil?from=tableau"}>
+                            <BookUser />
+                        </Link>
+                    </li>
                     <li className="barre-outils-item"><FileUser /></li>
                     <li className="barre-outils-item"><Download /></li>
                 </ul>

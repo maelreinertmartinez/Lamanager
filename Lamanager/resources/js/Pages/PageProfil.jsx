@@ -5,14 +5,15 @@ import RightPart from '@/Components/RightPart';
 import BarreOutils from '@/Components/BarreOutils';
 import ProfilLeftPart from '@/Components/ProfilLeftPart';
 import ProfilRightPart from '@/Components/ProfilRightPart';
-import BoutonProfil from '@/Components/BoutonProfil';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import GestionCompte from '@/Components/GestionCompte';
 
 export default function PageProfil() {
     
     const [userData, setUserData] = useState(null);
     const [id, setId] = useState(null);
+    const urlParams = new URLSearchParams(window.location.search);
 
     useEffect(() => {
         const fetchSessionData = async () => {
@@ -53,6 +54,17 @@ export default function PageProfil() {
         prenom : prenom,
         mail : mail
     };
+    if(urlParams.get('from') === 'tableau'){
+        return (
+            <>
+                <Header ComposantProp={BarreOutils} />
+                <div className="app">
+                    <LeftPart ComposantProp={ProfilLeftPart} userName={nom+" "+prenom} />
+                    <RightPart ComposantProp={GestionCompte}/>
+                </div>
+            </>
+        );
+    }else{
     return (
         <>
             <Header ComposantProp={BarreOutils} />
@@ -62,4 +74,5 @@ export default function PageProfil() {
             </div>
         </>
     );
+}
 }
