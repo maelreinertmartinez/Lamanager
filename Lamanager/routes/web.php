@@ -13,6 +13,7 @@ use App\Http\Controllers\PromoController;
 use App\Http\Controllers\GroupeController;
 use App\Models\Semaine;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\RoleController;
 use Inertia\Inertia;
 use App\Models\Promo;
 use Illuminate\Http\Request;
@@ -41,11 +42,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/promos/{annee_id}', [PromoController::class, 'index'])->name('api.promos');
     Route::get('/api/session', [AuthController::class, 'index'])->name('api.session');
     Route::get('/api/user/{user_id}', [EnseignantController::class, 'avoirInfo'])->name('api.enseignants.get');
+    Route::get('/api/enseignants/liste', [EnseignantController::class, 'listeEnseignant'])->name('api.enseignants.liste');
 
     Route::get('/api/enseignements/{promo_id}/{annee_id}', [EnseignementController::class, 'index']);
     Route::get('/api/promo/{id}', [PromoController::class, 'getPromo'])->name('api.promo.get');
     Route::get('/api/groupes/{promo_id}', [GroupeController::class, 'index'])->name('api.groupes');
     Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('api.cases');
+    Route::get('/api/roles', [RoleController::class, 'index'])->name('api.roles');
 
     Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
     Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
@@ -60,6 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/promos/update', [PromoController::class, 'updatePromos'])->name('api.promos.update');
 
     Route::post('/update-groupes', [GroupeController::class, 'update']);
+
+    Route::post('/api/enseignants', [EnseignantController::class, 'store'])->name('api.enseignants.store');
+    Route::put('/api/enseignants/{id}', [EnseignantController::class, 'update'])->name('api.enseignants.update');
+    Route::delete('/api/enseignants/{id}', [EnseignantController::class, 'destroy'])->name('api.enseignants.destroy');
 });
 
 Route::get('/login', function () {
