@@ -179,7 +179,9 @@ const GestionCompte = () => {
       </div>
       {showForm && (
         <div className="account-modification">
-          <h3>{selectedAccount ? 'Modifier le Compte' : 'Ajouter un Compte'}</h3>
+          <div className="form-header">
+            <h3>{selectedAccount ? 'Modifier le Compte' : 'Ajouter un Compte'}</h3>
+          </div>
           <form onSubmit={handleValidate}>
             <label>Nom</label>
             <input
