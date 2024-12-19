@@ -4,9 +4,11 @@ import { Link } from '@inertiajs/react';
 import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUser, Download } from "lucide-react";
 import axios from 'axios';
 import ImportPopup from "@/Components/ImportPopup.jsx";
+import RolePopup from "@/Components/RolePopup.jsx";
 
 function BarreOutils({ toggleIcons }) {
     const [showCustomPopup, setShowCustomPopup] = useState(false);
+    const [showRolePopup, setShowRolePopup] = useState(false);
     const [promoName, setPromoName] = useState('');
     const params = new URLSearchParams(window.location.search);
     const promoId = params.get('promo_id');
@@ -55,13 +57,19 @@ function BarreOutils({ toggleIcons }) {
                             <BookUser />
                         </Link>
                     </li>
-                    <li className="barre-outils-item"><FileUser /></li>
+                    <li className="barre-outils-item" onClick={() => setShowRolePopup(true)}><FileUser /></li>
                     <li className="barre-outils-item"><Download /></li>
                 </ul>
             </div>
             {showCustomPopup && (
                 <ImportPopup
                     onClose={() => setShowCustomPopup(false)}
+                />
+            )}
+
+            {showRolePopup && (
+                <RolePopup
+                    onClose={() => setShowRolePopup(false)}
                 />
             )}
         </>
