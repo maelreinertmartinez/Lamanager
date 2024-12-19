@@ -28,24 +28,7 @@ class GroupeController extends Controller
         return response()->json($case);
     }
 
-    public function stored(Request $request): JsonResponse
-    {
-        // Validation des données
-        $validatedData = $request->validate([
-            'promo_id' => 'required|integer',
-            'type' => 'required|string|max:255',
-            'nom' => 'nullable|string|max:255', // Ajout du champ 'nom' optionnel
-        ]);
 
-        // Création du groupe
-        $groupe = new Groupe();
-        $groupe->promo_id = $validatedData['promo_id'];
-        $groupe->type = $validatedData['type'];
-        $groupe->nom = $validatedData['nom'] ?? 'Nom par défaut'; // Utilisation d'un nom par défaut si non fourni
-        $groupe->save();
-
-        return response()->json($groupe, 201);
-    }
     public function update(Request $request, $id)
     {
         $groupe = Groupe::findOrFail($id);
