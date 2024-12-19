@@ -482,7 +482,7 @@ p {
 
 button:disabled,
 button[disabled]
-{ 
+{
     background-color: grey;
     color: white;
     cursor: not-allowed
@@ -538,7 +538,7 @@ button[disabled]
     transition: background-color 0.3s ease;
   }
   .tab-item.active {
-    background-color: #e0e0e0; 
+    background-color: #e0e0e0;
   }
 
 .tableau-import{
@@ -621,7 +621,7 @@ button[disabled]
     background-color: #564787;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     width: 40%; /* Same width as inputs */
     height: 200%; /* Same height as inputs */
     cursor: pointer;
@@ -673,6 +673,7 @@ button[disabled]
     height: 6%; /* Adjust height if needed */
 }
 
+
 .modif-promo-name-container::after,
 .modif-promo-numbertd-container::after,
 .modif-promo-numbertp-container::after
@@ -684,83 +685,13 @@ button[disabled]
     height: 6%;
 }
 
-.custom-popup-content-modif-voir {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    height: 70%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
 
-.input-with-icon {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-
-.input-with-icon input {
-    flex-grow: 1;
-    height: 60%;
-    border: 2px solid #564787;
-    border-radius: 8px;
-    padding: 5px;
-    margin: 2%;
-    width: 80%;
-    box-sizing: border-box;
-}
-
-.input-with-icon label {
-
-    padding-right: 1%;
-    padding-left: 1%;
-    padding-bottom: 2%;
-    margin-right: 5%;
-    height: 20%;
-    width: 3%; /* Définir une largeur fixe */
-    box-sizing: border-box; /* Inclure les bordures et le padding dans la largeur totale */
-}
-
-.custom-button-container-but {
-    margin-top: 4%;
-    display: flex;
-    justify-content: flex-end;
-
-    grid-column: span 1;
-
-}
-
-.custom-button-container-but button {
-    padding: 8px 16px;
-    background-color: #564787;
-    color: white;
-
-    border-radius: 4px;
-    margin-left: 2%;
-    cursor: pointer;
-}
 
 .icon-right {
     cursor: pointer;
 }
 
-.custom-popup-content-modif-voir .input-with-icon button {
-    padding: 8px 16px;
-    background-color: #564787;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 10px; /* Add space between buttons */
-}
 
-.custom-popup-content-modif-voir .input-with-icon button:hover {
-    background-color: #453a6b;
-}
 
 .custom-popup-content h2 {
     margin-top: 0;
@@ -1070,7 +1001,20 @@ button[disabled]
 .custom-button-container-unique button:hover {
     background-color: #453a6b;
 }
-.custom-popup-overlay-modif {
+
+
+
+
+.promo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+
+
+.special-popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -1083,100 +1027,32 @@ button[disabled]
     z-index: 1000;
 }
 
-.custom-popup-content-modif {
+.special-popup-content {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    height: 70%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    text-align: center;
 }
 
-.promo-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.special-popup-content p {
     margin-bottom: 20px;
 }
 
-.modif-promo-name-container,
-.modif-promo-numbertd-container,
-.modif-promo-numbertp-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.modif-promo-name-container label,
-.modif-promo-numbertd-container label,
-.modif-promo-numbertp-container label {
-    flex-shrink: 0;
-    width: 12%;
-}
-
-.modif-promo-name-container input,
-.modif-promo-numbertd-container input,
-.modif-promo-numbertp-container input {
-    flex-grow: 1;
-    height: 60%;
-    border: 2px solid #564787;
-    border-radius: 8px;
-    padding: 5px;
-    margin: 2%;
-    width: 20%;
-    box-sizing: border-box;
-}
-
-.custom-button-modif-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-.custom-button-modif-container::before {
-    content: "";
-    display: inline-block;
-    width: 12%; /* Same width as labels */
-    height: 6%; /* Adjust height if needed */
-}
-
-.custom-button-modif-container::after {
-    content: "";
-    display: inline-block;
-    width: 6%; /* Same width as ::after pseudo-elements */
-    height: 6%; /* Adjust height if needed */
-}
-
-.custom-button-modif-container button {
-    background-color: #564787;
-    color: white;
-    border: none;
+.special-popup-content input {
+    margin-bottom: 20px;
+    padding: 8px;
+    width: 80%;
+    border: 1px solid #564787;
     border-radius: 4px;
-    width: 20%; /* Same width as inputs */
-    height: 100%; /* Same height as inputs */
-    cursor: pointer;
-    margin-left: 4%;
-    margin-right: 10%; /* Add space between buttons */
 }
 
-.custom-button-modif-container button:last-child {
-    margin-right: 0; /* Remove margin from the last button */
-}
-
-
-.custom-button-container {
+.button-group {
     display: flex;
-    justify-content: flex-end;
-    padding: 10px;
+    justify-content: space-between;
 }
 
-.custom-button-container button {
-    margin-right: 15px;
-    margin-top: 15px;
+.button-group button {
     padding: 8px 16px;
     background-color: #564787;
     color: white;
@@ -1185,6 +1061,7 @@ button[disabled]
     cursor: pointer;
 }
 
-.custom-button-container button:hover {
+.button-group button:hover {
     background-color: #453a6b;
 }
+

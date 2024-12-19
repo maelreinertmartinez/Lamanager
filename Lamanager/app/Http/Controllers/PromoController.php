@@ -47,7 +47,7 @@ class PromoController extends Controller
         }
         return response()->json($promo);
     }
-    
+
     public function updatePromos(Request $request): JsonResponse
     {
         try {
@@ -66,5 +66,11 @@ class PromoController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function getAllPromos(): JsonResponse
+    {
+        $promos = Promo::all();
+        return response()->json($promos);
     }
 }
