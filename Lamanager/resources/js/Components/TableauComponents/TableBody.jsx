@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { handleClick, handleContextMenu, handleCloseContextMenu, handleDuplicate, handleDuplicateConfirm, handleEdit, handleMove, handleDelete, handleDeleteConfirm, parseWeeks } from '../../handlers';
+import { handleClick, handleContextMenu, handleCloseContextMenu, handleDuplicate, handleDuplicateConfirm, handleEdit, handleMove, handleMoveConfirm, handleDelete, handleDeleteConfirm, parseWeeks } from '../../handlers';
 import ContextMenu from './ContextMenu';
 import DuplicatePopup from './DuplicatePopup';
 import DeletePopup from './DeletePopup';
+import MovePopup from './MovePopup';
 import { getColorClass, handleCellClick } from '../../utils';
 
 function TableBody({ 
@@ -26,6 +27,7 @@ function TableBody({
     const [contextMenu, setContextMenu] = useState(null);
     const [showDuplicatePopup, setShowDuplicatePopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [showMovePopup, setShowMovePopup] = useState(false);
     const [duplicateOption, setDuplicateOption] = useState('pairs');
     const [customWeeks, setCustomWeeks] = useState('');
     const [isLoading, setIsLoadingState] = useState(false);
@@ -58,6 +60,14 @@ function TableBody({
             clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
             enseignantCode, setClickedCells, setIsLoading, setShowDuplicatePopup, handleCloseContextMenu, 
             duplicateOption, customWeeks, parseWeeks
+        ).finally(() => setIsLoading(false)); // Fin du chargement
+    };
+
+    const handleMoveConfirmClick = (selectedWeek) => {
+        setIsLoading(true); // Début du chargement
+        handleMoveConfirm(
+            selectedWeek, clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
+            enseignantCode, setClickedCells, setIsLoading, setShowMovePopup, handleCloseContextMenu
         ).finally(() => setIsLoading(false)); // Fin du chargement
     };
 
@@ -141,7 +151,7 @@ function TableBody({
                     contextMenu={contextMenu}
                     handleDuplicate={() => handleDuplicate(setShowDuplicatePopup)}
                     handleEdit={() => handleEdit(handleCloseContextMenu)}
-                    handleMove={() => handleMove(handleCloseContextMenu)}
+                    handleMove={() => handleMove(setShowMovePopup)}
                     handleDelete={handleDeleteClick}
                     handleCloseContextMenu={() => handleCloseContextMenu(setContextMenu)}
                 />
@@ -160,6 +170,13 @@ function TableBody({
                 <DeletePopup
                     handleDeleteConfirm={handleDeleteConfirmClick} // Modification ici
                     setShowDeletePopup={setShowDeletePopup}
+                />
+            )}
+            {showMovePopup && (
+                <MovePopup
+                    semaines={semaines}
+                    handleMoveConfirm={handleMoveConfirmClick} // Modification ici
+                    setShowMovePopup={setShowMovePopup}
                 />
             )}
         </>

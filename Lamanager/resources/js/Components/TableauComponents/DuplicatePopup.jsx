@@ -20,24 +20,6 @@ function DuplicatePopup({ duplicateOption, setDuplicateOption, customWeeks, setC
                             style={radioStyle}
                         />
                         <span style={textStyle}>Semaines paires</span>
-                        {duplicateOption === 'pairs' && (
-                            <div style={inputContainerStyle}>
-                                <input
-                                    type="number"
-                                    value={pairStart}
-                                    onChange={(e) => setPairStart(e.target.value)}
-                                    placeholder="Début"
-                                    style={inputStyle}
-                                />
-                                <input
-                                    type="number"
-                                    value={pairEnd}
-                                    onChange={(e) => setPairEnd(e.target.value)}
-                                    placeholder="Fin"
-                                    style={inputStyle}
-                                />
-                            </div>
-                        )}
                     </label>
                     <label style={radioLabelStyle}>
                         <input
@@ -48,24 +30,6 @@ function DuplicatePopup({ duplicateOption, setDuplicateOption, customWeeks, setC
                             style={radioStyle}
                         />
                         <span style={textStyle}>Semaines impaires</span>
-                        {duplicateOption === 'impairs' && (
-                            <div style={inputContainerStyle}>
-                                <input
-                                    type="number"
-                                    value={impairStart}
-                                    onChange={(e) => setImpairStart(e.target.value)}
-                                    placeholder="Début"
-                                    style={inputStyle}
-                                />
-                                <input
-                                    type="number"
-                                    value={impairEnd}
-                                    onChange={(e) => setImpairEnd(e.target.value)}
-                                    placeholder="Fin"
-                                    style={inputStyle}
-                                />
-                            </div>
-                        )}
                     </label>
                     <label style={radioLabelStyle}>
                         <input

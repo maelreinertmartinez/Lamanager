@@ -142,9 +142,9 @@ export const handleDuplicateConfirm = async (
 
     if (selectedRows.length === 1) {
         if (duplicateOption === 'pairs') {
-            weeksToDuplicate = semainesID.filter((_, index) => index % 2 === 0);
+            weeksToDuplicate = semainesID.filter((_, index) => index-1 % 2 === 0);
         } else if (duplicateOption === 'impairs') {
-            weeksToDuplicate = semainesID.filter((_, index) => index % 2 !== 0);
+            weeksToDuplicate = semainesID.filter((_, index) => index-1 % 2 !== 0);
         } else if (duplicateOption === 'custom') {
             weeksToDuplicate = parseWeeks(customWeeks).map(week => semainesID[week - 1]);
         }
@@ -192,8 +192,66 @@ export const handleEdit = (handleCloseContextMenu) => {
     handleCloseContextMenu();
 };
 
-export const handleMove = (handleCloseContextMenu) => {
-    // Logique pour déplacer la cellule
+export const handleMove = (setShowMovePopup) => {
+    setShowMovePopup(true);
+};
+
+export const handleMoveConfirm = async (
+    selectedWeek, clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
+    enseignantCode, setClickedCells, setIsLoading, setShowMovePopup, handleCloseContextMenu
+) => {
+    setIsLoading(true);
+    const selectedCells = Object.keys(clickedCells).filter(key => clickedCells[key]?.selected && !key.startsWith('semaine-'));
+    const selectedRows = [...new Set(selectedCells.map(key => key.split('-')[0]))].sort((a, b) => a - b);
+
+    // Vérifier si la semaine sélectionnée est la même que la semaine la plus haute de la sélection
+    if (parseInt(selectedWeek) === parseInt(selectedRows[0])) {
+        setIsLoading(false);
+        setShowMovePopup(false);
+        handleCloseContextMenu();
+        return;
+    }
+
+    for (const cellKey of selectedCells) {
+        const [rowIndex, colIndex] = cellKey.split('-').map(Number);
+        const newRowIndex = parseInt(selectedWeek) + (rowIndex - parseInt(selectedRows[0]));
+
+        try {
+            await deleteCellFromDatabase(
+                semainesID[rowIndex],
+                groupesID[colIndex]
+            );
+
+            await addCellToDatabase(
+                semainesID[newRowIndex],
+                enseignantId,
+                enseignement.id,
+                groupesID[colIndex],
+                heures,
+                minutes
+            );
+
+            // Mettre à jour l'état pour afficher les cellules déplacées
+            setClickedCells((prev) => {
+                const updatedCells = { ...prev };
+                const newCellKey = `${newRowIndex}-${colIndex}`;
+                updatedCells[newCellKey] = {
+                    clicked: true,
+                    text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}`
+                };
+                updatedCells[cellKey] = {
+                    clicked: false,
+                    text: ""
+                };
+                return updatedCells;
+            });
+        } catch (error) {
+            console.error('Erreur lors du déplacement:', error);
+        }
+    }
+
+    setIsLoading(false);
+    setShowMovePopup(false);
     handleCloseContextMenu();
 };
 
