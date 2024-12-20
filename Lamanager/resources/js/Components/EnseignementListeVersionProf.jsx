@@ -14,6 +14,7 @@ function EnseignementListeVersionProf({ anneeId, onEnseignementSelect }) {
                 setEnseignements(response.data);
                 setLoading(false);
             } catch (err) {
+                console.error('Erreur lors du chargement des enseignements:', err);
                 setError('Erreur lors du chargement des enseignements');
                 setLoading(false);
             }
@@ -51,5 +52,4 @@ function EnseignementListeVersionProf({ anneeId, onEnseignementSelect }) {
         </div>
     );
 }
-
 export default EnseignementListeVersionProf;

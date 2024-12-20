@@ -2,29 +2,40 @@ import React, { useEffect, useState } from 'react';
 import { Chart } from 'react-google-charts';
 import axios from 'axios';
 
-export default function VersionProfRightPart() {
-  const [casesResponse, setCasesResponse] = useState([]);
+export default function VersionProfRightPart({ selections }) {
   const [dataForChart, setDataForChart] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchSessionData = async () => {
-      try {
-        const response = await axios.get('/api/session');
-        const userId = response.data.userId;
-        console.log(response.data.userId);
-        
-        const casesResponse = await axios.get(`/api/cases/${userId}`);
-        setCasesResponse(casesResponse.data);
-        console.log(casesResponse.data);
-        
-        processData(casesResponse.data);
-      } catch (err) {
-        console.error('Erreur lors de la récupération des données', err);
-      }
-    };
+    if (selections.selectedAnnee && selections.selectedEnseignement) {
+      fetchCaseTableauData(selections.selectedAnnee.id, selections.selectedEnseignement.id);
+    }
+  }, [selections]);
 
-    fetchSessionData();
-  }, []);
+  const fetchCaseTableauData = async (anneeId, enseignementId) => {
+    setLoading(true);
+    try {
+      const sessionResponse = await axios.get('/api/session');
+      const userId = sessionResponse.data.userId;
+      console.log('User ID:', userId);
+
+      const response = await axios.get(`/api/case_tableau`, {
+        params: {
+          annee_id: anneeId,
+          enseignement_id: enseignementId,
+          enseignant_id: userId
+        }
+      });
+      console.log('Cases Response:', response.data);
+      processData(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Erreur lors de la récupération des données', err);
+      setError('Erreur lors de la récupération des données');
+      setLoading(false);
+    }
+  };
 
   const processData = (cases) => {
     const weeksData = {};
@@ -38,41 +49,44 @@ export default function VersionProfRightPart() {
         weeksData[weekId] = { total: 0 };
       }
 
-      // Ajouter les heures et les minutes à la semaine correspondante
       weeksData[weekId].total += hours + minutes / 60; // Convertir les minutes en heures
     });
 
-    // Transformer l'objet weeksData en un format compatible avec le graphique
     const formattedData = [['Semaines', 'Heures']];
     for (const weekId in weeksData) {
-      formattedData.push([`${weekId}`, weeksData[weekId].total]);
+      formattedData.push([`Semaine ${weekId}`, weeksData[weekId].total]);
     }
 
     setDataForChart(formattedData);
   };
 
+  if (loading) return <div>Chargement...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <div className='histogramme'>
-      <Chart
-        chartType="Bar"
-        width="100%"
-        height="100%"
-        data={dataForChart}
-        options={{
-          title: 'Heures par semaine',
-          chartArea: { width: '30%' },
-          hAxis: {
-            title: 'Heures',
-          },
-          vAxis: {
-            title: 'Semaines',
-            slantedText: true,
-            slantedTextAngle: 90,
-          },
-          bars: 'vertical',  
-          colors: ['#AD71C1'],  
-        }}
-      />
+      {dataForChart.length > 1 && (
+        <Chart
+          chartType="Bar"
+          width="100%"
+          height="100%"
+          data={dataForChart}
+          options={{
+            title: 'Heures par semaine',
+            chartArea: { width: '30%' },
+            hAxis: {
+              title: 'Heures',
+            },
+            vAxis: {
+              title: 'Semaines',
+              slantedText: true,
+              slantedTextAngle: 90,
+            },
+            bars: 'vertical',  
+            colors: ['#AD71C1'],  
+          }}
+        />
+      )}
     </div>
   );
 }

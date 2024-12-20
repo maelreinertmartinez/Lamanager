@@ -38,7 +38,7 @@ class EnseignementController extends Controller
 
     public function enseignementParAnnee($annee_id)
     {
-        $query = Enseignement::select('enseignements.id', 'annees.id')
+        $query = Enseignement::select('enseignements.id','enseignements.nom','annees.annee')
             ->join('promos', 'enseignements.promo_id', '=', 'promos.id')
             ->join('annees', 'promos.annee_id', '=', 'annees.id')
             ->where('annee_id', $annee_id);

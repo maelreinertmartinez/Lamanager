@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import EnseignementSelect from './TableauLeftPart/EnseignementSelect';
+import EnseignementListeVersionProf from '@/Components/EnseignementListeVersionProf';
 import MenuAnnee from '@/Components/MenuAnnee';
 
-export default function VersionProfLeftPart() {
+export default function VersionProfLeftPart({ onSelectionChange }) {
     const [selectedAnnee, setSelectedAnnee] = useState(null);
-    
-        const handleAnneeSelect = (annee) => {
-            setSelectedAnnee(annee);
-        };
+    const [selectedEnseignement, setSelectedEnseignement] = useState(null);
 
     
-    return ( 
-        <div>  
+
+    return (
+        <div>
             <MenuAnnee 
-            selectedAnnee={selectedAnnee} 
-            onAnneeSelect={handleAnneeSelect} 
-        />  
-        <div className="button-container"><button>Groupes</button></div> 
-        <div className="button-container"><button>Semaines</button></div>
-        <div className="button-container"><button>Tableau</button></div>
-        <div className="button-container"><button>Alertes</button></div>
+                selectedAnnee={selectedAnnee} 
+                onAnneeSelect={setSelectedAnnee} 
+            />
+            {selectedAnnee && (
+                <EnseignementListeVersionProf 
+                    anneeId={selectedAnnee.id} 
+                    onEnseignementSelect={setSelectedEnseignement} 
+                />
+            )}
         </div>
     );
 } 
