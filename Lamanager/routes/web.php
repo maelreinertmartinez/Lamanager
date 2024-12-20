@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
     Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
     Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
+    Route::delete('/api/promos/{id}', [PromoController::class, 'destroy'])->name('api.promos.destroy');
 
     Route::post('/api/update-promos/{id}', [PromoController::class, 'updateAlternantId'])->name('api.promos.updateAlternantId');
 
@@ -69,11 +70,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/promos/update', [PromoController::class, 'updatePromos'])->name('api.promos.update');
 
     Route::get('/api/liaison_groupes/{groupe_td_id}', [LiaisonGroupeController::class, 'getSubGroups']);
-Route::get('/api/liaison_groupes', [LiaisonGroupeController::class, 'index']);
-Route::post('/api/liaison_groupes', [LiaisonGroupeController::class, 'store']);
+    Route::get('/api/liaison_groupes', [LiaisonGroupeController::class, 'index']);
+    Route::post('/api/liaison_groupes', [LiaisonGroupeController::class, 'store']);
 
-Route::put('/api/groupes/{id}', [GroupeController::class, 'update'])->name('api.groupes.update');
-Route::post('/api/update-groupes', [GroupeController::class, 'updateGroupes'])->name('api.update-groupes');
+    Route::put('/api/groupes/{id}', [GroupeController::class, 'update'])->name('api.groupes.update');
+    Route::post('/api/update-groupes', [GroupeController::class, 'updateGroupes'])->name('api.update-groupes');
 
 
     Route::post('/api/enseignants', [EnseignantController::class, 'store'])->name('api.enseignants.store');
