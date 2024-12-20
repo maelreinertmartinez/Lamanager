@@ -49,8 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/promo/{id}', [PromoController::class, 'getPromo'])->name('api.promo.get');
     Route::get('/api/groupes/{promo_id}', [GroupeController::class, 'index'])->name('api.groupes');
     Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('api.cases');
+    
     Route::get('/api/roles', [RoleController::class, 'index'])->name('api.roles');
-
+    Route::put('/api/roles/{id}', [RoleController::class, 'update'])->name('api.roles.update');
+    Route::post('/api/roles', [RoleController::class, 'store'])->name('api.roles.store');
     Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
     Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
     Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
