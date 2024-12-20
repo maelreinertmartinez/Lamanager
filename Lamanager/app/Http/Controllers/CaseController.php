@@ -39,4 +39,12 @@ class CaseController extends Controller
 
         return response()->json(['message' => 'Case supprimée avec succès']);
     }
+
+    public function listeCasesParEnseignant($enseignant_id){
+        $cases = CaseTableau::where('enseignant_id', $enseignant_id)
+                            ->select('semaine_id','nombre_heure','nombre_minute','enseignement_id','groupe_id')
+                            ->get();
+
+        return response()->json($cases);
+    }
 }

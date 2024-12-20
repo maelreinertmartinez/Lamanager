@@ -1188,3 +1188,10 @@ button[disabled]
 .custom-button-container button:hover {
     background-color: #453a6b;
 }
+
+
+.histogramme {
+    width: 100%;
+    height: 100%;
+}
+
