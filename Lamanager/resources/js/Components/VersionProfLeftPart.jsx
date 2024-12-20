@@ -6,7 +6,11 @@ export default function VersionProfLeftPart({ onSelectionChange }) {
     const [selectedAnnee, setSelectedAnnee] = useState(null);
     const [selectedEnseignement, setSelectedEnseignement] = useState(null);
 
-    
+    useEffect(() => {
+        if (selectedAnnee && selectedEnseignement) {
+            onSelectionChange({ selectedAnnee, selectedEnseignement });
+        }
+    }, [selectedAnnee, selectedEnseignement, onSelectionChange]);
 
     return (
         <div>
