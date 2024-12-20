@@ -187,9 +187,12 @@ export const handleDuplicateConfirm = async (
     handleCloseContextMenu();
 };
 
-export const handleEdit = (handleCloseContextMenu) => {
-    // Logique pour modifier la cellule
-    handleCloseContextMenu();
+export const handleEdit = (setShowUpdatePopup, setSelectedGroups, groupNames, clickedCells) => {
+    const selectedGroups = groupNames.filter((_, index) => 
+        Object.keys(clickedCells).some(key => key.endsWith(`-${index}`) && clickedCells[key]?.selected && clickedCells[key]?.clicked)
+    );
+    setSelectedGroups(selectedGroups);
+    setShowUpdatePopup(true);
 };
 
 export const handleMove = (setShowMovePopup) => {

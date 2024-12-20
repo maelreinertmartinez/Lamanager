@@ -4,6 +4,7 @@ import ContextMenu from './ContextMenu';
 import DuplicatePopup from './DuplicatePopup';
 import DeletePopup from './DeletePopup';
 import MovePopup from './MovePopup';
+import UpdatePopup from './UpdatePopup';
 import { getColorClass, handleCellClick } from '../../utils';
 
 function TableBody({ 
@@ -16,21 +17,24 @@ function TableBody({
     enseignantId,
     enseignement,
     groupesID,
+    groupNames, // Utilisation de groupNames
     enseignantCode,
     heures,
     minutes,
     setClickedCells,
     onCellClick,
     showIcons,
-    setIsLoading // Ajout de setIsLoading
+    setIsLoading
 }) {
     const [contextMenu, setContextMenu] = useState(null);
     const [showDuplicatePopup, setShowDuplicatePopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showMovePopup, setShowMovePopup] = useState(false);
+    const [showUpdatePopup, setShowUpdatePopup] = useState(false); // Ajout de l'état pour la popup de mise à jour
     const [duplicateOption, setDuplicateOption] = useState('pairs');
     const [customWeeks, setCustomWeeks] = useState('');
     const [isLoading, setIsLoadingState] = useState(false);
+    const [selectedGroups, setSelectedGroups] = useState([]); // Ajout de l'état pour les groupes sélectionnés
 
     useEffect(() => {
         const handleClickOutside = () => {
@@ -69,6 +73,22 @@ function TableBody({
             selectedWeek, clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
             enseignantCode, setClickedCells, setIsLoading, setShowMovePopup, handleCloseContextMenu
         ).finally(() => setIsLoading(false)); // Fin du chargement
+    };
+
+    const handleUpdate = (updatedData) => {
+        setClickedCells((prev) => {
+            const updatedCells = { ...prev };
+            for (const cellKey of Object.keys(clickedCells)) {
+                if (clickedCells[cellKey]?.selected && clickedCells[cellKey]?.clicked) {
+                    const [rowIndex, colIndex] = cellKey.split('-').map(Number);
+                    updatedCells[cellKey] = {
+                        clicked: true,
+                        text: `${updatedData[colIndex].heures}h${updatedData[colIndex].minutes !== 0 ? updatedData[colIndex].minutes : ''} - ${updatedData[colIndex].enseignant}`
+                    };
+                }
+            }
+            return updatedCells;
+        });
     };
 
     return (
@@ -150,7 +170,7 @@ function TableBody({
                 <ContextMenu
                     contextMenu={contextMenu}
                     handleDuplicate={() => handleDuplicate(setShowDuplicatePopup)}
-                    handleEdit={() => handleEdit(handleCloseContextMenu)}
+                    handleEdit={() => handleEdit(setShowUpdatePopup, setSelectedGroups, groupNames, clickedCells, semainesID, groupesID)} // Modification ici
                     handleMove={() => handleMove(setShowMovePopup)}
                     handleDelete={handleDeleteClick}
                     handleCloseContextMenu={() => handleCloseContextMenu(setContextMenu)}
@@ -177,6 +197,14 @@ function TableBody({
                     semaines={semaines}
                     handleMoveConfirm={handleMoveConfirmClick} // Modification ici
                     setShowMovePopup={setShowMovePopup}
+                />
+            )}
+            {showUpdatePopup && (
+                <UpdatePopup
+                    setShowUpdatePopup={setShowUpdatePopup}
+                    initialData={{ heures, minutes, enseignant: enseignantCode }}
+                    selectedGroups={selectedGroups} // Utilisation des groupes sélectionnés
+                    handleUpdate={handleUpdate} // Ajout de la fonction de mise à jour
                 />
             )}
         </>

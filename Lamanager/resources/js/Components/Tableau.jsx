@@ -85,13 +85,14 @@ function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseign
                                     enseignantId={enseignantId}
                                     enseignement={enseignement}
                                     groupesID={groupesID}
+                                    groupNames={groupNames}
                                     enseignantCode={enseignantCode}
                                     heures={heures}
                                     minutes={minutes}
                                     setClickedCells={setClickedCells}
                                     onCellClick={onCellClick}
                                     showIcons={showIcons}
-                                    setIsLoading={setIsLoading} // Ajout de setIsLoading
+                                    setIsLoading={setIsLoading}
                                 />
                             </table>
                             <table className="w-full border-collapse border border-black sticky bottom-0 bg-white">
