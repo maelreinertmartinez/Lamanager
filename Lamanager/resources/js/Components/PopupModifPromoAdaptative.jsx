@@ -160,6 +160,15 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
 
         try {
             await axios.post('/api/update-groupes', { groupes: groupesData });
+
+            // Recalculate the number of TD and TP groups
+            const tdCount = groupesData.filter(groupe => groupe.type === 'TD').length;
+            const tpCount = groupesData.filter(groupe => groupe.type === 'TP').length;
+
+            // Update the promo data with the new counts
+            updatePromoData(promo.id, 'TD', tdCount);
+            updatePromoData(promo.id, 'TP', tpCount);
+
             refreshPromoData();
             onClose(); // Close the popup after successful submission
         } catch (error) {

@@ -75,7 +75,6 @@ Route::post('/api/liaison_groupes', [LiaisonGroupeController::class, 'store']);
 Route::put('/api/groupes/{id}', [GroupeController::class, 'update'])->name('api.groupes.update');
 Route::post('/api/update-groupes', [GroupeController::class, 'updateGroupes'])->name('api.update-groupes');
 
-Route::get('/api/promos', [PromoController::class, 'getAllPromos'])->name('api.promos.all');
 
     Route::post('/api/enseignants', [EnseignantController::class, 'store'])->name('api.enseignants.store');
     Route::put('/api/enseignants/{id}', [EnseignantController::class, 'update'])->name('api.enseignants.update');
