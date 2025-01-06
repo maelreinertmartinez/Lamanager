@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/update-groupes', [GroupeController::class, 'update']);
 
     Route::post('/api/enseignants', [EnseignantController::class, 'store'])->name('api.enseignants.store');
+    Route::get('/api/enseignants/{annee_id}/{id}', [EnseignantController::class, 'listeEnseignementParEnseignant']);
     Route::put('/api/enseignants/{id}', [EnseignantController::class, 'update'])->name('api.enseignants.update');
     Route::delete('/api/enseignants/{id}', [EnseignantController::class, 'destroy'])->name('api.enseignants.destroy');
 });

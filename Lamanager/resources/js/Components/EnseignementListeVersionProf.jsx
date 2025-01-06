@@ -9,7 +9,9 @@ function EnseignementListeVersionProf({ anneeId, onEnseignementSelect }) {
     useEffect(() => {
         const fetchEnseignements = async () => {
             try {
-                const response = await axios.get(`/api/enseignements/${anneeId}`);
+                const sessionResponse = await axios.get('/api/session');
+                const userId = sessionResponse.data.userId; 
+                const response = await axios.get(`/api/enseignants/${anneeId}/${userId}`);
                 console.log('Réponse des enseignements:', response.data);
                 setEnseignements(response.data);
                 setLoading(false);
@@ -36,8 +38,10 @@ function EnseignementListeVersionProf({ anneeId, onEnseignementSelect }) {
                 onChange={(e) => {
                     const selectedId = parseInt(e.target.value);
                     const selectedEnseignement = enseignements.find(e => e.id === selectedId);
+                    console.log('Enseignement sélectionné:', selectedEnseignement);
                     if (selectedEnseignement) {
                         onEnseignementSelect(selectedEnseignement);
+                        console.log('Enseignement sélectionné:', selectedEnseignement);
                     }
                 }}
                 defaultValue=""

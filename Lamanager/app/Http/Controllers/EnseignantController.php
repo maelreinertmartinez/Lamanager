@@ -130,4 +130,19 @@ class EnseignantController extends Controller
 
         return response()->json(['message' => 'Enseignant supprimé avec succès']);
     }
+
+    public function listeEnseignementParEnseignant($annee_id, $enseignant_id): JsonResponse
+    {
+        $enseignant = Enseignant::select('enseignements.id','enseignements.nom')
+                            ->join('case_tableau', 'case_tableau.enseignant_id', '=', 'enseignants.id')
+                            ->join('enseignements', 'case_tableau.enseignement_id', '=', 'enseignements.id')
+                            ->join('promos', 'enseignements.promo_id', '=', 'promos.id')
+                            ->join('annees', 'promos.annee_id', '=', 'annees.id')
+                            ->where('annees.id', $annee_id)
+                            ->where('enseignant_id', $enseignant_id)
+                            ->distinct()
+                            ->get();
+
+        return response()->json($enseignant);
+    }
 }

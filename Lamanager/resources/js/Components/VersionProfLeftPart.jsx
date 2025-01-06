@@ -24,6 +24,11 @@ export default function VersionProfLeftPart({ onSelectionChange }) {
                     onEnseignementSelect={setSelectedEnseignement} 
                 />
             )}
+            <div className="button-container">
+                <button> Groupes </button>
+                <button> Tableau </button>
+                <button> Alertes </button>
+            </div> 
         </div>
     );
 } 

@@ -79,7 +79,7 @@
                 slantedTextAngle: 90,
               },
               bars: 'vertical',  
-              colors: ['#AD71C1'],  
+              colors: ['#564787'],  
             }}
           />
         )}
