@@ -4,14 +4,20 @@ import MenuAnnee from '@/Components/MenuAnnee';
 
 export default function VersionProfLeftPart({ onSelectionChange }) {
     const [selectedAnnee, setSelectedAnnee] = useState(null);
-    const [selectedEnseignement, setSelectedEnseignement] = useState(null);
+    const [selectedEnseignement, setSelectedEnseignement] = useState(null);  
     const [isAllEnseignementsSelected, setIsAllEnseignementsSelected] = useState(false);
+    const [showGroupes, setShowGroupes] = useState(false);
 
     useEffect(() => {
-        if (selectedAnnee && selectedEnseignement) {
-            onSelectionChange({ selectedAnnee, selectedEnseignement });
+        if (selectedAnnee && selectedEnseignement) {    
+            console.log('showGroupes:', showGroupes);
+            onSelectionChange({ selectedAnnee, selectedEnseignement, showGroupes });
         }
-    }, [selectedAnnee, selectedEnseignement, onSelectionChange]);
+    }, [selectedAnnee, selectedEnseignement, showGroupes, onSelectionChange]);
+
+    const handleGroupesClick = () => {
+        setShowGroupes(prevShowGroupes => !prevShowGroupes);
+    };
 
     useEffect(() => {
         if (isAllEnseignementsSelected) {
@@ -34,7 +40,7 @@ export default function VersionProfLeftPart({ onSelectionChange }) {
                 />
             )}
             <div className="button-container">
-                <button> Groupes </button>
+                <button onClick={handleGroupesClick}>Groupes</button>
                 <button> Tableau </button>
                 <button> Alertes </button>
             </div> 
