@@ -13,12 +13,12 @@ class LiaisonGroupeController extends Controller
 
     public function store(Request $request)
     {
-        $case = new LiaisonGroupe();
-        $case->groupe_td_id = $request->groupe_td_id;
-        $case->groupe_tp_id = $request->groupe_tp_id;
-        $case->save();
+        $liaison = new LiaisonGroupe();
+        $liaison->groupe_td_id = $request->input('groupe_td_id');
+        $liaison->groupe_tp_id = $request->input('groupe_tp_id');
+        $liaison->save();
 
-        return response()->json($case);
+        return response()->json($liaison, 201);
     }
 
     public function getSubGroups($groupe_td_id)

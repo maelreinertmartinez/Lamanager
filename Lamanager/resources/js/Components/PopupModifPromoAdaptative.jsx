@@ -80,9 +80,15 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
         }
         try {
             const payload = { promo_id: promo.id, type: 'TP', nom: newGroupName };
+            console.log("Payload:", payload); // Ajoutez cette ligne pour vérifier le payload
             const response = await axios.post('/api/groupes', payload);
+
             const newGroup = response.data;
-            await axios.post('/api/liaison_groupes', { groupe_td_id: tdGroup.id, groupe_tp_id: newGroup.id });
+
+            // Create the liaison between TD and TP groups
+            const liaisonPayload = { groupe_td_id: tdGroup.id, groupe_tp_id: newGroup.id };
+            await axios.post('/api/liaison_groupes', liaisonPayload);
+
             setGroupesData(prevGroupesData => [...prevGroupesData, newGroup]);
             setLiaisons(prevLiaisons => [...prevLiaisons, { groupe_td_id: tdGroup.id, groupe_tp_id: newGroup.id }]);
             updatePromoData(promo.id, 'TP', groupesData.length + 1);
@@ -160,6 +166,15 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
 
         try {
             await axios.post('/api/update-groupes', { groupes: groupesData });
+
+            // Recalculate the counts of TD and TP groups
+            const tdCount = groupesData.filter(groupe => groupe.type === 'TD').length;
+            const tpCount = groupesData.filter(groupe => groupe.type === 'TP').length;
+
+            // Update the parent component's state with the new counts
+            updatePromoData(promo.id, 'TD', tdCount);
+            updatePromoData(promo.id, 'TP', tpCount);
+
             refreshPromoData();
             onClose(); // Close the popup after successful submission
         } catch (error) {

@@ -3,7 +3,7 @@ import PopupModifPromoAdaptative from "./PopupModifPromoAdaptative.jsx";
 import axios from "axios";
 import "../../css/modifpromo.css";
 
-function PopupModifPromo({ onClose, promos }) {
+function PopupModifPromo({ onClose, promos, selectedAnnee }) {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedPromo, setSelectedPromo] = useState(null);
     const [promoData, setPromoData] = useState(promos.map(promo => ({
@@ -49,7 +49,7 @@ function PopupModifPromo({ onClose, promos }) {
 
     const refreshPromoData = async () => {
         try {
-            const response = await axios.get('/api/promos');
+            const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
             setPromoData(response.data);
         } catch (error) {
             console.error("Error refreshing promo data:", error);
@@ -58,8 +58,21 @@ function PopupModifPromo({ onClose, promos }) {
 
     const handleSubmit = async () => {
         try {
-            console.log(promoData);
-            await axios.post('/api/promos/update', { promos: promoData });
+            // Recalculate the counts of TD and TP groups
+            const updatedPromoData = await Promise.all(promoData.map(async (promo) => {
+                const response = await axios.get(`/api/groupes/${promo.id}`);
+                const groupes = response.data;
+                const tdCount = groupes.filter(groupe => groupe.type === 'TD').length;
+                const tpCount = groupes.filter(groupe => groupe.type === 'TP').length;
+                return {
+                    ...promo,
+                    nombre_td: tdCount,
+                    nombre_tp: tpCount
+                };
+            }));
+            setPromoData(updatedPromoData);
+
+            await axios.post('/api/promos/update', { promos: updatedPromoData });
             onClose();
         } catch (error) {
             console.error("Error updating promos:", error);

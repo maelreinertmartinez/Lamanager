@@ -27,19 +27,13 @@ class GroupeController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $groupes = $request->input('groupes');
+        $groupe = Groupe::findOrFail($id);
+        $groupe->nom = $request->input('nom');
+        $groupe->save();
 
-        foreach ($groupes as $groupeData) {
-            $groupe = Groupe::find($groupeData['id']);
-            if ($groupe) {
-                $groupe->nom = $groupeData['nom'];
-                $groupe->save();
-            }
-        }
-
-        return response()->json(['message' => 'Groupes updated successfully']);
+        return response()->json($groupe, 200);
     }
 
 
