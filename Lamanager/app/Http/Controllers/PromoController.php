@@ -21,6 +21,7 @@ class PromoController extends Controller
         return response()->json($promo);
     }
 
+
     public function store(Request $request): JsonResponse
     {
         $promo = new Promo();
