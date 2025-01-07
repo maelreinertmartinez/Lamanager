@@ -20,6 +20,7 @@ class PromoController extends Controller
         $promo = Promo::find($id);
         return response()->json($promo);
     }
+
     public function store(Request $request): JsonResponse
     {
         $promo = new Promo();
