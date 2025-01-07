@@ -737,9 +737,7 @@ button[disabled]
 .custom-button-container-mod {
     display: flex;
     justify-content: flex-end;
-
-    grid-column: span 1;
-
+    padding: 10px;
 }
 
 .custom-button-container-mod button {
