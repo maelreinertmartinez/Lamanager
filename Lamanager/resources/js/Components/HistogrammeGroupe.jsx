@@ -10,7 +10,7 @@ const HistogrammeGroupe = ({ data }) => {
   }));
 
   return (
-    <VictoryChart theme={VictoryTheme.material} domainPadding={20} containerComponent={<VictoryVoronoiContainer />} width={window.innerWidth * 0.9} height={window.innerHeight * 0.9}>
+    <VictoryChart theme={VictoryTheme.material} domainPadding={35} containerComponent={<VictoryVoronoiContainer />} width={window.innerWidth * 0.9} height={window.innerHeight * 0.9}>
       <VictoryAxis
         tickValues={formattedData.map(item => item.semaine)}
         tickFormat={formattedData.map(item => item.semaine)}
@@ -36,7 +36,7 @@ const HistogrammeGroupe = ({ data }) => {
           y="CM"
           style={{ data: { fill: "#FFCE6E" } }}
           labels={({ datum }) => `CM : ${datum.CM}h`}
-          labelComponent={<VictoryTooltip style={{ fontSize: 7 }} />}
+          labelComponent={<VictoryTooltip style={{ fontSize: 15 }} />}
         />
         <VictoryBar
           data={formattedData}
@@ -44,7 +44,7 @@ const HistogrammeGroupe = ({ data }) => {
           y="TD"
           style={{ data: { fill: "#FF6D88" } }}
           labels={({ datum }) => `TD : ${datum.TD}h`}
-          labelComponent={<VictoryTooltip style={{ fontSize: 7 }} />}
+          labelComponent={<VictoryTooltip style={{ fontSize: 15 }} />}
         />
         <VictoryBar
           data={formattedData}
@@ -52,7 +52,7 @@ const HistogrammeGroupe = ({ data }) => {
           y="TP"
           style={{ data: { fill: "#62C4FB" } }}
           labels={({ datum }) => `TP : ${datum.TP}h`}
-          labelComponent={<VictoryTooltip style={{ fontSize: 7 }} />}
+          labelComponent={<VictoryTooltip style={{ fontSize: 15 }} />}
         />
 
       </VictoryStack>

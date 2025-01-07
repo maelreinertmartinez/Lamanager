@@ -18,7 +18,10 @@ export default function VersionProfLeftPart({ onSelectionChange }) {
 
     const handleGroupesClick = () => {
         setShowGroupes(prevShowGroupes => !prevShowGroupes);
-    };
+        if (selectedAnnee && selectedEnseignement) {
+          onSelectionChange({ selectedAnnee, selectedEnseignement, showGroupes: !showGroupes });
+        }
+      };
 
     const handleTableauClick = () => {
         setShowTableauPopup(true);
