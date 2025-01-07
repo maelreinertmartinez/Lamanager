@@ -61,7 +61,7 @@ class CaseController extends Controller
     }
     public function listeEnseignement($annee_id, $enseignant_id): JsonResponse
     {
-        $query = CaseTableau::select('semaine_id','nombre_heure','nombre_minute','enseignement_id','groupe_id','numero','type')
+        $query = CaseTableau::select('semaine_id','nombre_heure','nombre_minute','enseignement_id','enseignements.nom','groupe_id','numero','type')
             ->join('semaines', 'case_tableau.semaine_id', '=', 'semaines.id')
             ->join('enseignements', 'case_tableau.enseignement_id', '=', 'enseignements.id')
             ->join('groupes', 'case_tableau.groupe_id', '=', 'groupes.id')
