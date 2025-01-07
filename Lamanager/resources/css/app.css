@@ -673,6 +673,7 @@ button[disabled]
     height: 6%; /* Adjust height if needed */
 }
 
+
 .modif-promo-name-container::after,
 .modif-promo-numbertd-container::after,
 .modif-promo-numbertp-container::after
@@ -699,8 +700,15 @@ button[disabled]
 .input-with-icon {
     display: flex;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    width: 70%;
+    gap: 10px;
+}
+
+.subgroups {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    gap: 10px;
 }
 
 .input-with-icon input {
@@ -721,8 +729,8 @@ button[disabled]
     padding-bottom: 2%;
     margin-right: 5%;
     height: 20%;
-    width: 3%; /* Définir une largeur fixe */
-    box-sizing: border-box; /* Inclure les bordures et le padding dans la largeur totale */
+    width: 0;
+    box-sizing: border-box;
 }
 
 .custom-button-container-but {

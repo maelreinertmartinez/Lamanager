@@ -10,9 +10,9 @@ class GroupeController extends Controller
     public function index($promo_id): JsonResponse
     {
         $groupes = Groupe::where('promo_id', $promo_id)
-                      ->select('id', 'nom', 'type')
-                      ->get();
-        
+            ->select('id', 'nom', 'type')
+            ->get();
+
         return response()->json($groupes);
     }
     public function store(Request $request): JsonResponse
@@ -26,18 +26,25 @@ class GroupeController extends Controller
         return response()->json($case);
     }
 
-    // GroupeController.php
-    public function store2(Request $request): JsonResponse
+    public function stored(Request $request): JsonResponse
     {
-        $promoId = $request->input('promo_id');
-        $newGroup = Groupe::create([
-            'nom' => 'amodifier',
-            'type' => $request->input('type'),
-            'promo_id' => $promoId,
+        // Validation des données
+        $validatedData = $request->validate([
+            'promo_id' => 'required|integer',
+            'type' => 'required|string|max:255',
+            'nom' => 'nullable|string|max:255', // Ajout du champ 'nom' optionnel
         ]);
 
-        return response()->json($newGroup);
+        // Création du groupe
+        $groupe = new Groupe();
+        $groupe->promo_id = $validatedData['promo_id'];
+        $groupe->type = $validatedData['type'];
+        $groupe->nom = $validatedData['nom'] ?? 'Nom par défaut'; // Utilisation d'un nom par défaut si non fourni
+        $groupe->save();
+
+        return response()->json($groupe, 201);
     }
+
 
     public function update(Request $request)
     {
