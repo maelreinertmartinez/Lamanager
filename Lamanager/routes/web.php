@@ -60,10 +60,12 @@ require __DIR__.'/auth.php';
     Route::get('/api/promo/{id}', [PromoController::class, 'getPromo'])->name('api.promo.get');
     Route::get('/api/groupes/{promo_id}', [GroupeController::class, 'index'])->name('api.groupes');
     Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('api.cases');
+    
     Route::get('/api/roles', [RoleController::class, 'index'])->name('api.roles');
     Route::get('/api/cases/recherche/{annee_id}/{enseignement_id}/{enseignant_id}', [CaseController::class, 'listeCasesParEnseignant']);
     Route::get('/api/enseignements/{anneeId}',[EnseignementController::class, 'enseignementParAnnee'])->name('api.enseignements');
-
+    Route::put('/api/roles/{id}', [RoleController::class, 'update'])->name('api.roles.update');
+    Route::post('/api/roles', [RoleController::class, 'store'])->name('api.roles.store');
     Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
     Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
     Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');

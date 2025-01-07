@@ -1,0 +1,154 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: #fff;
+    border-radius: 8px;
+    width: 80%;
+    max-height: 80vh;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #6a1b9a;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.popup-header h2 {
+    color: #6a1b9a;
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #333;
+    cursor: pointer;
+}
+
+.roles-and-form {
+    display: flex;
+    gap: 1rem;
+}
+
+.roles-section {
+    flex: 1;
+    background: #e6e0ef; /* Fond blanc */
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #333; /* Texte noir */
+}
+
+.roles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.roles-header h3 {
+    margin: 0;
+    color: #6a1b9a;
+}
+
+.roles-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.roles-section li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.roles-section button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.creation-section {
+    flex: 1;
+    background: #e6e0ef;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.creation-section label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.creation-section input {
+    width: 100%;
+    padding: 0.4rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.creation-section h3 {
+    color: #6a1b9a;
+    margin-bottom: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.add-button {
+    background-color: #564787;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.cancel-button {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.add-btn {
+    background-color: #564787 !important;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
