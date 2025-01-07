@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PopupModifPromoAdaptative from "./PopupModifPromoAdaptative.jsx";
 import axios from "axios";
-function PopupModifPromo({ onClose, promos }) {
+import "../../css/modifpromo.css";
+
+function PopupModifPromo({ onClose, promos, selectedAnnee }) {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedPromo, setSelectedPromo] = useState(null);
     const [promoData, setPromoData] = useState(promos.map(promo => ({
@@ -18,8 +20,8 @@ function PopupModifPromo({ onClose, promos }) {
                     const groupes = response.data;
                     const tdCount = groupes.filter(groupe => groupe.type === 'TD').length;
                     const tpCount = groupes.filter(groupe => groupe.type === 'TP').length;
-                    return { 
-                        ...promo, 
+                    return {
+                        ...promo,
                         groupes,
                         nombre_td: tdCount,
                         nombre_tp: tpCount
@@ -45,104 +47,74 @@ function PopupModifPromo({ onClose, promos }) {
         setSelectedPromo(null);
     };
 
-    const handleInputChange = (index, field, value) => {
-        const newPromoData = [...promoData];
-        if (field === 'nombre_td' || field === 'nombre_tp') {
-            value = parseInt(value) || 0;
+    const refreshPromoData = async () => {
+        try {
+            const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
+            setPromoData(response.data);
+        } catch (error) {
+            console.error("Error refreshing promo data:", error);
         }
-        newPromoData[index][field] = value;
-        setPromoData(newPromoData);
-    };
-    
-    const updatePromoData = (promoId, type, newCount) => {
-        const newPromoData = promoData.map(promo => {
-            if (promo.id === promoId) {
-                if (type === 'TD') {
-                    promo.nombre_td = newCount;
-                } else if (type === 'TP') {
-                    promo.nombre_tp = newCount;
-                }
-            }
-            return promo;
-        });
-        setPromoData(newPromoData);
     };
 
     const handleSubmit = async () => {
         try {
-            console.log(promoData);
-            await axios.post('/api/promos/update', { promos: promoData });
+            // Recalculate the counts of TD and TP groups
+            const updatedPromoData = await Promise.all(promoData.map(async (promo) => {
+                const response = await axios.get(`/api/groupes/${promo.id}`);
+                const groupes = response.data;
+                const tdCount = groupes.filter(groupe => groupe.type === 'TD').length;
+                const tpCount = groupes.filter(groupe => groupe.type === 'TP').length;
+                return {
+                    ...promo,
+                    nombre_td: tdCount,
+                    nombre_tp: tpCount
+                };
+            }));
+            setPromoData(updatedPromoData);
+
+            await axios.post('/api/promos/update', { promos: updatedPromoData });
             onClose();
         } catch (error) {
             console.error("Error updating promos:", error);
         }
     };
 
-    const calculateGroupCounts = (promo) => {
-        const tdCount = promo.groupes ? promo.groupes.filter(groupe => groupe.type === 'TD').length : 0;
-        const tpCount = promo.groupes ? promo.groupes.filter(groupe => groupe.type === 'TP').length : 0;
-        return { tdCount, tpCount };
-    };
-
     return (
         <div className="custom-popup-overlay-modif" onClick={onClose}>
             <div className="custom-popup-content-modif" onClick={(e) => e.stopPropagation()}>
-                <div className="modif-promo-name-container">
-                    <label>Nom de la promo :</label>
+                <div className="popupmodifpromo-header">
+                    <h2>Modification de Promo</h2>
+                </div>
+                <div className="promos-container">
                     {promoData.map((promo, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            value={promo.nom}
-                            onChange={(e) => handleInputChange(index, 'nom', e.target.value)}
+                        <div key={index} className="promo-block">
+                            <label>Nom : {promo.nom}</label>
+                            <label>Nombre TD : {promo.nombre_td}</label>
+                            <label>Nombre TP : {promo.nombre_tp}</label>
+                            <button onClick={() => handleButtonClick(promo.nom)}>
+                                Modifier {promo.nom}
+                            </button>
+                        </div>
+                    ))}
+                </div>
+                {showPopup && (
+                    <div>
+                        <PopupModifPromoAdaptative
+                            onClose={handleClosePopup}
+                            promoName={selectedPromo}
+                            promos={promos}
+                            updatePromoData={(id, type, count) => {
+                                setPromoData(prevData => prevData.map(promo =>
+                                    promo.id === id ? { ...promo, [`nombre_${type.toLowerCase()}`]: count } : promo
+                                ));
+                            }}
+                            refreshPromoData={refreshPromoData}
                         />
-                    ))}
-                </div>
-
-                <div className="modif-promo-numbertd-container">
-                    <label>Nombre de groupe TD :</label>
-                    {promoData.map((promo, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            value={promo.nombre_td}
-                            onChange={(e) => handleInputChange(index, 'nombre_td', e.target.value)}
-                        />
-                    ))}
-                </div>
-
-                <div className="modif-promo-numbertp-container">
-                    <label>Nombre de groupe TP :</label>
-                    {promoData.map((promo, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            value={promo.nombre_tp}
-                            onChange={(e) => handleInputChange(index, 'nombre_tp', e.target.value)}
-                        />
-                    ))}
-                </div>
-
-                <div className="custom-button-modif-container">
-                    {promos.map((promo, index) => (
-                        <button key={index} onClick={() => handleButtonClick(promo.nom)}>
-                            Modifier {promo.nom}
-                        </button>
-                    ))}
-                </div>
-
+                    </div>
+                )}
                 <div className="custom-button-container">
                     <button onClick={handleSubmit}>Valider</button>
                 </div>
-
-                {showPopup && (
-                    <PopupModifPromoAdaptative
-                        onClose={handleClosePopup}
-                        promoName={selectedPromo}
-                        promos={promos}
-                        updatePromoData={updatePromoData}
-                    />
-                )}
             </div>
         </div>
     );

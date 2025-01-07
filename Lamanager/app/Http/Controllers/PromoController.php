@@ -20,6 +20,8 @@ class PromoController extends Controller
         $promo = Promo::find($id);
         return response()->json($promo);
     }
+
+
     public function store(Request $request): JsonResponse
     {
         $promo = new Promo();
@@ -37,7 +39,7 @@ class PromoController extends Controller
 
     public function updateAlternantId(Request $request,$id): JsonResponse
     {
-        
+
         $promo = Promo::find($id);
         if($promo) {
             $promo->alternant_id = $request->alternant_id;
@@ -47,7 +49,7 @@ class PromoController extends Controller
         }
         return response()->json($promo);
     }
-    
+
     public function updatePromos(Request $request): JsonResponse
     {
         try {

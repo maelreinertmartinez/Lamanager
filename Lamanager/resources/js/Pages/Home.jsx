@@ -5,6 +5,7 @@ import RightPart from '../Components/RightPart';
 import PromoRightPart from '@/Components/PromoRightPart';
 import HeaderNeutre from '@/Components/HeaderNeutre';
 import MenuAnnee from '@/Components/MenuAnnee';
+import AddAnneeForm from '@/Components/AddAnneeForm';
 
 const Home = () => {
     const [selectedAnnee, setSelectedAnnee] = useState(null);
@@ -20,11 +21,25 @@ const Home = () => {
         />
     );
 
+    const AddAnneeFormWithProps = () => (
+        <AddAnneeForm 
+            onAnneeAdded={handleAnneeSelect} 
+            onClose={() => {}}
+        />
+    );
+
+    const CombinedLeftComponents = () => (
+        <>
+            <MenuAnneeWithProps />
+            <AddAnneeFormWithProps />
+        </>
+    );
+
     return (
         <>
             <Header ComposantProp={HeaderNeutre}/>
             <div className="app">
-                <LeftPart ComposantProp={MenuAnneeWithProps} />
+                <LeftPart ComposantProp={CombinedLeftComponents} />
                 <RightPart ComposantProp={() => <PromoRightPart selectedAnnee={selectedAnnee} />}/>
             </div>
         </>

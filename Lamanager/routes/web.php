@@ -35,6 +35,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/test', function () {
+    return Inertia::render('Test');
+})->name('test');
+
+Route::get('/login', function () {
+    return Inertia::render('Login');
+})->name('login');
+
+require __DIR__.'/auth.php';
 
     Route::get('/api/enseignants', [EnseignantController::class, 'index'])->name('api.enseignants');
     Route::get('/api/enseignant/{id}', [EnseignantController::class, 'showCode'])->name('api.enseignant.get');
@@ -50,6 +61,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/groupes/{promo_id}', [GroupeController::class, 'index'])->name('api.groupes');
     Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('api.cases');
     Route::get('/api/roles', [RoleController::class, 'index'])->name('api.roles');
+    Route::get('/api/cases/recherche/{annee_id}/{enseignement_id}/{enseignant_id}', [CaseController::class, 'listeCasesParEnseignant']);
+    Route::get('/api/enseignements/{anneeId}',[EnseignementController::class, 'enseignementParAnnee'])->name('api.enseignements');
 
     Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
     Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
@@ -68,16 +81,28 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/api/promos/update', [PromoController::class, 'updatePromos'])->name('api.promos.update');
 
-    Route::post('/update-groupes', [GroupeController::class, 'update']);
+Route::get('/api/liaison_groupes/{groupe_td_id}', [LiaisonGroupeController::class, 'getSubGroups']);
+Route::get('/api/liaison_groupes', [LiaisonGroupeController::class, 'index']);
+Route::post('/api/liaison_groupes', [LiaisonGroupeController::class, 'store']);
+
+Route::put('/api/groupes/{id}', [GroupeController::class, 'update'])->name('api.groupes.update');
+Route::post('/api/update-groupes', [GroupeController::class, 'updateGroupes'])->name('api.update-groupes');
+
+Route::post('/api/groupes', [GroupeController::class, 'stored'])->name('api.groupes.store');
 
     Route::post('/api/enseignants', [EnseignantController::class, 'store'])->name('api.enseignants.store');
+    Route::get('/api/enseignants/{annee_id}/{id}', [EnseignantController::class, 'listeEnseignementParEnseignant']);
     Route::put('/api/enseignants/{id}', [EnseignantController::class, 'update'])->name('api.enseignants.update');
     Route::delete('/api/enseignants/{id}', [EnseignantController::class, 'destroy'])->name('api.enseignants.destroy');
-});
+
 
 Route::get('/login', function () {
     return Inertia::render('Login');
 })->name('login');
+
+Route::get('/versionProf', function () {
+    return Inertia::render('PageVersionProf');
+})->name('versionProf')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/api/session', [AuthenticatedSessionController::class, 'index'])->name('api.session');
@@ -85,3 +110,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::post('api/groupes', [GroupeController::class, 'store']);

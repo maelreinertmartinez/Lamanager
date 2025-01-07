@@ -1,0 +1,93 @@
+.custom-popup-overlay-modif {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.custom-popup-content-modif {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+
+}
+
+.labels-block {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.promos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.promo-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 22%;
+    height: 30%;
+}
+
+.promo-block label {
+    margin-bottom: 10px;
+}
+
+.promo-block button {
+    background-color: #564787;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.custom-button-container {
+    position: fixed;
+    right: 22%;
+    bottom: 15%;
+    z-index: 100; /* Ensure it is below the popup content */
+}
+
+.custom-button-container button {
+    padding: 8px 16px;
+    background-color: #564787;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-button-container button:hover {
+    background-color: #453a6b;
+}
+
+.popupmodifpromo-header {
+    background-color: #564787;
+    color: white;
+    padding: 1%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    width: 100%;
+}

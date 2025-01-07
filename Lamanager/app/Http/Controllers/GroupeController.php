@@ -10,9 +10,9 @@ class GroupeController extends Controller
     public function index($promo_id): JsonResponse
     {
         $groupes = Groupe::where('promo_id', $promo_id)
-                      ->select('id', 'nom', 'type')
-                      ->get();
-        
+            ->select('id', 'nom', 'type')
+            ->get();
+
         return response()->json($groupes);
     }
     public function store(Request $request): JsonResponse
@@ -26,32 +26,27 @@ class GroupeController extends Controller
         return response()->json($case);
     }
 
-    // GroupeController.php
-    public function store2(Request $request): JsonResponse
-    {
-        $promoId = $request->input('promo_id');
-        $newGroup = Groupe::create([
-            'nom' => 'amodifier',
-            'type' => $request->input('type'),
-            'promo_id' => $promoId,
-        ]);
 
-        return response()->json($newGroup);
+    public function update(Request $request, $id)
+    {
+        $groupe = Groupe::findOrFail($id);
+        $groupe->nom = $request->input('nom');
+        $groupe->save();
+
+        return response()->json($groupe, 200);
     }
 
-    public function update(Request $request)
+
+    public function updateGroupes(Request $request)
     {
         $groupes = $request->input('groupes');
-
         foreach ($groupes as $groupeData) {
-            $groupe = Groupe::find($groupeData['id']);
-            if ($groupe) {
-                $groupe->nom = $groupeData['nom'];
-                $groupe->save();
-            }
+            $groupe = Groupe::findOrFail($groupeData['id']);
+            $groupe->nom = $groupeData['nom'];
+            $groupe->save();
         }
 
-        return response()->json(['message' => 'Groupes updated successfully']);
+        return response()->json(['message' => 'Groupes updated successfully'], 200);
     }
 
     // GroupeController.php

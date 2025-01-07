@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import ChoixPromo from "./ChoixPromo";
-import CustomPopup from "@/Components/CustomPopup.jsx";
+import AjoutPromo from "@/Components/AjoutPromo.jsx";
 import BoutonModificationsPromos from "./BoutonsModificationsPromos";
 import { Trash2, Edit } from "lucide-react";
 import { Link } from '@inertiajs/react';
@@ -19,11 +19,11 @@ function PromoRightPart({ selectedAnnee }) {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
             try {
-                
+
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
-                
-                
-                //console.log(response.data); 
+
+
+                //console.log(response.data);
                 setPromos(response.data);
                 setLoading(false);
             } catch (err) {
@@ -74,7 +74,7 @@ function PromoRightPart({ selectedAnnee }) {
         </div>
 
             {showCustomPopup && (
-                <CustomPopup
+                <AjoutPromo
                     selectedAnnee={selectedAnnee}
                     onClose={() => setShowCustomPopup(false )}
                 />
@@ -97,7 +97,7 @@ function PromoRightPart({ selectedAnnee }) {
                     promos={promos}
                     selectedYear={selectedAnnee.annee}
                 />
-        )}  
+        )}
 
         {/* Popup d'ajout */}
         {showAddPopup && (
