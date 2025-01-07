@@ -11,6 +11,10 @@
       if (selections.selectedAnnee && selections.selectedEnseignement) {
         fetchCaseTableauData(selections.selectedAnnee.id, selections.selectedEnseignement.id);
       }
+      if (selections.all === "all") {
+        fetchCaseTableauDataAll(selections.selectedAnnee.id);
+
+      }
     }, [selections]);
 
     const fetchCaseTableauData = async (anneeId, enseignementId) => {
@@ -18,12 +22,23 @@
       try {
         const sessionResponse = await axios.get('/api/session');
         const userId = sessionResponse.data.userId;
-        console.log('User ID:', userId);
-        console.log('Année ID:', anneeId);
-        console.log('Enseignement ID:', enseignementId);
 
         const response = await axios.get(`/api/cases/recherche/${anneeId}/${enseignementId}/${userId}`);
-        console.log('Cases Response:', response.data);
+        processData(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Erreur lors de la récupération des données', err);
+        setError('Erreur lors de la récupération des données');
+        setLoading(false);
+      }
+    };
+    const fetchCaseTableauDataAll = async (anneeId) => {
+      setLoading(true);
+      try {
+        const sessionResponse = await axios.get('/api/session');
+        const userId = sessionResponse.data.userId;
+  
+        const response = await axios.get(`/api/cases/rechercheComplete/${anneeId}/${userId}`);
         processData(response.data);
         setLoading(false);
       } catch (err) {

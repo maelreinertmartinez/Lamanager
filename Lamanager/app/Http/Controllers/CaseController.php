@@ -42,17 +42,36 @@ class CaseController extends Controller
 
     public function listeCasesParEnseignant($annee_id, $enseignement_id, $enseignant_id): JsonResponse
     {
-        $cases = CaseTableau::select('semaine_id','nombre_heure','nombre_minute','enseignement_id','groupe_id','numero','type')
-                            ->join('semaines', 'case_tableau.semaine_id', '=', 'semaines.id')
-                            ->join('enseignements', 'case_tableau.enseignement_id', '=', 'enseignements.id')
-                            ->join('groupes', 'case_tableau.groupe_id', '=', 'groupes.id')
-                            ->join('promos', 'enseignements.promo_id', '=', 'promos.id')
-                            ->join('annees', 'promos.annee_id', '=', 'annees.id')
-                            ->where('annees.id', $annee_id)
-                            ->where('enseignement_id', $enseignement_id)
-                            ->where('enseignant_id', $enseignant_id)
-                            ->get();
-
+        $query = CaseTableau::select('semaine_id','nombre_heure','nombre_minute','enseignement_id','groupe_id','numero','type')
+            ->join('semaines', 'case_tableau.semaine_id', '=', 'semaines.id')
+            ->join('enseignements', 'case_tableau.enseignement_id', '=', 'enseignements.id')
+            ->join('groupes', 'case_tableau.groupe_id', '=', 'groupes.id')
+            ->join('promos', 'enseignements.promo_id', '=', 'promos.id')
+            ->join('annees', 'promos.annee_id', '=', 'annees.id')
+            ->where('annees.id', $annee_id)
+            ->where('enseignant_id', $enseignant_id);
+    
+        if ($enseignement_id !== null) {
+            $query->where('enseignement_id', $enseignement_id);
+        }
+    
+        $cases = $query->get();
+    
+        return response()->json($cases);
+    }
+    public function listeEnseignement($annee_id, $enseignant_id): JsonResponse
+    {
+        $query = CaseTableau::select('semaine_id','nombre_heure','nombre_minute','enseignement_id','groupe_id','numero','type')
+            ->join('semaines', 'case_tableau.semaine_id', '=', 'semaines.id')
+            ->join('enseignements', 'case_tableau.enseignement_id', '=', 'enseignements.id')
+            ->join('groupes', 'case_tableau.groupe_id', '=', 'groupes.id')
+            ->join('promos', 'enseignements.promo_id', '=', 'promos.id')
+            ->join('annees', 'promos.annee_id', '=', 'annees.id')
+            ->where('annees.id', $annee_id)
+            ->where('enseignant_id', $enseignant_id);
+    
+        $cases = $query->get();
+    
         return response()->json($cases);
     }
 

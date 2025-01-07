@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/cases/{enseignement_id}', [CaseController::class, 'index'])->name('api.cases');
     Route::get('/api/roles', [RoleController::class, 'index'])->name('api.roles');
     Route::get('/api/cases/recherche/{annee_id}/{enseignement_id}/{enseignant_id}', [CaseController::class, 'listeCasesParEnseignant']);
+    Route::get('/api/cases/rechercheComplete/{annee_id}/{enseignant_id}', [CaseController::class, 'listeEnseignement']);
     Route::get('/api/enseignements/{anneeId}',[EnseignementController::class, 'enseignementParAnnee'])->name('api.enseignements');
 
     Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
