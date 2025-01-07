@@ -122,10 +122,21 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
         const tdGroup = groupesData.find(groupe => groupe.nom === tdGroupToDelete && groupe.type === 'TD');
         if (tdGroup) {
             try {
+                // Delete related TP groups
+                const relatedTPGroups = liaisons
+                    .filter(liaison => liaison.groupe_td_id === tdGroup.id)
+                    .map(liaison => liaison.groupe_tp_id);
+
+                for (const tpGroupId of relatedTPGroups) {
+                    await axios.delete(`/api/groupes/${tpGroupId}`);
+                }
+
+                // Delete the TD group
                 await axios.delete(`/api/groupes/${tdGroup.id}`);
-                setGroupesData(groupesData.filter(groupe => groupe.id !== tdGroup.id));
+                setGroupesData(groupesData.filter(groupe => groupe.id !== tdGroup.id && !relatedTPGroups.includes(groupe.id)));
                 setLiaisons(liaisons.filter(liaison => liaison.groupe_td_id !== tdGroup.id));
                 updatePromoData(promo.id, 'TD', groupesData.length - 1);
+                updatePromoData(promo.id, 'TP', groupesData.filter(groupe => groupe.type === 'TP').length);
             } catch (error) {
                 console.error("Error deleting TD group:", error);
             }
