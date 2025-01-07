@@ -166,16 +166,15 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
                         </div>
                     </div>
                 ))}
-                <div className="custom-button-container">
+                <div className="custom-button-container-mod">
                     <button onClick={() => handleAddGroup('TD')}>Ajouter TD</button>
                     <button onClick={() => handleDeleteGroup('TD')}>Supprimer TD</button>
                     <button onClick={handleAddTPGroup}>Ajouter TP</button>
                     <button onClick={handleDeleteTPGroup}>Supprimer TP</button>
-                </div>
-                <div className="custom-button-container-but">
                     <button onClick={handleSubmit}>Valider</button>
-                    <button onClick={onClose}>Fermer</button>
+
                 </div>
+
             </div>
         </div>
     );
