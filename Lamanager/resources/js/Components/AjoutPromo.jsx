@@ -4,22 +4,27 @@ import axios from "axios";
 function AjoutPromo({ onClose, selectedAnnee }) {
     const [promoName, setPromoName] = useState("");
     const [tdNbr, setTdNbr] = useState("");
-    const [tpNbr, setTpNbr] = useState("");
+    const [tpNbrByTd, setTpNbrByTd] = useState("");
     const [isAlternant, setIsAlternant] = useState(false);
 
     async function creationPromo() {
-        const newPromo = await handlePromos(); // Créer la promo normale
-        if (newPromo) {
-            await handleGroupes(newPromo); // Créer les groupes pour la promo normale
+        if (promoName !== "" && tdNbr !== "" && tpNbrByTd !== "" && tdNbr > 0 && tpNbrByTd > 0) {
+            onClose(); // Fermer la popup après soumission
+            const newPromo = await handlePromos(); // Créer la promo normale
+            if (newPromo) {
+                await handleGroupes(newPromo); // Créer les groupes pour la promo normale
 
-            if (isAlternant) {
-                // Créer la promo alternante
-                const alternantPromo = await handlePromosAlternant(newPromo);
-                if (alternantPromo) {
-                    await handleGroupes(alternantPromo); // Créer les groupes pour la promo alternante
+                if (isAlternant) {
+                    // Créer la promo alternante
+                    const alternantPromo = await handlePromosAlternant(newPromo);
+                    if (alternantPromo) {
+                        await handleGroupes(alternantPromo); // Créer les groupes pour la promo alternante
+                    }
                 }
             }
+            window.location.reload();
         }
+
     }
 
     async function addPromo(selectedAnnee, alternantId, promoName, tdNbr, tpNbr, alternant) {
@@ -42,7 +47,7 @@ function AjoutPromo({ onClose, selectedAnnee }) {
 
     const handlePromos = async () => {
         try {
-            const promo = await addPromo(selectedAnnee,null, promoName, tdNbr, tpNbr, false);
+            const promo = await addPromo(selectedAnnee,null, promoName, tdNbr, tpNbrByTd, false);
             console.log("Promo créée :", promo.data);
             return promo.data;
         } catch (err) {
@@ -78,7 +83,7 @@ function AjoutPromo({ onClose, selectedAnnee }) {
             const nomTD = "TD" + parseInt(i + 1);
             const td = await addGroupe(promo, nomTD, "TD");
 
-            for (let j = 1; j <= promo.nombre_tp/promo.nombre_td; j++) {
+            for (let j = 1; j <= promo.nombre_tp; j++) {
                 num_td = num_td+1;
                 const nomTP = "TP" + num_td;
                 const tp = await addGroupe(promo, nomTP, "TP");
@@ -90,45 +95,80 @@ function AjoutPromo({ onClose, selectedAnnee }) {
                 });
             }
         }
-        onClose(); // Fermer la popup après soumission
+
     };
 
     return (
         <div className="custom-popup-overlay-unique" onClick={onClose}>
             <div className="custom-popup-content-unique" onClick={(e) => e.stopPropagation()}>
-                <div className="custom-promo-name-container-unique">
-                    <p>Nom de la promo :</p>
-                    <input
-                        type="text"
-                        value={promoName}
-                        onChange={(e) => setPromoName(e.target.value)}
-                    />
-                </div>
-                <div className="custom-input-container-unique">
-                    <div className="custom-input-group-unique">
-                        <label>Nom de groupe TD :</label>
+                <div
+                    style={{
+                        marginBottom: "10%",
+                    }}>
+                    <div className="custom-promo-name-container-unique">
+                        <p>Nom de la promo :</p>
                         <input
                             type="text"
+                            value={promoName}
+                            onChange={(e) => setPromoName(e.target.value)}
+                        />
+
+                    </div>
+                    {(promoName === "") && (
+                        <div className="custom-input-container-unique">
+                            <div className="custom-group-unique"
+                                 style={{
+                                     color: "red",
+                                 }}>
+                                <label>Le nom de la promo ne peut pas être vide.</label>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className="custom-input-container-unique">
+                    <div className="custom-group-unique">
+                        <label>Nombre de groupe TD :</label>
+                        <input
+                            type="number"
                             value={tdNbr}
                             onChange={(e) => setTdNbr(e.target.value)} // Mise à jour de l'état
                         />
                     </div>
-                    <div className="custom-input-group-unique">
-                        <label>Nom de groupe TP :</label>
+                    <div className="custom-group-unique">
+                        <label>Nombre de groupe TP par TD :</label>
                         <input
-                            type="text"
-                            value={tpNbr}
-                            onChange={(e) => setTpNbr(e.target.value)} // Mise à jour de l'état
+                            type="number"
+                            value={tpNbrByTd}
+                            onChange={(e) => setTpNbrByTd(e.target.value)} // Mise à jour de l'état
                         />
                     </div>
                 </div>
-                <div className="custom-input-group-unique">
+                {(tdNbr <= '0' || tpNbrByTd <= '0') && (
+                    <div className="custom-input-container-unique">
+                        <div className="custom-group-unique"
+                             style={{
+                                 color: "red",
+                             }}>
+                            <label>Le nombre de groupe de TD et TP doit être un nombre positif non nul.</label>
+                        </div>
+                    </div>
+                )}
+
+                <div className="custom-group-unique">
                     <label>Alternant :</label>
                     <input
                         type="checkbox"
                         checked={isAlternant}
                         onChange={(e) => setIsAlternant(e.target.checked)}
                     />
+                </div>
+
+                <div className="custom-group-unique">
+                    <label
+                        style={{
+                            fontSize : 20,
+                        }}
+                    >La promo a TD : {tdNbr || 0} et TP : {tdNbr * tpNbrByTd || 0}</label>
                 </div>
                 <div className="custom-button-container-unique">
                     <button onClick={creationPromo}>Valider</button>
