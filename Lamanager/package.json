@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "lucide-react": "^0.454.0",
-        "react-google-charts": "^5.2.1"
+        "react-google-charts": "^5.2.1",
+        "victory": "^37.3.5"
     }
 }

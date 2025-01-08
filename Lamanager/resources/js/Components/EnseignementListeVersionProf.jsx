@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function EnseignementListeVersionProf({ anneeId, onEnseignementSelect }) {
+function EnseignementListeVersionProf({ anneeId, onEnseignementSelect, setIsAllEnseignementsSelected }) {
     const [enseignements, setEnseignements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,7 +12,6 @@ function EnseignementListeVersionProf({ anneeId, onEnseignementSelect }) {
                 const sessionResponse = await axios.get('/api/session');
                 const userId = sessionResponse.data.userId; 
                 const response = await axios.get(`/api/enseignants/${anneeId}/${userId}`);
-                console.log('Réponse des enseignements:', response.data);
                 setEnseignements(response.data);
                 setLoading(false);
             } catch (err) {
@@ -38,15 +37,20 @@ function EnseignementListeVersionProf({ anneeId, onEnseignementSelect }) {
                 onChange={(e) => {
                     const selectedId = parseInt(e.target.value);
                     const selectedEnseignement = enseignements.find(e => e.id === selectedId);
-                    console.log('Enseignement sélectionné:', selectedEnseignement);
                     if (selectedEnseignement) {
                         onEnseignementSelect(selectedEnseignement);
+                        setIsAllEnseignementsSelected(false);
                         console.log('Enseignement sélectionné:', selectedEnseignement);
+                    }
+                    if(e.target.value === 'all') {
+                        console.log('Tous les enseignements');
+                        setIsAllEnseignementsSelected(true);
                     }
                 }}
                 defaultValue=""
             >
                 <option value="" disabled>Sélectionnez un enseignement</option>
+                <option value="all">Tous les enseignements</option>
                 {enseignements.map((enseignement) => (
                     <option key={enseignement.id} value={enseignement.id}>
                         {enseignement.nom}
