@@ -1,7 +1,13 @@
 import React from 'react';
-import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryTheme, VictoryTooltip, VictoryVoronoiContainer, VictoryLabel } from 'victory';
+import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryTheme, VictoryTooltip, VictoryVoronoiContainer, VictoryLabel, VictoryLegend } from 'victory';
 
 const HistogrammeGroupe = ({ data }) => {
+
+  const chartWidth = window.innerWidth * 0.9;
+  const chartHeight = window.innerHeight * 0.9;
+  const numberOfBars = data.length;
+  const dynamicDomainPadding = Math.max(10, chartWidth / (numberOfBars * 2)); 
+  
   const formattedData = data.map(item => ({
     semaine: item.semaine,
     CM: item.CM,
@@ -10,7 +16,21 @@ const HistogrammeGroupe = ({ data }) => {
   }));
 
   return (
-    <VictoryChart theme={VictoryTheme.material} domainPadding={35} containerComponent={<VictoryVoronoiContainer />} width={window.innerWidth * 0.9} height={window.innerHeight * 0.9}>
+    <VictoryChart theme={VictoryTheme.material} domainPadding={dynamicDomainPadding} containerComponent={<VictoryVoronoiContainer />} width={window.innerWidth * 0.9} height={window.innerHeight * 0.9}>
+      
+      <VictoryLegend
+        x={chartWidth * 0.05}
+        y={chartHeight * 0.1}
+        orientation="horizontal"
+        gutter={20}
+        style={{ border: { stroke: "black" }, title: { fontSize: 24 }, labels: { fontSize: 18 } }}
+        data={[
+          { name: "CM", symbol: { fill: "#FFCE6E" } },
+          { name: "TD", symbol: { fill: "#FF6D88" } },
+          { name: "TP", symbol: { fill: "#62C4FB" } }
+        ]}
+      />
+
       <VictoryAxis
         tickValues={formattedData.map(item => item.semaine)}
         tickFormat={formattedData.map(item => item.semaine)}
@@ -24,8 +44,9 @@ const HistogrammeGroupe = ({ data }) => {
      
       />
       <VictoryLabel
-        x={225}
-        y={25}
+        x={window.innerWidth * 0.5}
+        y={window.innerHeight * 0}  
+        style={{ fontSize: 30 }}
         textAnchor="middle"
         text="Répartition des heures par type de cours"
       />

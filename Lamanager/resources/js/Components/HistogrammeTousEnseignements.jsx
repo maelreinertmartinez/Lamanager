@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryTheme, VictoryTooltip, VictoryVoronoiContainer, VictoryLabel } from 'victory';
+import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryTheme, VictoryTooltip, VictoryVoronoiContainer, VictoryLabel, VictoryLegend } from 'victory';
 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -12,24 +12,46 @@ const getRandomColor = () => {
 
 const HistogrammeTousEnseignements = ({ data }) => {
   
-  const formattedData = data.map(item => ({
-    semaine: item.semaine,
-    ...item.enseignements,
-  }));
+  console.log('Data received:', data);
 
-  const enseignements = Object.keys(formattedData[0]).filter(key => key !== 'semaine');
-
+  const enseignements = Object.keys(data[0]).filter(key => key !== 'semaine' && key !== 'total');
+  console.log('Enseignements:', enseignements)
 
   const colors = enseignements.reduce((acc, enseignement) => {
     acc[enseignement] = getRandomColor();
     return acc;
   }, {});
 
+  const sanitizedData = data.map(item => {
+    const sanitizedItem = { ...item };
+    enseignements.forEach(enseignement => {
+      if (isNaN(sanitizedItem[enseignement])) {
+        sanitizedItem[enseignement] = 0;
+      }
+    });
+    return sanitizedItem;
+  });
+
+  const chartWidth = window.innerWidth * 1;
+  const chartHeight = window.innerHeight * 1;
+  const numberOfBars = sanitizedData.length;
+  const dynamicDomainPadding = Math.max(10, chartWidth / (numberOfBars * 2));
+
   return (
-    <VictoryChart theme={VictoryTheme.material} domainPadding={35} containerComponent={<VictoryVoronoiContainer />} width={window.innerWidth * 0.9} height={window.innerHeight * 0.9}>
+    <VictoryChart theme={VictoryTheme.material} domainPadding={dynamicDomainPadding} containerComponent={<VictoryVoronoiContainer />} width={chartWidth} height={chartHeight}>
+      <VictoryLegend
+        orientation="horizontal"
+        gutter={20}
+        style={{ border: { stroke: "black" }, title: { fontSize: 20 }, labels: { fontSize: 20 } }}
+        data={enseignements.map((enseignement, index) => ({
+          name: enseignement,
+          symbol: { fill: colors[enseignement] }
+        }))}
+      />
+      
       <VictoryAxis
-        tickValues={formattedData.map(item => item.semaine)}
-        tickFormat={formattedData.map(item => item.semaine)}
+        tickValues={sanitizedData.map(item => item.semaine)}
+        tickFormat={sanitizedData.map(item => item.semaine)}
         style={{
             grid: { stroke: "none" } // Supprimer les lignes verticales
         }}
@@ -39,8 +61,9 @@ const HistogrammeTousEnseignements = ({ data }) => {
         tickFormat={(x) => `${x}h`}
       />
       <VictoryLabel
-        x={225}
-        y={25}
+        x={window.innerWidth * 0.5}
+        y={window.innerHeight * 0}  
+        style={{ fontSize: 30 }}
         textAnchor="middle"
         text="Répartition des heures par enseignement"
       />
@@ -48,10 +71,10 @@ const HistogrammeTousEnseignements = ({ data }) => {
         {enseignements.map((enseignement, index) => (
           <VictoryBar
             key={index}
-            data={formattedData}
+            data={sanitizedData}
             x="semaine"
             y={enseignement}
-            style={{ data: { fill: "#000000" } }}
+            style={{ data: { fill: colors[enseignement] } }}
             labels={({ datum }) => `${enseignement} : ${datum[enseignement]}h`}
             labelComponent={<VictoryTooltip style={{ fontSize: 15 }} />}
           />
