@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MenuAnnee from './MenuAnnee';
 import EnseignementListeVersionProf from './EnseignementListeVersionProf';
 import TableauVersionProf from './TableauVersionProf';
+import TableauVersionProfDetail from './TableauVersionProfDetail';
 
 export default function VersionProfLeftPart({ onSelectionChange }) {
     const [selectedAnnee, setSelectedAnnee] = useState(null);
@@ -9,6 +10,7 @@ export default function VersionProfLeftPart({ onSelectionChange }) {
     const [isAllEnseignementsSelected, setIsAllEnseignementsSelected] = useState(false);
     const [showGroupes, setShowGroupes] = useState(false);
     const [showTableauPopup, setShowTableauPopup] = useState(false);
+    const [showDetailsPopup, setShowDetailsPopup] = useState(false);
 
     useEffect(() => {
         if (selectedAnnee && selectedEnseignement) {    
@@ -29,6 +31,14 @@ export default function VersionProfLeftPart({ onSelectionChange }) {
 
     const handleCloseTableauPopup = () => {
         setShowTableauPopup(false);
+    };
+
+    const handleDetailsClick = () => {
+        setShowDetailsPopup(true);
+    };
+
+    const handleCloseDetailsPopup = () => {
+        setShowDetailsPopup(false);
     };
 
     useEffect(() => {
@@ -66,6 +76,24 @@ export default function VersionProfLeftPart({ onSelectionChange }) {
                         </button>
                         <h2 className="text-2xl font-bold mb-4">Tableau des Enseignements</h2>
                         <TableauVersionProf anneeId={selectedAnnee.id} />
+                        <div className="button-container">
+                            <button onClick={handleDetailsClick}>Détail Semaine</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showDetailsPopup && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto relative">
+                        <button 
+                            onClick={handleCloseDetailsPopup} 
+                            className="absolute top-4 right-4 text-2xl font-bold hover:text-red-600"
+                        >
+                            &times;
+                        </button>
+                        <h2 className="text-2xl font-bold mb-4">Détail Semaine</h2>
+                        <TableauVersionProfDetail anneeId={selectedAnnee.id} />
                     </div>
                 </div>
             )}
