@@ -14,7 +14,6 @@ export default function VersionProfRightPart({ selections }) {
 
   useEffect(() => {
     if (selections.selectedAnnee && selections.selectedEnseignement) {
-      //console.log('Fetching data for:', selections);
       fetchCaseTableauData(selections.selectedAnnee.id, selections.selectedEnseignement.id);
     }
     if (selections.all === "all") {
@@ -33,8 +32,6 @@ export default function VersionProfRightPart({ selections }) {
 
       const response = await axios.get(`/api/cases/recherche/${anneeId}/${enseignementId}/${userId}`);
       processData(response.data, false);
-      
-      //console.log('Data:', response.data);
       setLoading(false);
     } catch (err) {
       console.error('Erreur lors de la récupération des données', err);
@@ -51,7 +48,6 @@ export default function VersionProfRightPart({ selections }) {
 
       const response = await axios.get(`/api/cases/rechercheComplete/${anneeId}/${userId}`);
       processData(response.data, true);
-      //console.log('Data:', response.data);
       setLoading(false);
     } catch (err) {
       console.error('Erreur lors de la récupération des données', err);
@@ -61,7 +57,6 @@ export default function VersionProfRightPart({ selections }) {
   };
 
   const processData = (cases, isAllEnseignementsSelected) => {
-    //console.log('isAllEnseignementsSelected:', isAllEnseignementsSelected);
     const weeksData = {};
     const groupesData = {};
     const enseignements = new Set();

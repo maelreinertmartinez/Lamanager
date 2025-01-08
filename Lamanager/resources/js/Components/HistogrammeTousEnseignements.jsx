@@ -11,11 +11,8 @@ const getRandomColor = () => {
 };
 
 const HistogrammeTousEnseignements = ({ data }) => {
-  
-  console.log('Data received:', data);
 
   const enseignements = Object.keys(data[0]).filter(key => key !== 'semaine' && key !== 'total');
-  console.log('Enseignements:', enseignements)
 
   const colors = enseignements.reduce((acc, enseignement) => {
     acc[enseignement] = getRandomColor();
