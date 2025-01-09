@@ -1,8 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-function UpdatePopup({ setShowUpdatePopup, initialData, selectedGroups, handleUpdate }) {
+function UpdatePopup({ setShowUpdatePopup, initialData, selectedGroups, handleUpdateConfirm, enseignementId }) {
     const [heures, setHeures] = useState(selectedGroups.map(() => `${initialData.heures}:${initialData.minutes}`));
-    const [enseignants, setEnseignants] = useState(selectedGroups.map(() => initialData.enseignant));
+    const [enseignants, setEnseignants] = useState([]);
+    const [enseignantsMap, setEnseignantsMap] = useState({});
+    const [selectedEnseignants, setSelectedEnseignants] = useState(new Array(selectedGroups.length).fill(''));
+
+    useEffect(() => {
+        const fetchEnseignants = async () => {
+            try {
+                const response = await axios.get('/api/enseignants'); // Remplacez par l'URL de votre API
+                const enseignantsData = response.data;
+    
+                // Créer un objet de mappage enseignantId => code
+                const map = enseignantsData.reduce((acc, enseignant) => {
+                    acc[enseignant.id] = enseignant.code; // Mappage de l'ID au nom complet
+                    return acc;
+                }, {});
+    
+                setEnseignants(enseignantsData);
+                setEnseignantsMap(map);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des enseignants:', error);
+            }
+        };
+    
+        fetchEnseignants();
+    }, []);
 
     const handleHeuresChange = (index, value) => {
         const newHeures = [...heures];
@@ -11,20 +36,47 @@ function UpdatePopup({ setShowUpdatePopup, initialData, selectedGroups, handleUp
     };
 
     const handleEnseignantChange = (index, value) => {
-        const newEnseignants = [...enseignants];
-        newEnseignants[index] = value;
-        setEnseignants(newEnseignants);
+        const newSelectedEnseignants = [...selectedEnseignants];
+        newSelectedEnseignants[index] = value;
+        setSelectedEnseignants(newSelectedEnseignants);
     };
 
-    const handleConfirm = () => {
-        const updatedData = selectedGroups.map((groupe, index) => ({
-            groupe,
-            heures: heures[index],
-            enseignant: enseignants[index]
-        }));
-        handleUpdate(updatedData);
-        setShowUpdatePopup(false);
+    const handleConfirmClick = () => {
+        const updatedData = [];
+
+        Object.keys(groupedCells).forEach((groupeId, index) => {
+            const [hours, minutes] = heures[index].split(':').map(Number);
+            const enseignantId = selectedEnseignants[index];
+            const enseignantCode = enseignantsMap[enseignantId];
+
+            groupedCells[groupeId].forEach(cell => {
+                updatedData.push({
+                    groupeId: cell.groupeId,
+                    heures: hours,
+                    minutes: minutes,
+                    enseignantId: enseignantId,
+                    enseignantCode: enseignantCode,
+                    enseignementId: enseignementId,
+                    semaineId: cell.semaineId,
+                    cellKey: cell.cellKey
+                });
+            });
+        });
+
+        handleUpdateConfirm(updatedData);
+        if (typeof setShowUpdatePopup === 'function') {
+            setShowUpdatePopup(false);
+        }
     };
+
+    // Regrouper les cellules par groupeId
+    const groupedCells = selectedGroups.reduce((acc, cell) => {
+        if (!acc[cell.groupeId]) {
+            acc[cell.groupeId] = [];
+        }
+        acc[cell.groupeId].push(cell);
+        return acc;
+    }, {});
 
     return (
         <div className="popup-overlay" style={overlayStyle}>
@@ -32,40 +84,42 @@ function UpdatePopup({ setShowUpdatePopup, initialData, selectedGroups, handleUp
                 <h2>Modifier</h2>
                 <div style={inputContainerStyle}>
                     <div style={columnHeaderStyle}>
-                        {selectedGroups.map((groupe, index) => (
+                        {Object.keys(groupedCells).map((groupeId, index) => (
                             <div key={`header-${index}`} style={columnStyle}>
-                                <label style={labelStyle}>{groupe}</label>
+                                <label style={labelStyle}>{groupedCells[groupeId][0].name}</label>
                             </div>
                         ))}
                     </div>
                     <div style={columnHeaderStyle}>
-                        {selectedGroups.map((_, index) => (
-                            <input
-                                key={`heures-${index}`}
-                                type="time"
-                                value={heures[index]}
-                                onChange={(e) => handleHeuresChange(index, e.target.value)}
-                                style={inputStyle}
-                                placeholder="HH:MM"
-                            />
-                        ))}
-                    </div>
-                    <div style={columnHeaderStyle}>
-                        {selectedGroups.map((_, index) => (
-                            <input
-                                key={`enseignant-${index}`}
-                                type="text"
-                                value={enseignants[index]}
-                                onChange={(e) => handleEnseignantChange(index, e.target.value)}
-                                style={inputStyle}
-                                placeholder="Nom de l'enseignant"
-                            />
+                        {Object.keys(groupedCells).map((groupeId, index) => (
+                            <div key={`input-${index}`} style={columnStyle}>
+                                <input
+                                    type="time"
+                                    value={heures[index]}
+                                    onChange={(e) => handleHeuresChange(index, e.target.value)}
+                                    style={inputStyle}
+                                    placeholder="HH:MM"
+                                />
+                                <select
+                                    value={selectedEnseignants[index]}
+                                    onChange={(e) => handleEnseignantChange(index, e.target.value)}
+                                    style={selectStyle}
+                                    size={enseignants.length}
+                                >
+                                    <option value="" disabled>Choisir un enseignant</option>
+                                    {enseignants.map((enseignant) => (
+                                        <option key={enseignant.id} value={enseignant.id}>
+                                            {enseignant.nom} {enseignant.prenom}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         ))}
                     </div>
                 </div>
                 <div style={buttonContainerStyle}>
                     <button onClick={() => setShowUpdatePopup(false)} style={buttonStyle}>Annuler</button>
-                    <button onClick={handleConfirm} style={buttonStyle}>Confirmer</button>
+                    <button onClick={handleConfirmClick} style={buttonStyle}>Confirmer</button>
                 </div>
             </div>
         </div>
@@ -119,6 +173,15 @@ const inputStyle = {
     padding: '10px',
     fontSize: '16px',
     marginBottom: '10px',
+};
+
+const selectStyle = {
+    width: '100%',
+    padding: '10px',
+    fontSize: '16px',
+    marginBottom: '10px',
+    maxHeight: '150px',
+    overflowY: 'auto'
 };
 
 const buttonContainerStyle = {

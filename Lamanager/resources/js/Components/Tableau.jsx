@@ -55,12 +55,13 @@ function EnseignementComponent({ promoId, selectedEnseignements, onRemoveEnseign
                 ))}
             </div>
             
-            {selectedEnseignements.map((enseignement) => enseignement && (
+            {selectedEnseignements.filter(enseignement => activeTableau === enseignement.nom)
+                .map((enseignement) => (
                 <div 
                     key={enseignement.id}
                     className="Tableau"
                     id={enseignement.nom}
-                    style={{ display: activeTableau === enseignement.nom && !isLoading ? 'block' : 'none' }} // Modification ici
+                    style={{ display: activeTableau === enseignement.nom && !isLoading ? 'block' : 'none' }}
                 >
                     <div className="flex flex-col">
                         <div className="mb-4 relative">

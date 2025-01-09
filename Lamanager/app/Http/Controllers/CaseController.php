@@ -35,6 +35,7 @@ class CaseController extends Controller
     {
         $case = CaseTableau::where('semaine_id', $request->semaine_id)
                           ->where('groupe_id', $request->groupe_id)
+                          ->where('enseignement_id', $request->enseignement_id)
                           ->delete();
 
         return response()->json(['message' => 'Case supprimée avec succès']);

@@ -38,12 +38,13 @@ export const addCellToDatabase = async (semaineID, enseignantId, enseignementId,
     }
 };
 
-export const deleteCellFromDatabase = async (semaineId, groupeId) => {
+export const deleteCellFromDatabase = async (semaineId, groupeId, enseignementId) => {
     try {
         const response = await axios.delete('/api/cases', {
             data: {
                 semaine_id: semaineId,
-                groupe_id: groupeId
+                groupe_id: groupeId,
+                enseignement_id: enseignementId
             }
         });
         return response.data;
@@ -68,7 +69,7 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
 
                 for (let i = 0; i < groupesID.length; i++) {
                     try {
-                        deleteCellFromDatabase(semainesID[rowIndex], groupesID[i]);
+                        deleteCellFromDatabase(semainesID[rowIndex], groupesID[i], enseignementId);
                     } catch (error) {
                     }
                 }
@@ -77,14 +78,17 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                     const cellKey = `${rowIndex}-${i}`;
                     if (isRowFullyColored) {
                         // Décocher et supprimer de la BDD
-                        updatedCells[cellKey] = { clicked: false, text: "" };
+                        updatedCells[cellKey] = { clicked: false, text: "", heures: null, minutes: null, enseignantCode: null };
                         try {
                         } catch (error) {
                             console.error('Erreur lors de la suppression:', error);
                         }
                     } else {
                         // Cocher et ajouter à la BDD
-                        updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}` };
+                        updatedCells[cellKey] = { clicked: true, text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}`, 
+                        heures: heures,
+                        minutes: minutes,
+                        enseignantCode: enseignantCode};
                         try {
                             addCellToDatabase(semainesID[rowIndex], enseignantIdInt, enseignementId, groupesID[i], heures, minutes);
                         } catch (error) {
@@ -99,15 +103,18 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
     
                 if (isCurrentlyClicked) {
                     // Si la cellule est déjà cochée, on la décoche
-                    updatedCells[key] = { clicked: false, text: "" };
+                    updatedCells[key] = { clicked: false, text: "", heures: null, minutes: null, enseignantCode: null };
                     try {
-                        deleteCellFromDatabase(semaineId, groupeID);
+                        deleteCellFromDatabase(semaineId, groupeID, enseignementId);
                     } catch (error) {
                         console.error('Erreur lors de la suppression:', error);
                     }
                 } else {
                     // Si la cellule n'est pas cochée, on la coche
-                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}` };
+                    updatedCells[key] = { clicked: true, text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}`,
+                    heures: heures,
+                    minutes: minutes,
+                    enseignantCode: enseignantCode};
                     try {
                         addCellToDatabase(semaineId, enseignantIdInt, enseignementId, groupeID, heures, minutes);
                     } catch (error) {
@@ -115,7 +122,6 @@ export const handleCellClick = async (rowIndex, colIndex, semaineId, enseignantI
                     }
                 }
             }
-    
             return updatedCells;
         });
     };

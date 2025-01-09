@@ -75,7 +75,7 @@ export const handleClick = (
             semainesID, 
             enseignantCode, 
             heures,
-            minutes, 
+            minutes,
             setClickedCells
         );
     } else if (clickedCells[`${rowIndex}-${colIndex}`]?.text) {
@@ -130,8 +130,7 @@ export const handleDuplicate = (setShowDuplicatePopup) => {
 };
 
 export const handleDuplicateConfirm = async (
-    clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
-    enseignantCode, setClickedCells, setIsLoading, setShowDuplicatePopup, handleCloseContextMenu, 
+    clickedCells, semainesID, enseignement, groupesID, setClickedCells, setIsLoading, setShowDuplicatePopup, handleCloseContextMenu, 
     duplicateOption, customWeeks, parseWeeks
 ) => {
     setIsLoading(true);
@@ -142,9 +141,9 @@ export const handleDuplicateConfirm = async (
 
     if (selectedRows.length === 1) {
         if (duplicateOption === 'pairs') {
-            weeksToDuplicate = semainesID.filter((_, index) => index-1 % 2 === 0);
+            weeksToDuplicate = semainesID.filter((_, index) => index % 2 === 0);
         } else if (duplicateOption === 'impairs') {
-            weeksToDuplicate = semainesID.filter((_, index) => index-1 % 2 !== 0);
+            weeksToDuplicate = semainesID.filter((_, index) => index % 2 !== 0);
         } else if (duplicateOption === 'custom') {
             weeksToDuplicate = parseWeeks(customWeeks).map(week => semainesID[week - 1]);
         }
@@ -154,25 +153,29 @@ export const handleDuplicateConfirm = async (
 
     for (const cellKey of selectedCells) {
         const [rowIndex, colIndex] = cellKey.split('-').map(Number);
+        const cellData = clickedCells[cellKey];
 
         for (const week of weeksToDuplicate) {
             try {
                 await addCellToDatabase(
                     week,
-                    enseignantId,
+                    cellData.enseignantId,
                     enseignement.id,
                     groupesID[colIndex],
-                    heures,
-                    minutes
+                    cellData.heures,
+                    cellData.minutes,
                 );
 
-                // Mettre à jour l'état pour afficher les cellules dupliquées
                 setClickedCells((prev) => {
                     const updatedCells = { ...prev };
                     const newCellKey = `${semainesID.indexOf(week)}-${colIndex}`;
                     updatedCells[newCellKey] = {
                         clicked: true,
-                        text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}`
+                        text: `${cellData.heures}h${cellData.minutes !== 0 ? cellData.minutes : ''} - ${cellData.enseignantCode}`,
+                        heures: cellData.heures,
+                        minutes: cellData.minutes,
+                        enseignantId: cellData.enseignantId,
+                        enseignantCode: cellData.enseignantCode
                     };
                     return updatedCells;
                 });
@@ -187,27 +190,18 @@ export const handleDuplicateConfirm = async (
     handleCloseContextMenu();
 };
 
-export const handleEdit = (setShowUpdatePopup, setSelectedGroups, groupNames, clickedCells) => {
-    const selectedGroups = groupNames.filter((_, index) => 
-        Object.keys(clickedCells).some(key => key.endsWith(`-${index}`) && clickedCells[key]?.selected && clickedCells[key]?.clicked)
-    );
-    setSelectedGroups(selectedGroups);
-    setShowUpdatePopup(true);
-};
-
 export const handleMove = (setShowMovePopup) => {
     setShowMovePopup(true);
 };
 
 export const handleMoveConfirm = async (
-    selectedWeek, clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
-    enseignantCode, setClickedCells, setIsLoading, setShowMovePopup, handleCloseContextMenu
+    selectedWeek, clickedCells, semainesID, enseignement, groupesID,
+     setClickedCells, setIsLoading, setShowMovePopup, handleCloseContextMenu
 ) => {
     setIsLoading(true);
     const selectedCells = Object.keys(clickedCells).filter(key => clickedCells[key]?.selected && !key.startsWith('semaine-'));
     const selectedRows = [...new Set(selectedCells.map(key => key.split('-')[0]))].sort((a, b) => a - b);
 
-    // Vérifier si la semaine sélectionnée est la même que la semaine la plus haute de la sélection
     if (parseInt(selectedWeek) === parseInt(selectedRows[0])) {
         setIsLoading(false);
         setShowMovePopup(false);
@@ -218,29 +212,34 @@ export const handleMoveConfirm = async (
     for (const cellKey of selectedCells) {
         const [rowIndex, colIndex] = cellKey.split('-').map(Number);
         const newRowIndex = parseInt(selectedWeek) + (rowIndex - parseInt(selectedRows[0]));
+        const cellData = clickedCells[cellKey];
 
         try {
             await deleteCellFromDatabase(
                 semainesID[rowIndex],
-                groupesID[colIndex]
+                groupesID[colIndex],
+                enseignement.id
             );
 
             await addCellToDatabase(
                 semainesID[newRowIndex],
-                enseignantId,
+                cellData.enseignantId,
                 enseignement.id,
                 groupesID[colIndex],
-                heures,
-                minutes
+                cellData.heures,
+                cellData.minutes
             );
 
-            // Mettre à jour l'état pour afficher les cellules déplacées
             setClickedCells((prev) => {
                 const updatedCells = { ...prev };
                 const newCellKey = `${newRowIndex}-${colIndex}`;
                 updatedCells[newCellKey] = {
                     clicked: true,
-                    text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}`
+                    text: `${cellData.heures}h${cellData.minutes !== 0 ? cellData.minutes : ''} - ${cellData.enseignantCode}`,
+                    heures: cellData.heures,
+                    minutes: cellData.minutes,
+                    enseignantId: cellData.enseignantId,
+                    enseignantCode: cellData.enseignantCode
                 };
                 updatedCells[cellKey] = {
                     clicked: false,
@@ -259,14 +258,14 @@ export const handleMoveConfirm = async (
 };
 
 export const handleDelete = (
-    clickedCells, semainesID, groupesID, setClickedCells, setContextMenu, setShowDeletePopup
+    setContextMenu, setShowDeletePopup
 ) => {
     setShowDeletePopup(true);
     handleCloseContextMenu(setContextMenu);
 };
 
 export const handleDeleteConfirm = async (
-    clickedCells, semainesID, groupesID, setClickedCells, setShowDeletePopup, deleteOption, customRows
+    clickedCells, semainesID, groupesID, setClickedCells, setShowDeletePopup, deleteOption, customRows, enseignement
 ) => {
     let selectedCells = [];
 
@@ -285,14 +284,14 @@ export const handleDeleteConfirm = async (
         try {
             await deleteCellFromDatabase(
                 semainesID[rowIndex],
-                groupesID[colIndex]
+                groupesID[colIndex],
+                enseignement.id
             );
         } catch (error) {
             console.error('Erreur lors de la suppression de la base de données:', error);
         }
     }
 
-    // Mettre à jour l'état pour décocher les cellules supprimées
     setClickedCells((prev) => {
         const updatedCells = { ...prev };
         selectedCells.forEach(cellKey => {
@@ -307,6 +306,66 @@ export const handleDeleteConfirm = async (
     });
 
     setShowDeletePopup(false);
+};
+
+export const handleUpdate = (setShowUpdatePopup, setSelectedGroups, clickedCells, groupNames, groupIds, semainesID) => {
+    const selectedGroups = Object.keys(clickedCells)
+        .filter(key => clickedCells[key]?.selected && clickedCells[key]?.clicked)
+        .map(key => {
+            const [rowIndex, colIndex] = key.split('-').map(Number);
+            return {
+                cellKey: key,
+                semaineId: semainesID[rowIndex],
+                groupeId: groupIds[colIndex],
+                name: groupNames[colIndex]
+            };
+        });
+    setSelectedGroups(selectedGroups);
+    setShowUpdatePopup(true);
+};
+
+export const handleUpdateConfirm = async (updatedData, clickedCells, setClickedCells) => {
+    let selectedCells = Object.keys(clickedCells).filter(key => clickedCells[key]?.selected && !key.startsWith('semaine-'));
+    console.log("selectedCells", selectedCells);
+    
+    selectedCells = selectedCells.sort((a, b) => {
+        const [rowA, colA] = a.split('-').map(Number);
+        const [rowB, colB] = b.split('-').map(Number);
+        return colA - colB || rowA - rowB;
+    });
+
+    console.log("selectedCells sorted", selectedCells);
+
+    for (const { groupeId, heures, minutes, enseignantId, enseignementId, semaineId } of updatedData) {
+        await deleteCellFromDatabase(semaineId, groupeId, enseignementId);
+
+        await addCellToDatabase(semaineId, enseignantId, enseignementId, groupeId, heures, minutes);
+    }
+
+    selectedCells.forEach((cellKey, index) => {
+        const [rowIndex, colIndex] = cellKey.split('-').map(Number);
+        const cellData = clickedCells[cellKey];
+
+        const { groupeId, heures, minutes, enseignantId, enseignantCode, enseignementId, semaineId } = updatedData[index];
+
+        console.log(`Cellule ${cellKey} - Gr: ${groupeId} - H: ${heures} - M: ${minutes} - E: ${enseignantId} - EC: ${enseignantCode} - EI: ${enseignementId} - S: ${semaineId}`);
+
+        setClickedCells((prev) => {
+            const updatedCells = { ...prev };
+            const newCellKey = `${rowIndex}-${colIndex}`;
+
+            updatedCells[newCellKey] = {
+                clicked: true,
+                text: `${heures}h${minutes !== 0 ? minutes : ''} - ${enseignantCode}`,
+                heures: heures,
+                minutes: minutes,
+                enseignantId: enseignantId,
+                enseignantCode: enseignantCode,
+                enseignementId: enseignementId
+            };
+            return updatedCells;
+        });
+    });
 };
 
 const parseRows = (rowsString) => {
@@ -340,3 +399,4 @@ export const parseWeeks = (weeksString) => {
     });
     return weeks;
 };
+

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { handleClick, handleContextMenu, handleCloseContextMenu, handleDuplicate, handleDuplicateConfirm, handleEdit, handleMove, handleMoveConfirm, handleDelete, handleDeleteConfirm, parseWeeks } from '../../handlers';
+import { handleClick, handleContextMenu, handleCloseContextMenu, handleDuplicate, handleDuplicateConfirm, handleMove, handleMoveConfirm, handleDelete, handleDeleteConfirm, parseWeeks, handleUpdate, handleUpdateConfirm } from '../../handlers';
 import ContextMenu from './ContextMenu';
 import DuplicatePopup from './DuplicatePopup';
 import DeletePopup from './DeletePopup';
@@ -17,7 +17,7 @@ function TableBody({
     enseignantId,
     enseignement,
     groupesID,
-    groupNames, // Utilisation de groupNames
+    groupNames,
     enseignantCode,
     heures,
     minutes,
@@ -30,11 +30,11 @@ function TableBody({
     const [showDuplicatePopup, setShowDuplicatePopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showMovePopup, setShowMovePopup] = useState(false);
-    const [showUpdatePopup, setShowUpdatePopup] = useState(false); // Ajout de l'état pour la popup de mise à jour
+    const [showUpdatePopup, setShowUpdatePopup] = useState(false);
     const [duplicateOption, setDuplicateOption] = useState('pairs');
     const [customWeeks, setCustomWeeks] = useState('');
     const [isLoading, setIsLoadingState] = useState(false);
-    const [selectedGroups, setSelectedGroups] = useState([]); // Ajout de l'état pour les groupes sélectionnés
+    const [selectedGroups, setSelectedGroups] = useState([]);
 
     useEffect(() => {
         const handleClickOutside = () => {
@@ -49,46 +49,36 @@ function TableBody({
     }, []);
 
     const handleDeleteClick = () => {
-        handleDelete(clickedCells, semainesID, groupesID, setClickedCells, setContextMenu, setShowDeletePopup);
+        handleDelete(setContextMenu, setShowDeletePopup);
     };
 
     const handleDeleteConfirmClick = (deleteOption, customRows) => {
-        setIsLoading(true); // Début du chargement
-        handleDeleteConfirm(clickedCells, semainesID, groupesID, setClickedCells, setShowDeletePopup, deleteOption, customRows)
-            .finally(() => setIsLoading(false)); // Fin du chargement
+        setIsLoading(true);
+        handleDeleteConfirm(clickedCells, semainesID, groupesID, setClickedCells, setShowDeletePopup, deleteOption, 
+            customRows, enseignement)
+            .finally(() => setIsLoading(false));
     };
 
     const handleDuplicateConfirmClick = () => {
-        setIsLoading(true); // Début du chargement
+        setIsLoading(true);
         handleDuplicateConfirm(
-            clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
-            enseignantCode, setClickedCells, setIsLoading, setShowDuplicatePopup, handleCloseContextMenu, 
+            clickedCells, semainesID, enseignement, groupesID, setClickedCells, setIsLoading, setShowDuplicatePopup, handleCloseContextMenu, 
             duplicateOption, customWeeks, parseWeeks
-        ).finally(() => setIsLoading(false)); // Fin du chargement
+        ).finally(() => setIsLoading(false));
     };
 
     const handleMoveConfirmClick = (selectedWeek) => {
-        setIsLoading(true); // Début du chargement
+        setIsLoading(true);
         handleMoveConfirm(
-            selectedWeek, clickedCells, semainesID, enseignantId, enseignement, groupesID, heures, minutes, 
-            enseignantCode, setClickedCells, setIsLoading, setShowMovePopup, handleCloseContextMenu
-        ).finally(() => setIsLoading(false)); // Fin du chargement
+            selectedWeek, clickedCells, semainesID, enseignement, groupesID, setClickedCells, setIsLoading, setShowMovePopup, handleCloseContextMenu
+        ).finally(() => setIsLoading(false));
     };
 
-    const handleUpdate = (updatedData) => {
-        setClickedCells((prev) => {
-            const updatedCells = { ...prev };
-            for (const cellKey of Object.keys(clickedCells)) {
-                if (clickedCells[cellKey]?.selected && clickedCells[cellKey]?.clicked) {
-                    const [rowIndex, colIndex] = cellKey.split('-').map(Number);
-                    updatedCells[cellKey] = {
-                        clicked: true,
-                        text: `${updatedData[colIndex].heures}h${updatedData[colIndex].minutes !== 0 ? updatedData[colIndex].minutes : ''} - ${updatedData[colIndex].enseignant}`
-                    };
-                }
-            }
-            return updatedCells;
-        });
+    const handleUpdateConfirmClick = (updatedData) => {
+        setIsLoading(true);
+        handleUpdateConfirm(updatedData, clickedCells, setClickedCells, semainesID, enseignantId, enseignement, groupesID, 
+             enseignantCode, setShowUpdatePopup, setIsLoading
+        ).finally(() => setIsLoading(false));
     };
 
     return (
@@ -170,7 +160,7 @@ function TableBody({
                 <ContextMenu
                     contextMenu={contextMenu}
                     handleDuplicate={() => handleDuplicate(setShowDuplicatePopup)}
-                    handleEdit={() => handleEdit(setShowUpdatePopup, setSelectedGroups, groupNames, clickedCells, semainesID, groupesID)} // Modification ici
+                    handleEdit={() => handleUpdate(setShowUpdatePopup, setSelectedGroups, clickedCells, groupNames, groupesID, semainesID)}
                     handleMove={() => handleMove(setShowMovePopup)}
                     handleDelete={handleDeleteClick}
                     handleCloseContextMenu={() => handleCloseContextMenu(setContextMenu)}
@@ -182,20 +172,20 @@ function TableBody({
                     setDuplicateOption={setDuplicateOption}
                     customWeeks={customWeeks}
                     setCustomWeeks={setCustomWeeks}
-                    handleDuplicateConfirm={handleDuplicateConfirmClick} // Modification ici
+                    handleDuplicateConfirm={handleDuplicateConfirmClick}
                     setShowDuplicatePopup={setShowDuplicatePopup}
                 />
             )}
             {showDeletePopup && (
                 <DeletePopup
-                    handleDeleteConfirm={handleDeleteConfirmClick} // Modification ici
+                    handleDeleteConfirm={handleDeleteConfirmClick}
                     setShowDeletePopup={setShowDeletePopup}
                 />
             )}
             {showMovePopup && (
                 <MovePopup
                     semaines={semaines}
-                    handleMoveConfirm={handleMoveConfirmClick} // Modification ici
+                    handleMoveConfirm={handleMoveConfirmClick}
                     setShowMovePopup={setShowMovePopup}
                 />
             )}
@@ -203,8 +193,11 @@ function TableBody({
                 <UpdatePopup
                     setShowUpdatePopup={setShowUpdatePopup}
                     initialData={{ heures, minutes, enseignant: enseignantCode }}
-                    selectedGroups={selectedGroups} // Utilisation des groupes sélectionnés
-                    handleUpdate={handleUpdate} // Ajout de la fonction de mise à jour
+                    selectedGroups={selectedGroups}
+                    groupesID={groupesID}
+                    handleUpdateConfirm={handleUpdateConfirmClick}
+                    enseignementId={enseignement.id}
+                    semainesID={semainesID}
                 />
             )}
         </>
