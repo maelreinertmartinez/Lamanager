@@ -17,7 +17,6 @@ class LiaisonGroupe extends Model
         'groupe_tp_id',
     ];
 
-
     public function groupeTD(): BelongsTo
     {
         return $this->belongsTo(Groupe::class, 'groupe_td_id');

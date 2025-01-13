@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Promo;
+use App\Models\CaseTableau;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 class PromoController extends Controller
 {
     public function index($annee_id): JsonResponse
@@ -69,4 +72,26 @@ class PromoController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function destroy($id): JsonResponse
+    {
+        $promo = Promo::find($id);
+        if ($promo) {
+            // Vérifiez si la promo est associée à un cours
+            $associatedCourses = DB::table('case_tableau')
+                ->join('enseignements', 'case_tableau.enseignement_id', '=', 'enseignements.id')
+                ->where('enseignements.promo_id', $id)
+                ->exists();
+
+            if ($associatedCourses) {
+                return response()->json(['error' => 'La promo est associée à un cours et ne peut pas être supprimée'], 400);
+            }
+
+            $promo->delete();
+            return response()->json(['message' => 'Promo supprimée avec succès']);
+        }
+        return response()->json(['error' => 'Promo non trouvée'], 404);
+    }
+
+
 }

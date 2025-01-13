@@ -70,6 +70,7 @@ require __DIR__.'/auth.php';
     Route::post('/api/annees', [AnneeController::class, 'store'])->name('api.annees.store');
     Route::post('/api/cases', [CaseController::class, 'store'])->name('api.cases.store');
     Route::post('/api/promos', [PromoController::class, 'store'])->name('api.promos.store');
+    Route::delete('/api/promos/{id}', [PromoController::class, 'destroy'])->name('api.promos.destroy');
 
     Route::post('/api/update-promos/{id}', [PromoController::class, 'updateAlternantId'])->name('api.promos.updateAlternantId');
 

@@ -6,6 +6,7 @@ import BoutonModificationsPromos from "./BoutonsModificationsPromos";
 import { Trash2, Edit } from "lucide-react";
 import { Link } from '@inertiajs/react';
 import PopupModifPromo from "./PopupModifPromo";
+import PopupSuppression from "./popupSuppression"; // Importez le composant PopupSuppression
 
 function PromoRightPart({ selectedAnnee }) {
     const [promos, setPromos] = useState([]);
@@ -15,15 +16,12 @@ function PromoRightPart({ selectedAnnee }) {
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [showAddPopup, setShowAddPopup] = useState(false);
     const [showCustomPopup, setShowCustomPopup] = useState(false);
+
     useEffect(() => {
         const fetchPromos = async () => {
             if (!selectedAnnee) return;
             try {
-
                 const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
-
-
-                //console.log(response.data);
                 setPromos(response.data);
                 setLoading(false);
             } catch (err) {
@@ -35,6 +33,10 @@ function PromoRightPart({ selectedAnnee }) {
         fetchPromos();
     }, [selectedAnnee]);
 
+    const handleDelete = (promoId) => {
+        setPromos(promos.filter(promo => promo.id !== promoId));
+    };
+
     if (loading) return <div>Chargement...</div>;
     if (error) return <div>{error}</div>;
 
@@ -42,7 +44,6 @@ function PromoRightPart({ selectedAnnee }) {
     for(var i=0;i<promos.length;i++){
         if(!promos[i].alternant){
             temp.push(promos[i]);
-            //console.log('temp',temp);
         }
     }
 
@@ -73,45 +74,30 @@ function PromoRightPart({ selectedAnnee }) {
             />
         </div>
 
-            {showCustomPopup && (
-                <AjoutPromo
-                    selectedAnnee={selectedAnnee}
-                    onClose={() => setShowCustomPopup(false )}
-                />
-            )}
+        {showCustomPopup && (
+            <AjoutPromo
+                selectedAnnee={selectedAnnee}
+                onClose={() => setShowCustomPopup(false)}
+            />
+        )}
 
-        {/* Popup de suppression */}
         {showDeletePopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Suppression</h2>
-                <p>Message de test pour la suppression</p>
-                <button onClick={() => setShowDeletePopup(false)}>Fermer</button>
-            </div>
-            </div>
+            <PopupSuppression
+                onClose={() => setShowDeletePopup(false)}
+                promos={promos}
+                onDelete={handleDelete}
+            />
         )}
 
         {showEditPopup && (
-                <PopupModifPromo
-                    onClose={() => setShowEditPopup(false)}
-                    promos={promos}
-                    selectedYear={selectedAnnee.annee}
-                />
-        )}
-
-        {/* Popup d'ajout */}
-        {showAddPopup && (
-            <div className="popup-overlay">
-            <div className="popup-content">
-                <h2>Ajout</h2>
-                <p>Message de test pour l'ajout</p>
-                <button onClick={() => setShowAddPopup(false)}>Fermer</button>
-            </div>
-            </div>
+            <PopupModifPromo
+                onClose={() => setShowEditPopup(false)}
+                promos={promos}
+                selectedYear={selectedAnnee.annee}
+            />
         )}
     </>
     );
 }
 
 export default PromoRightPart;
-
