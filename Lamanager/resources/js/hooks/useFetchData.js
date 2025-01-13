@@ -51,6 +51,10 @@ function useFetchData(selectedTime, selectedEnseignements, promoId, enseignantId
                 newClickedCells[key] = {
                     clicked: true,
                     text: `${caseItem.nombre_heure}h${caseItem.nombre_minute || ''} - ${enseignantCodes[caseItem.enseignant_id]}`,
+                    heures: caseItem.nombre_heure,
+                    minutes: caseItem.nombre_minute,
+                    enseignantId: caseItem.enseignant_id,
+                    enseignantCode: enseignantCodes[caseItem.enseignant_id],
                 };
             }
         });
