@@ -937,7 +937,6 @@ button[disabled]
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 10%;
 }
 
 .custom-promo-name-container-unique input {
@@ -954,27 +953,27 @@ button[disabled]
     gap: 10px;
 }
 
-.custom-input-group-unique {
+.custom-group-unique {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
 }
 
-.custom-input-group-unique label {
+.custom-group-unique label {
     display: flex;
     align-items: center;
     margin-right: 10px;
     font-size: 16px;
 }
 
-.custom-input-group-unique input[type="checkbox"] {
+.custom-group-unique input[type="checkbox"] {
     margin-left: 10px;
     width: 40px;
     height: 40px;
 }
 
-.custom-input-group-unique input {
+.custom-group-unique input {
     width: 200px;
     padding: 5px;
     border-radius: 12px;
