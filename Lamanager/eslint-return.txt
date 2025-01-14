@@ -1,0 +1,747 @@
+
+/var/www/resources/js/Components/AddAnneeForm.jsx
+   4:25  error  'onAnneeAdded' is missing in props validation  react/prop-types
+   4:39  error  'onClose' is missing in props validation       react/prop-types
+  16:18  error  'err' is defined but never used                no-unused-vars
+
+/var/www/resources/js/Components/AjoutPromo.jsx
+   4:23  error  'onClose' is missing in props validation                    react/prop-types
+   4:32  error  'selectedAnnee' is missing in props validation              react/prop-types
+  32:37  error  'selectedAnnee.id' is missing in props validation           react/prop-types
+  62:13  error  Unexpected newline between function and ( of function call  no-unexpected-multiline
+
+/var/www/resources/js/Components/BarreOutils.jsx
+   9:24  error  'toggleIcons' is missing in props validation             react/prop-types
+  16:11  error  'redirectionGestion' is assigned a value but never used  no-unused-vars
+
+/var/www/resources/js/Components/BoutonProfil.jsx
+  6:9   error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  7:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+
+/var/www/resources/js/Components/BoutonsModificationsPromos.jsx
+  3:38  error  'className' is missing in props validation  react/prop-types
+  3:49  error  'Icon' is missing in props validation       react/prop-types
+  3:55  error  'onClick' is missing in props validation    react/prop-types
+
+/var/www/resources/js/Components/Checkbox.jsx
+  1:36  error  'className' is missing in props validation  react/prop-types
+  3:9   error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/ChoixPromo.jsx
+  3:23  error  'className' is missing in props validation  react/prop-types
+  3:34  error  'title' is missing in props validation      react/prop-types
+
+/var/www/resources/js/Components/ConfirmModifPromo.jsx
+  4:30  error  'isOpen' is missing in props validation     react/prop-types
+  4:38  error  'onClose' is missing in props validation    react/prop-types
+  4:47  error  'onConfirm' is missing in props validation  react/prop-types
+  4:58  error  'message' is missing in props validation    react/prop-types
+
+/var/www/resources/js/Components/DangerButton.jsx
+  2:5  error  'className' is missing in props validation  react/prop-types
+  3:5  error  'disabled' is missing in props validation   react/prop-types
+  4:5  error  'children' is missing in props validation   react/prop-types
+  8:9  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/Dropdown.jsx
+   7:21  error  'children' is missing in props validation        react/prop-types
+  15:9   error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  16:13  error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  21:20  error  'children' is missing in props validation        react/prop-types
+  25:9   error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  26:13  error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  29:17  error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  39:5   error  'align' is missing in props validation           react/prop-types
+  40:5   error  'width' is missing in props validation           react/prop-types
+  41:5   error  'contentClasses' is missing in props validation  react/prop-types
+  42:5   error  'children' is missing in props validation        react/prop-types
+  61:9   error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  62:13  error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  71:17  error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  75:21  error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+  89:25  error  'className' is missing in props validation       react/prop-types
+  89:41  error  'children' is missing in props validation        react/prop-types
+  91:9   error  'React' must be in scope when using JSX          react/react-in-jsx-scope
+
+/var/www/resources/js/Components/EnseignementListeVersionProf.jsx
+  4:41  error  'anneeId' is missing in props validation                        react/prop-types
+  4:50  error  'onEnseignementSelect' is missing in props validation           react/prop-types
+  4:72  error  'setIsAllEnseignementsSelected' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/GestionCompte.jsx
+  58:9  error  'handleDelete' is assigned a value but never used  no-unused-vars
+
+/var/www/resources/js/Components/Header.jsx
+  4:19  error  'ComposantProp' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/HeaderNeutre.jsx
+  7:23  error  Unexpected empty object pattern  no-empty-pattern
+
+/var/www/resources/js/Components/Histogramme.jsx
+   4:24  error  'data' is missing in props validation             react/prop-types
+   6:9   error  'chartHeight' is assigned a value but never used  no-unused-vars
+   7:29  error  'data.length' is missing in props validation      react/prop-types
+  18:26  error  'data.map' is missing in props validation         react/prop-types
+  19:26  error  'data.map' is missing in props validation         react/prop-types
+
+/var/www/resources/js/Components/HistogrammeGroupe.jsx
+   4:30  error  'data' is missing in props validation         react/prop-types
+   8:29  error  'data.length' is missing in props validation  react/prop-types
+  11:30  error  'data.map' is missing in props validation     react/prop-types
+
+/var/www/resources/js/Components/HistogrammeTousEnseignements.jsx
+  13:41  error  'data' is missing in props validation      react/prop-types
+  22:30  error  'data.map' is missing in props validation  react/prop-types
+  43:48  error  'index' is defined but never used          no-unused-vars
+
+/var/www/resources/js/Components/ImportPopup.jsx
+    4:24   error  'onClose' is missing in props validation                     react/prop-types
+   58:31   error  'donnes_alternant' is assigned a value but never used        no-unused-vars
+   70:27   error  'response' is assigned a value but never used                no-unused-vars
+  199:101  error  Unknown property 'class' found, use 'className' instead      react/no-unknown-property
+  199:129  error  Unknown property 'maxlength' found, use 'maxLength' instead  react/no-unknown-property
+  200:101  error  Unknown property 'class' found, use 'className' instead      react/no-unknown-property
+  200:129  error  Unknown property 'maxlength' found, use 'maxLength' instead  react/no-unknown-property
+  201:101  error  Unknown property 'class' found, use 'className' instead      react/no-unknown-property
+  201:129  error  Unknown property 'maxlength' found, use 'maxLength' instead  react/no-unknown-property
+  202:101  error  Unknown property 'class' found, use 'className' instead      react/no-unknown-property
+  202:129  error  Unknown property 'maxlength' found, use 'maxLength' instead  react/no-unknown-property
+  205:109  error  Unknown property 'class' found, use 'className' instead      react/no-unknown-property
+  206:109  error  Unknown property 'class' found, use 'className' instead      react/no-unknown-property
+  207:109  error  Unknown property 'class' found, use 'className' instead      react/no-unknown-property
+  208:109  error  Unknown property 'class' found, use 'className' instead      react/no-unknown-property
+
+/var/www/resources/js/Components/InputError.jsx
+  1:38  error  'message' is missing in props validation    react/prop-types
+  1:47  error  'className' is missing in props validation  react/prop-types
+  3:9   error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/InputLabel.jsx
+  2:5  error  'value' is missing in props validation      react/prop-types
+  3:5  error  'className' is missing in props validation  react/prop-types
+  4:5  error  'children' is missing in props validation   react/prop-types
+  8:9  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/InputModifPromo.jsx
+  3:28  error  'isOpen' is missing in props validation    react/prop-types
+  3:36  error  'onClose' is missing in props validation   react/prop-types
+  3:45  error  'onSubmit' is missing in props validation  react/prop-types
+  3:55  error  'title' is missing in props validation     react/prop-types
+  3:62  error  'label' is missing in props validation     react/prop-types
+
+/var/www/resources/js/Components/LeftPart.jsx
+  3:36  error  'ComposantProp' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/MenuAnnee.jsx
+   4:22  error  'selectedAnnee' is missing in props validation     react/prop-types
+   4:37  error  'onAnneeSelect' is missing in props validation     react/prop-types
+  18:22  error  'err' is defined but never used                    no-unused-vars
+  37:79  error  'selectedAnnee.id' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/Modal.jsx
+   9:5   error  'children' is missing in props validation   react/prop-types
+  10:5   error  'show' is missing in props validation       react/prop-types
+  11:5   error  'maxWidth' is missing in props validation   react/prop-types
+  12:5   error  'closeable' is missing in props validation  react/prop-types
+  13:5   error  'onClose' is missing in props validation    react/prop-types
+  30:9   error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  31:13  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  37:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  45:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  48:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  56:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/NavLink.jsx
+   4:5  error  'active' is missing in props validation     react/prop-types
+   5:5  error  'className' is missing in props validation  react/prop-types
+   6:5  error  'children' is missing in props validation   react/prop-types
+  10:9  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/PopupModifPromo.jsx
+   6:28  error  'onClose' is missing in props validation           react/prop-types
+   6:37  error  'promos' is missing in props validation            react/prop-types
+   6:45  error  'selectedAnnee' is missing in props validation     react/prop-types
+   9:55  error  'promos.map' is missing in props validation        react/prop-types
+  52:75  error  'selectedAnnee.id' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/PopupModifPromoAdaptative.jsx
+  7:38  error  'onClose' is missing in props validation           react/prop-types
+  7:47  error  'promoName' is missing in props validation         react/prop-types
+  7:58  error  'promos' is missing in props validation            react/prop-types
+  7:66  error  'updatePromoData' is missing in props validation   react/prop-types
+  7:83  error  'refreshPromoData' is missing in props validation  react/prop-types
+  8:26  error  'promos.find' is missing in props validation       react/prop-types
+
+/var/www/resources/js/Components/PrimaryButton.jsx
+  2:5  error  'className' is missing in props validation  react/prop-types
+  3:5  error  'disabled' is missing in props validation   react/prop-types
+  4:5  error  'children' is missing in props validation   react/prop-types
+  8:9  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/ProfilLeftPart.jsx
+   3:10  error  'Link' is defined but never used           no-unused-vars
+   5:42  error  'userName' is missing in props validation  react/prop-types
+   9:14  error  'route' is not defined                     no-undef
+  11:40  error  'route' is not defined                     no-undef
+
+/var/www/resources/js/Components/ProfilRightPart.jsx
+  5:43  error  'userData' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/PromoRightPart.jsx
+  11:27  error  'selectedAnnee' is missing in props validation        react/prop-types
+  17:12  error  'showAddPopup' is assigned a value but never used     no-unused-vars
+  17:26  error  'setShowAddPopup' is assigned a value but never used  no-unused-vars
+  24:79  error  'selectedAnnee.id' is missing in props validation     react/prop-types
+  27:22  error  'err' is defined but never used                       no-unused-vars
+  56:93  error  'selectedAnnee.id' is missing in props validation     react/prop-types
+  96:45  error  'selectedAnnee.annee' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/ResponsiveNavLink.jsx
+   4:5  error  'active' is missing in props validation     react/prop-types
+   5:5  error  'className' is missing in props validation  react/prop-types
+   6:5  error  'children' is missing in props validation   react/prop-types
+  10:9  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/RightPart.jsx
+  3:37  error  'ComposantProp' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/RolePopup.jsx
+   5:32  error  'onClose' is missing in props validation               react/prop-types
+  61:9   error  'toggleRoleActive' is assigned a value but never used  no-unused-vars
+
+/var/www/resources/js/Components/SecondaryButton.jsx
+  2:5  error  'type' is missing in props validation       react/prop-types
+  3:5  error  'className' is missing in props validation  react/prop-types
+  4:5  error  'disabled' is missing in props validation   react/prop-types
+  5:5  error  'children' is missing in props validation   react/prop-types
+  9:9  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/Tableau.jsx
+   9:34   error  'promoId' is missing in props validation                       react/prop-types
+   9:43   error  'selectedEnseignements' is missing in props validation         react/prop-types
+   9:66   error  'onRemoveEnseignement' is missing in props validation          react/prop-types
+   9:88   error  'selectedTime' is missing in props validation                  react/prop-types
+   9:102  error  'onCellClick' is missing in props validation                   react/prop-types
+   9:115  error  'showIcons' is missing in props validation                     react/prop-types
+  33:57   error  'selectedEnseignements.length' is missing in props validation  react/prop-types
+  44:40   error  'selectedEnseignements.map' is missing in props validation     react/prop-types
+  91:36   error  'selectedEnseignements.map' is missing in props validation     react/prop-types
+
+/var/www/resources/js/Components/TableauComponents/ContextMenu.jsx
+   3:24  error  'contextMenu' is missing in props validation               react/prop-types
+   3:37  error  'handleDuplicate' is missing in props validation           react/prop-types
+   3:54  error  'handleEdit' is missing in props validation                react/prop-types
+   3:66  error  'handleMove' is missing in props validation                react/prop-types
+   3:78  error  'handleDelete' is missing in props validation              react/prop-types
+   3:92  error  'handleCloseContextMenu' is defined but never used         no-unused-vars
+   3:92  error  'handleCloseContextMenu' is missing in props validation    react/prop-types
+   8:34  error  'contextMenu.mouseY' is missing in props validation        react/prop-types
+   9:35  error  'contextMenu.mouseX' is missing in props validation        react/prop-types
+  20:30  error  'contextMenu.canDuplicate' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/TableauComponents/DeletePopup.jsx
+  3:24  error  'handleDeleteConfirm' is missing in props validation  react/prop-types
+  3:45  error  'setShowDeletePopup' is missing in props validation   react/prop-types
+
+/var/www/resources/js/Components/TableauComponents/DuplicatePopup.jsx
+    3:27   error  'duplicateOption' is missing in props validation          react/prop-types
+    3:44   error  'setDuplicateOption' is missing in props validation       react/prop-types
+    3:64   error  'customWeeks' is missing in props validation              react/prop-types
+    3:77   error  'setCustomWeeks' is missing in props validation           react/prop-types
+    3:93   error  'handleDuplicateConfirm' is missing in props validation   react/prop-types
+    3:117  error  'setShowDuplicatePopup' is missing in props validation    react/prop-types
+    4:12   error  'pairStart' is assigned a value but never used            no-unused-vars
+    4:23   error  'setPairStart' is assigned a value but never used         no-unused-vars
+    5:12   error  'pairEnd' is assigned a value but never used              no-unused-vars
+    5:21   error  'setPairEnd' is assigned a value but never used           no-unused-vars
+    6:12   error  'impairStart' is assigned a value but never used          no-unused-vars
+    6:25   error  'setImpairStart' is assigned a value but never used       no-unused-vars
+    7:12   error  'impairEnd' is assigned a value but never used            no-unused-vars
+    7:23   error  'setImpairEnd' is assigned a value but never used         no-unused-vars
+  124:7    error  'inputContainerStyle' is assigned a value but never used  no-unused-vars
+
+/var/www/resources/js/Components/TableauComponents/MovePopup.jsx
+   3:22  error  'semaines' is missing in props validation           react/prop-types
+   3:32  error  'handleMoveConfirm' is missing in props validation  react/prop-types
+   3:51  error  'setShowMovePopup' is missing in props validation   react/prop-types
+  16:40  error  'semaines.length' is missing in props validation    react/prop-types
+  19:35  error  'semaines.map' is missing in props validation       react/prop-types
+
+/var/www/resources/js/Components/TableauComponents/TableBody.jsx
+   11:5    error  'semaines' is missing in props validation                 react/prop-types
+   12:5    error  'semainesID' is missing in props validation               react/prop-types
+   13:5    error  'nbGroupe' is missing in props validation                 react/prop-types
+   14:5    error  'nbCM' is missing in props validation                     react/prop-types
+   15:5    error  'nbTD' is missing in props validation                     react/prop-types
+   16:5    error  'clickedCells' is missing in props validation             react/prop-types
+   17:5    error  'enseignantId' is missing in props validation             react/prop-types
+   18:5    error  'enseignement' is missing in props validation             react/prop-types
+   19:5    error  'groupesID' is missing in props validation                react/prop-types
+   20:5    error  'groupNames' is missing in props validation               react/prop-types
+   21:5    error  'enseignantCode' is missing in props validation           react/prop-types
+   22:5    error  'heures' is missing in props validation                   react/prop-types
+   23:5    error  'minutes' is missing in props validation                  react/prop-types
+   24:5    error  'setClickedCells' is missing in props validation          react/prop-types
+   25:5    error  'onCellClick' is missing in props validation              react/prop-types
+   26:5    error  'showIcons' is missing in props validation                react/prop-types
+   27:5    error  'setIsLoading' is missing in props validation             react/prop-types
+   36:23   error  'setIsLoadingState' is assigned a value but never used    no-unused-vars
+   93:31   error  'semaines.map' is missing in props validation             react/prop-types
+  105:138  error  'clickedCells[].text' is missing in props validation      react/prop-types
+  115:99   error  'clickedCells[].selected' is missing in props validation  react/prop-types
+  124:79   error  'clickedCells[].clicked' is missing in props validation   react/prop-types
+  136:89   error  'clickedCells[].text' is missing in props validation      react/prop-types
+  146:104  error  'clickedCells[].selected' is missing in props validation  react/prop-types
+  150:76   error  'clickedCells[].text' is missing in props validation      react/prop-types
+  151:83   error  'clickedCells[].text' is missing in props validation      react/prop-types
+  199:50   error  'enseignement.id' is missing in props validation          react/prop-types
+
+/var/www/resources/js/Components/TableauComponents/TableHeader.jsx
+   4:24  error  'enseignement' is missing in props validation      react/prop-types
+   4:38  error  'nbGroupe' is missing in props validation          react/prop-types
+   4:48  error  'nbCM' is missing in props validation              react/prop-types
+   4:54  error  'nbTD' is missing in props validation              react/prop-types
+   4:60  error  'nbTP' is missing in props validation              react/prop-types
+   4:66  error  'groupNames' is missing in props validation        react/prop-types
+  13:49  error  'enseignement.nom' is missing in props validation  react/prop-types
+  38:29  error  'groupNames.map' is missing in props validation    react/prop-types
+
+/var/www/resources/js/Components/TableauComponents/TableTotal.jsx
+   5:23  error  'nbGroupe' is missing in props validation       react/prop-types
+   5:33  error  'nbCM' is missing in props validation           react/prop-types
+   5:39  error  'nbTD' is missing in props validation           react/prop-types
+   5:45  error  'nbTP' is missing in props validation           react/prop-types
+   5:51  error  'clickedCells' is missing in props validation   react/prop-types
+   5:65  error  'setPopupTotal' is missing in props validation  react/prop-types
+  17:24  error  '_' is assigned a value but never used          no-unused-vars
+
+/var/www/resources/js/Components/TableauComponents/UpdatePopup.jsx
+   4:24   error  'setShowUpdatePopup' is missing in props validation     react/prop-types
+   4:44   error  'initialData' is missing in props validation            react/prop-types
+   4:57   error  'selectedGroups' is missing in props validation         react/prop-types
+   4:73   error  'handleUpdateConfirm' is missing in props validation    react/prop-types
+   4:94   error  'enseignementId' is missing in props validation         react/prop-types
+   5:57   error  'selectedGroups.map' is missing in props validation     react/prop-types
+   5:82   error  'initialData.heures' is missing in props validation     react/prop-types
+   5:104  error  'initialData.minutes' is missing in props validation    react/prop-types
+   8:93   error  'selectedGroups.length' is missing in props validation  react/prop-types
+  73:41   error  'selectedGroups.reduce' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/TableauLeftPart/EnseignantList.jsx
+   4:27  error  'selectedEnseignant' is missing in props validation     react/prop-types
+   4:47  error  'onEnseignantSelect' is missing in props validation     react/prop-types
+  20:22  error  'err' is defined but never used                         no-unused-vars
+  47:84  error  'selectedEnseignant.id' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/TableauLeftPart/EnseignementSelect.jsx
+   4:31  error  'promoId' is missing in props validation               react/prop-types
+   4:40  error  'anneeId' is missing in props validation               react/prop-types
+   4:49  error  'onEnseignementSelect' is missing in props validation  react/prop-types
+  15:22  error  'err' is defined but never used                        no-unused-vars
+
+/var/www/resources/js/Components/TableauLeftPart/ListesEnseignementsEnseignants.jsx
+   8:5  error  'promoId' is missing in props validation               react/prop-types
+   9:5  error  'anneeId' is missing in props validation               react/prop-types
+  10:5  error  'onEnseignementSelect' is missing in props validation  react/prop-types
+  11:5  error  'selectedEnseignant' is missing in props validation    react/prop-types
+  12:5  error  'onEnseignantSelect' is missing in props validation    react/prop-types
+  13:5  error  'onTimeSelect' is missing in props validation          react/prop-types
+  14:5  error  'defaultTime' is missing in props validation           react/prop-types
+  15:5  error  'isAlternant' is defined but never used                no-unused-vars
+  15:5  error  'isAlternant' is missing in props validation           react/prop-types
+  16:5  error  'onAlternantChange' is missing in props validation     react/prop-types
+
+/var/www/resources/js/Components/TableauLeftPart/SwitchAlternant.jsx
+  3:28  error  'promoId' is missing in props validation          react/prop-types
+  3:37  error  'onSwitchChange' is missing in props validation   react/prop-types
+  9:12  error  'alternantId' is assigned a value but never used  no-unused-vars
+
+/var/www/resources/js/Components/TableauLeftPart/TimeSelector.jsx
+  3:25  error  'defaultTime' is missing in props validation   react/prop-types
+  3:38  error  'onTimeSelect' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/TableauVersionProf.jsx
+  4:46  error  'anneeId' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/TableauVersionProfDetail.jsx
+  4:52  error  'anneeId' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/TextInput.jsx
+   4:7   error  'type' is missing in props validation       react/prop-types
+   4:22  error  'className' is missing in props validation  react/prop-types
+   4:38  error  'isFocused' is missing in props validation  react/prop-types
+  20:9   error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Components/VersionProfLeftPart.jsx
+  7:47  error  'onSelectionChange' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Components/VersionProfRightPart.jsx
+    7:48  error  'selections' is missing in props validation                          react/prop-types
+   16:20  error  'selections.selectedAnnee' is missing in props validation            react/prop-types
+   16:48  error  'selections.selectedEnseignement' is missing in props validation     react/prop-types
+   17:39  error  'selections.selectedAnnee' is missing in props validation            react/prop-types
+   17:53  error  'selections.selectedAnnee.id' is missing in props validation         react/prop-types
+   17:68  error  'selections.selectedEnseignement' is missing in props validation     react/prop-types
+   17:89  error  'selections.selectedEnseignement.id' is missing in props validation  react/prop-types
+   19:20  error  'selections.all' is missing in props validation                      react/prop-types
+   21:42  error  'selections.selectedAnnee' is missing in props validation            react/prop-types
+   21:56  error  'selections.selectedAnnee.id' is missing in props validation         react/prop-types
+  126:19  error  'selections.showGroupes' is missing in props validation              react/prop-types
+
+/var/www/resources/js/Components/popupSuppression.jsx
+   4:29  error  'onClose' is missing in props validation     react/prop-types
+   4:38  error  'promos' is missing in props validation      react/prop-types
+   4:46  error  'onDelete' is missing in props validation    react/prop-types
+  33:19  error  'promos.map' is missing in props validation  react/prop-types
+
+/var/www/resources/js/Layouts/AuthenticatedLayout.jsx
+    8:47  error  'header' is missing in props validation    react/prop-types
+    8:55  error  'children' is missing in props validation  react/prop-types
+   15:9   error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   16:13  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   17:17  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   18:21  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   19:25  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   20:29  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   21:33  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   22:37  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   26:29  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   27:33  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   28:43  error  'route' is not defined                     no-undef
+   29:45  error  'route' is not defined                     no-undef
+   36:25  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   37:29  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   38:33  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   39:37  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   40:41  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   41:45  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   47:49  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   53:53  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   63:37  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   64:41  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   65:51  error  'route' is not defined                     no-undef
+   69:41  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   70:51  error  'route' is not defined                     no-undef
+   81:25  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   82:29  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   90:33  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   96:37  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  107:37  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  124:17  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  130:21  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  131:25  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  132:35  error  'route' is not defined                     no-undef
+  133:37  error  'route' is not defined                     no-undef
+  139:21  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  140:25  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  141:29  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  144:29  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  149:25  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  150:29  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  150:54  error  'route' is not defined                     no-undef
+  153:29  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  155:39  error  'route' is not defined                     no-undef
+  166:17  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  167:21  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  173:13  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+
+/var/www/resources/js/Layouts/GuestLayout.jsx
+   4:39  error  'children' is missing in props validation  react/prop-types
+   6:9   error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   7:13  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   8:17  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+   9:21  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+  13:13  error  'React' must be in scope when using JSX    react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Auth/ConfirmPassword.jsx
+  16:14  error  'route' is not defined                   no-undef
+  22:9   error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  23:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  25:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  30:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  31:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  32:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  34:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  44:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  47:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  48:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Auth/ForgotPassword.jsx
+   7:42  error  'status' is missing in props validation  react/prop-types
+  15:14  error  'route' is not defined                   no-undef
+  19:9   error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  20:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  22:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  29:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  34:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  35:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  45:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  47:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  48:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Auth/Login.jsx
+   1:17  error  'useState' is defined but never used             no-unused-vars
+   4:8   error  'axios' is defined but never used                no-unused-vars
+  12:34  error  'processing' is assigned a value but never used  no-unused-vars
+  20:14  error  'route' is not defined                           no-undef
+
+/var/www/resources/js/Pages/Auth/Register.jsx
+   19:14  error  'route' is not defined                   no-undef
+   25:9   error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   26:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   28:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   29:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   30:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   32:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   43:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   46:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   47:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   49:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   60:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   63:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   64:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   66:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   77:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   80:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   81:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   86:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+   99:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  105:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  106:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  107:31  error  'route' is not defined                   no-undef
+  113:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Auth/ResetPassword.jsx
+   8:41  error  'token' is missing in props validation   react/prop-types
+   8:48  error  'email' is missing in props validation   react/prop-types
+  19:14  error  'route' is not defined                   no-undef
+  25:9   error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  26:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  28:13  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  29:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  30:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  32:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  42:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  45:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  46:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  48:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  59:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  62:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  63:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  68:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  80:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  86:17  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+  87:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Auth/VerifyEmail.jsx
+   5:39  error  'status' is missing in props validation                          react/prop-types
+  11:14  error  'route' is not defined                                           no-undef
+  15:9   error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  16:13  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  18:13  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  21:33  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  26:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  32:13  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  33:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  34:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  38:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  39:31  error  'route' is not defined                                           no-undef
+
+/var/www/resources/js/Pages/PageProfil.jsx
+  23:22  error  'err' is defined but never used  no-unused-vars
+  37:26  error  'err' is defined but never used  no-unused-vars
+
+/var/www/resources/js/Pages/PageTableau.jsx
+  8:8  error  'BoutonProfil' is defined but never used  no-unused-vars
+
+/var/www/resources/js/Pages/Profile/Edit.jsx
+   7:32  error  'mustVerifyEmail' is missing in props validation  react/prop-types
+   7:49  error  'status' is missing in props validation           react/prop-types
+   9:9   error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  11:17  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  16:13  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  18:13  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  19:17  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  20:21  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  21:25  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  28:21  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  29:25  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  32:21  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+  33:25  error  'React' must be in scope when using JSX           react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Profile/Partials/DeleteUserForm.jsx
+   10:42  error  'className' is missing in props validation  react/prop-types
+   33:17  error  'route' is not defined                      no-undef
+   49:9   error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   50:13  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   51:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   55:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   63:13  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   67:13  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   68:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   69:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   73:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   80:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   81:25  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   87:25  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  101:25  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  107:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  108:25  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  112:25  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Profile/Partials/UpdatePasswordForm.jsx
+    9:46  error  'className' is missing in props validation  react/prop-types
+   30:13  error  'route' is not defined                      no-undef
+   48:9   error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   49:13  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   50:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   54:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   60:13  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   61:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   62:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   67:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   79:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   85:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   86:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   88:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+   98:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  101:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  102:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  107:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  118:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  124:17  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  125:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  127:21  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+  134:25  error  'React' must be in scope when using JSX     react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.jsx
+    9:5   error  'mustVerifyEmail' is missing in props validation                 react/prop-types
+   10:5   error  'status' is missing in props validation                          react/prop-types
+   11:5   error  'className' is missing in props validation                       react/prop-types
+   24:15  error  'route' is not defined                                           no-undef
+   28:9   error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   29:13  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   30:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   34:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   35:40  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+   39:13  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   40:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   41:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   43:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   53:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   56:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   57:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   59:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   69:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   73:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   74:25  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   76:29  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   77:39  error  'route' is not defined                                           no-undef
+   87:29  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   95:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   96:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   98:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  105:25  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+
+/var/www/resources/js/Pages/Welcome.jsx
+    4:35  error  'auth' is missing in props validation                            react/prop-types
+    4:41  error  'laravelVersion' is missing in props validation                  react/prop-types
+    4:57  error  'phpVersion' is missing in props validation                      react/prop-types
+   17:9   error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   18:13  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   19:13  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   20:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   25:17  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   26:21  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   27:25  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   28:29  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   29:33  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   35:29  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   36:39  error  'auth.user' is missing in props validation                       react/prop-types
+   37:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   38:47  error  'route' is not defined                                           no-undef
+   44:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   45:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   46:51  error  'route' is not defined                                           no-undef
+   51:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   52:51  error  'route' is not defined                                           no-undef
+   62:25  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   63:29  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   64:33  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   69:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   73:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   79:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   84:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   87:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   88:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   92:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   93:49  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+   99:53  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  103:53  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  110:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  111:49  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  115:49  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  128:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  135:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  144:33  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  148:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  149:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  155:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  156:49  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  161:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  162:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  166:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  176:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  183:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  191:33  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  195:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  196:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  202:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  203:49  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  204:49  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  205:49  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  210:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  211:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  215:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  225:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  232:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  240:33  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  241:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  242:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  248:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  249:49  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  254:37  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  255:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  259:41  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  260:52  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  263:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  270:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  277:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  284:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  291:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  300:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  307:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  314:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  321:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  328:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  335:45  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+  348:25  error  'React' must be in scope when using JSX                          react/react-in-jsx-scope
+
+/var/www/resources/js/app.jsx
+  17:21  error  'React' must be in scope when using JSX  react/react-in-jsx-scope
+
+/var/www/resources/js/handlers.js
+  155:16  error  'rowIndex' is assigned a value but never used  no-unused-vars
+  347:15  error  'cellData' is assigned a value but never used  no-unused-vars
+
+/var/www/resources/js/hooks/useFetchData.js
+  16:12  error  'casesData' is assigned a value but never used  no-unused-vars
+
+/var/www/resources/js/utils.js
+  73:30  error  'error' is defined but never used  no-unused-vars
+  73:37  error  Empty block statement              no-empty
+  82:29  error  Empty block statement              no-empty
+
+✖ 595 problems (595 errors, 0 warnings)
+  12 errors and 0 warnings potentially fixable with the `--fix` option.
+
