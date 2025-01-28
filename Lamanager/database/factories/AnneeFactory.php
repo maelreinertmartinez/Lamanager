@@ -24,8 +24,10 @@ class AnneeFactory extends Factory
     ];
     public function definition(): array
     {
+        $annee = array_pop($this->annee);
         return [
-            'annee'=>array_pop($this->annee),
+            'nom' => 'Année ' . $annee,
+            'annee' => $annee,
         ];
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Annee;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Annee;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Promo>
@@ -15,48 +15,14 @@ class PromoFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    protected $promo=[
-            'BUT 1',
-            'BUT 2',
-            'BUT 3',
-        ];
-    protected $nbr_td = [3,2,2];
-    protected $nbr_tp = [6,4,4];
-
     public function definition(): array
     {
-
         return [
-            'alternant_id' => null,
-            'nom' => function(array $attributes) {
-                $nom = array_pop($this->promo);
-
-                if (empty($this->promo)){
-                    $this->promo=[
-                        'BUT 1',
-                        'BUT 2',
-                        'BUT 3',
-                    ];
-                }
-                return $nom;
-            },
-            'nombre_td' => function(array $attributes) {
-                $nombre_td = array_pop($this->nbr_td);
-
-                if (empty($this->nbr_td)){
-                    $this->nbr_td=[3,2,2];
-                }
-                return $nombre_td;
-            },
-            'nombre_tp' => function(array $attributes) {
-                $nombre_tp = array_pop($this->nbr_tp);
-
-                if (empty($this->nbr_tp)){
-                    $this->nbr_tp=[6,4,4];
-                }
-                return $nombre_tp;
-            },
-            'alternant' => false,
+            'nom' => 'BUT ' . $this->faker->numberBetween(1, 3),
+            'nombre_td' => $this->faker->numberBetween(1, 4),
+            'nombre_tp' => $this->faker->numberBetween(2, 8),
+            'alternant' => $this->faker->boolean,
+            'nb_etudiants' => $this->faker->numberBetween(40, 150),
             'annee_id' => Annee::factory(),
         ];
     }

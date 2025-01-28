@@ -18,6 +18,7 @@ class Promo extends Model
         'nombre_td',
         'nombre_tp',
         'alternant',
+        'nb_etudiants'
     ];
 
     public function annee(): BelongsTo
@@ -33,5 +34,11 @@ class Promo extends Model
     public function groupe(): HasMany
     {
         return $this->hasMany(Groupe::class);
+    }
+
+    public function validateNbEtudiants($nb = null): bool
+    {
+        $nb = $nb ?? $this->nb_etudiants;
+        return $nb > 0 && $nb <= 200;
     }
 }

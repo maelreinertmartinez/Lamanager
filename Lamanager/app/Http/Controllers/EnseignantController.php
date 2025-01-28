@@ -3,18 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Enseignant;
+use App\Http\Requests\EnseignantRequest;
+use App\Http\Resources\EnseignantResource;
+use App\Services\EnseignantService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Log;
 
 class EnseignantController extends Controller
 {
-    public function index(): JsonResponse
+    protected $enseignantService;
+
+    public function __construct(EnseignantService $enseignantService)
     {
-        $enseignants = Enseignant::all();
-        return response()->json($enseignants);
+        $this->enseignantService = $enseignantService;
+    }
+
+    public function index(): AnonymousResourceCollection
+    {
+        $enseignants = Enseignant::with('role')->get();
+        return EnseignantResource::collection($enseignants);
     }
 
     public function avoirInfo($id): JsonResponse
@@ -32,6 +43,7 @@ class EnseignantController extends Controller
 
         return response()->json($enseignants);
     }
+
     public function showCode($id): JsonResponse
     {
         $enseignant = Enseignant::where('id', $id)
@@ -41,6 +53,24 @@ class EnseignantController extends Controller
         return response()->json($enseignant);
     }
 
+    public function show($id): EnseignantResource
+    {
+        $enseignant = Enseignant::with('role')->findOrFail($id);
+        return new EnseignantResource($enseignant);
+    }
+
+    public function store(EnseignantRequest $request): EnseignantResource
+    {
+        $enseignant = $this->enseignantService->createEnseignant($request->validated());
+        return new EnseignantResource($enseignant);
+    }
+
+    public function update(EnseignantRequest $request, Enseignant $enseignant): EnseignantResource
+    {
+        $enseignant = $this->enseignantService->updateEnseignant($enseignant, $request->validated());
+        return new EnseignantResource($enseignant);
+    }
+
     public function changementMdp(Request $request): JsonResponse
     {
         $request->validate([
@@ -48,89 +78,20 @@ class EnseignantController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        $enseignant = Enseignant::find($request->user()->id);
+        $enseignant = Enseignant::findOrFail($request->user()->id);
 
-        if (!Hash::check($request->current_password, $enseignant->mot_de_passe)) {
-            return response()->json(['error' => 'Current password is incorrect'], 400);
+        if (!$this->enseignantService->verifyCurrentPassword($enseignant, $request->current_password)) {
+            return response()->json(['error' => 'Le mot de passe actuel est incorrect'], 400);
         }
 
-        $enseignant->update(['mot_de_passe' => Hash::make($request->password)]);
+        $this->enseignantService->updatePassword($enseignant, $request->password);
 
-        return response()->json(['message' => 'Password updated successfully']);
+        return response()->json(['message' => 'Mot de passe mis à jour avec succès']);
     }
 
-    public function store(Request $request): JsonResponse
+    public function destroy(Enseignant $enseignant): JsonResponse
     {
-        $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'mail' => 'required|string|email|max:255|unique:enseignants',
-            'role_id' => 'required|integer',
-            'password' => 'required|string|confirmed',
-            'actif' => 'required|boolean',
-            'admin' => 'required|boolean',
-        ]);
-
-        // Generate unique code
-        $code = strtoupper(substr($request->prenom, 0, 1) . substr($request->nom, 0, 2));
-        $originalCode = $code;
-        $counter = 1;
-
-        while (Enseignant::where('code', $code)->exists()) {
-            $code = strtoupper(substr($request->prenom, 0, 1) . substr($request->nom, 0, $counter + 1));
-            $counter++;
-            if ($counter > strlen($request->nom)) {
-                $code = strtoupper(substr($request->nom, 0, 2) . substr($request->prenom, 0, 1));
-                break;
-            }
-        }
-
-        $enseignant = Enseignant::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'mail' => $request->mail,
-            'role_id' => $request->role_id,
-            'mot_de_passe' => Hash::make($request->password),
-            'actif' => $request->actif,
-            'code' => $code,
-            'admin' => $request->admin,
-        ]);
-
-        return response()->json($enseignant);
-    }
-
-    public function update(Request $request, $id): JsonResponse
-    {
-        $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'mail' => 'required|string|email|max:255|unique:enseignants,mail,' . $id,
-            'role_id' => 'required|integer',
-            'password' => 'nullable|string|confirmed',
-            'actif' => 'required|boolean',
-            'admin' => 'required|boolean',
-        ]);
-
-        $enseignant = Enseignant::findOrFail($id);
-        $enseignant->nom = $request->nom;
-        $enseignant->prenom = $request->prenom;
-        $enseignant->mail = $request->mail;
-        $enseignant->role_id = $request->role_id;
-        if ($request->filled('password')) {
-            $enseignant->mot_de_passe = Hash::make($request->password);
-        }
-        $enseignant->actif = $request->actif;
-        $enseignant->admin = $request->admin;
-        $enseignant->save();
-
-        return response()->json($enseignant);
-    }
-
-    public function destroy($id): JsonResponse
-    {
-        $enseignant = Enseignant::findOrFail($id);
         $enseignant->delete();
-
         return response()->json(['message' => 'Enseignant supprimé avec succès']);
     }
 

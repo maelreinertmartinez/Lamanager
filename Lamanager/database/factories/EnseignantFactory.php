@@ -33,12 +33,12 @@ class EnseignantFactory extends Factory
         $admin = $this->faker->boolean;
 
         return [
-            'nom' => $prenom,
-            'prenom' => $nom,
-            'code' => $code,
+            'nom' => $this->faker->lastName(),
+            'prenom' => $this->faker->firstName(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'statut' => $this->faker->randomElement(['titulaire', 'vacataire']),
             'actif' => true,
             'mot_de_passe' => static::$password ??= Hash::make('password'),
-            'mail' => $mail,
             'admin' => $admin,
             'role_id' => Role::factory(),
         ];
