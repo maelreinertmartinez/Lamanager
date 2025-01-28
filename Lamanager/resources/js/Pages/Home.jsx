@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Header from '../Components/Header';
 import LeftPart from '../Components/LeftPart';
 import RightPart from '../Components/RightPart';
-import PromoRightPart from '@/Components/PromoRightPart';
-import HeaderNeutre from '@/Components/HeaderNeutre';
-import MenuAnnee from '@/Components/MenuAnnee';
-import AddAnneeForm from '@/Components/AddAnneeForm';
+import PromoRightPart from '@/Components/Promotion/PartieDroitePromoComposant';
+import HeaderNeutre from '@/Components/MiseEnPage/EnteteComposantNeutre';
+import MenuAnnee from '@/Components/Commun/MenuAnneeComposant';
+import AddAnneeForm from '@/Components/Formulaires/FormulaireAjoutAnneeComposant';
 
 
 

@@ -3,8 +3,8 @@ import logo from '../../img/testlogo.png';
 import { Link } from '@inertiajs/react';
 import { Table, ChartColumnIncreasing, MousePointer2, Settings, BookUser, FileUser, Download } from "lucide-react";
 import axios from 'axios';
-import ImportPopup from "@/Components/ImportPopup.jsx";
-import RolePopup from "@/Components/RolePopup.jsx";
+import ImportPopup from "@/Components/FenetresModales/FenetreImportationComposant";
+import RolePopup from "@/Components/FenetresModales/FenetreRoleComposant";
 
 function BarreOutils({ toggleIcons }) {
     const [showCustomPopup, setShowCustomPopup] = useState(false);

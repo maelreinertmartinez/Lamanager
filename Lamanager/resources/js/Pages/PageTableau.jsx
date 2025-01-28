@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../Components/Header';
 import ListesEnseignementsEnseignants from '../Components/TableauLeftPart/ListesEnseignementsEnseignants';
-import LeftPart from '@/Components/LeftPart';
-import RightPart from '@/Components/RightPart';
-import Tableau from '@/Components/Tableau';
-import BarreOutils from '@/Components/BarreOutils';
-import BoutonProfil from '@/Components/BoutonProfil';
+import LeftPart from '@/Components/MiseEnPage/PartieGaucheComposant';
+import RightPart from '@/Components/MiseEnPage/PartieDroiteComposant';
+import Tableau from '@/Components/Tableaux/TableauComposant';
+import BarreOutils from '@/Components/MiseEnPage/BarreOutilsComposant';
+import BoutonProfil from '@/Components/Boutons/BoutonProfilComposant';
 
 export default function PageTableau() {
     // Déplacer la déclaration de urlParams avant son utilisation
@@ -106,4 +106,3 @@ export default function PageTableau() {
         </>
     );
 }
-

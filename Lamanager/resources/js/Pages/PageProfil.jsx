@@ -1,13 +1,13 @@
 import React from 'react';
-import Header from '@/Components/Header';
-import LeftPart from '@/Components/LeftPart';
-import RightPart from '@/Components/RightPart';
-import BarreOutils from '@/Components/BarreOutils';
-import ProfilLeftPart from '@/Components/ProfilLeftPart';
-import ProfilRightPart from '@/Components/ProfilRightPart';
+import Header from '@/Components/MiseEnPage/EnteteComposant';
+import LeftPart from '@/Components/MiseEnPage/PartieGaucheComposant';
+import RightPart from '@/Components/MiseEnPage/PartieDroiteComposant';
+import BarreOutils from '@/Components/MiseEnPage/BarreOutilsComposant';
+import ProfilLeftPart from '@/Components/Profil/PartieGaucheProfilComposant';
+import ProfilRightPart from '@/Components/Profil/PartieDroiteProfilComposant';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import GestionCompte from '@/Components/GestionCompte';
+import GestionCompte from '@/Components/Profil/GestionCompteComposant';
 
 export default function PageProfil() {
     

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../../../img/testlogo.png';
-import InputLabel from "@/Components/InputLabel.jsx";
+import InputLabel from "@/Components/Commun/EtiquetteChampComposant.jsx";
 import axios from 'axios';
 import unilim from "../../../img/logo_universite.png";
 import { LogIn } from 'lucide-react';

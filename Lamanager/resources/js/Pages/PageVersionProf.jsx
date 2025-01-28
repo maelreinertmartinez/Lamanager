@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import Header from '@/Components/Header';
-import LeftPart from '@/Components/LeftPart';
-import RightPart from '@/Components/RightPart';
-import BarreOutils from '@/Components/BarreOutils';
-import VersionProfLeftPart from '@/Components/VersionProfLeftPart';
-import VersionProfRightPart from '@/Components/VersionProfRightPart';
+import Header from '@/Components/MiseEnPage/EnteteComposant';
+import LeftPart from '@/Components/MiseEnPage/PartieGaucheComposant';
+import RightPart from '@/Components/MiseEnPage/PartieDroiteComposant';
+import BarreOutils from '@/Components/MiseEnPage/BarreOutilsComposant';
+import VersionProfLeftPart from '@/Components/Tableaux/PartieGaucheProfesseurComposant';
+import VersionProfRightPart from '@/Components/Tableaux/PartieDroiteProfesseurComposant';
 
 export default function PageVersionProf() {
   const [selections, setSelections] = useState({});

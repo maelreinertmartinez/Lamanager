@@ -1,5 +1,5 @@
 import React from "react";
-import BoutonProfil from "@/Components/BoutonProfil";
+import BoutonProfil from "@/Components/Boutons/BoutonProfilComposant";
 
 function Header({ ComposantProp }) {
   return (
