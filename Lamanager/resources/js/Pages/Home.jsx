@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Header from '../Components/Header';
-import LeftPart from '../Components/LeftPart';
-import RightPart from '../Components/RightPart';
-import PromoRightPart from '@/Components/Promotion/PartieDroitePromoComposant';
-import HeaderNeutre from '@/Components/MiseEnPage/EnteteComposantNeutre';
+import Entete from '@/Components/MiseEnPage/EnteteComposant';
+import PartieGauche from '@/Components/MiseEnPage/PartieGaucheComposant';
+import PartieDroite from '@/Components/MiseEnPage/PartieDroiteComposant';
+import AjoutPromo from '@/Components/Promotion/AjoutPromoComposant';
+import EnteteNeutre from '@/Components/MiseEnPage/EnteteNeutreComposant';
 import MenuAnnee from '@/Components/Commun/MenuAnneeComposant';
 import AddAnneeForm from '@/Components/Formulaires/FormulaireAjoutAnneeComposant';
 
@@ -39,10 +39,10 @@ const Home = () => {
 
     return (
         <>
-            <Header ComposantProp={HeaderNeutre}/>
+            <Entete ComposantProp={EnteteNeutre}/>
             <div className="app">
-                <LeftPart ComposantProp={CombinedLeftComponents} />
-                <RightPart ComposantProp={() => <PromoRightPart selectedAnnee={selectedAnnee} />}/>
+                <PartieGauche ComposantProp={CombinedLeftComponents} />
+                <PartieDroite ComposantProp={() => <AjoutPromo selectedAnnee={selectedAnnee} />}/>
             </div>
         </>
     );
