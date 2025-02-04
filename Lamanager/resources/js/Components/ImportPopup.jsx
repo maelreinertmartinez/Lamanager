@@ -1,226 +1,228 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import React, { useState, useReducer } from "react";
+import { CSVParserService } from "../services/CSVParserService";
+import { APIService } from "../services/APIService";
+import PropTypes from 'prop-types';
 
-function ImportPopup({ onClose }) {
+// Définition du reducer pour la gestion d'état
+const initialState = {
+    status: 'idle',
+    data: {
+        listeRecherche: [],
+        listeHeures: [],
+        isAlternance: false,
+        semestre: null
+    },
+    error: null
+};
+
+function reducer(state, action) {
+    switch (action.type) {
+        case 'PARSING_START':
+            return { ...state, status: 'parsing', error: null };
+        case 'PARSING_SUCCESS':
+            return { 
+                ...state, 
+                status: 'parsed', 
+                data: action.payload,
+                error: null 
+            };
+        case 'PARSING_ERROR':
+            return { ...state, status: 'error', error: action.payload };
+        case 'SAVING_START':
+            return { ...state, status: 'saving', error: null };
+        case 'SAVING_SUCCESS':
+            return { ...state, status: 'saved', error: null };
+        case 'SAVING_ERROR':
+            return { ...state, status: 'error', error: action.payload };
+        case 'UPDATE_HEURES':
+            const newListeHeures = [...state.data.listeHeures];
+            newListeHeures[action.payload.index][action.payload.field] = action.payload.value;
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    listeHeures: newListeHeures
+                }
+            };
+        default:
+            return state;
+    }
+}
+
+function ImportPopup({ onClose, promoId }) {
+    const [state, dispatch] = useReducer(reducer, initialState);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [listeRecherche, setListeRecherche] = useState([]); 
-    const [semestre, setSemestre] = useState();
-    const [listeHeures, setListeHeures] = useState([]);
-    const [isAlternance, setIsAlternance] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const params = new URLSearchParams(window.location.search);
-    const promoId = params.get('promo_id');
 
-    const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]);
-    };
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
 
-    const parseValue = (value, field) => {
-        if (field >= 0 && field <= 7) {
-            return value === "" ? "" : parseFloat(value);
+        setSelectedFile(file);
+        dispatch({ type: 'PARSING_START' });
+
+        try {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const content = e.target.result;
+                    const parsedData = CSVParserService.parseCSVContent(content);
+                    dispatch({ type: 'PARSING_SUCCESS', payload: parsedData });
+                } catch (error) {
+                    dispatch({ type: 'PARSING_ERROR', payload: error.message });
+                }
+            };
+            reader.readAsText(file);
+        } catch (error) {
+            dispatch({ type: 'PARSING_ERROR', payload: 'Erreur lors de la lecture du fichier' });
         }
-        return value;
     };
 
-    const handleInputChange = (e, index, field) => {
-        const newValue = parseValue(e.target.value, field);
-        const newListeHeures = [...listeHeures];
-        newListeHeures[index][field] = newValue;
-        setListeHeures(newListeHeures);
+    const handleInputChange = (index, field, value) => {
+        const parsedValue = CSVParserService.parseHeures(value);
+        dispatch({
+            type: 'UPDATE_HEURES',
+            payload: { index, field, value: parsedValue }
+        });
+    };
+
+    const handleValidate = async () => {
+        if (state.status !== 'parsed' && state.status !== 'error') {
+            return;
+        }
+
+        dispatch({ type: 'SAVING_START' });
+
+        try {
+            const promo = await APIService.getPromo(promoId);
+            const { listeRecherche, listeHeures, isAlternance, semestre } = state.data;
+
+            const enseignements = listeRecherche.map((nom, index) => ({
+                nom,
+                promo_id: promoId,
+                alternant: false,
+                nombre_heures_cm: listeHeures[index][0],
+                nombre_heures_td: listeHeures[index][1],
+                nombre_heures_tp: listeHeures[index][2],
+                semestre,
+                nombre_heures_projet: listeHeures[index][3]
+            }));
+
+            if (promo.alternant_id && isAlternance) {
+                const alternanceEnseignements = listeRecherche.map((nom, index) => ({
+                    ...enseignements[index],
+                    promo_id: promo.alternant_id,
+                    alternant: true
+                }));
+                await APIService.saveEnseignements(alternanceEnseignements);
+            }
+
+            await APIService.saveEnseignements(enseignements);
+            dispatch({ type: 'SAVING_SUCCESS' });
+            onClose();
+        } catch (error) {
+            dispatch({ type: 'SAVING_ERROR', payload: error.message });
+        }
     };
 
     const toggleEditMode = () => {
-        if (isEditing) {
-            handleValidate(); 
-        } else {
-            setIsDisabled(true);
-        }
         setIsEditing(!isEditing);
     };
-    
-
-    const handleValidate = async () => {
-        if (!selectedFile) {
-            setErrorMessage("Veuillez selectionner un fichier CSV en premier.");
-        } else {
-            setErrorMessage("");
-            //console.log("Valeurs modifiées : ", listeHeures);
-
-            try {
-                const promo = await axios.get(`/api/promo/${promoId}`);
-                console.log("Les valeurs de promo : ", promo);
-
-                for (let index = 0; index < listeRecherche.length; index++) { 
-                    if (promo.data.alternant_id !== null){
-                        const item = listeRecherche[index]; 
-                        const donnes_alternant = await axios.post('api/enseignements', { 
-                            nom: item, 
-                            promo_id: promo.data.alternant_id, 
-                            alternant: isAlternance,
-                            nombre_heures_cm: listeHeures[index][0], 
-                            nombre_heures_td: listeHeures[index][1], 
-                            nombre_heures_tp: listeHeures[index][2], 
-                            semestre: semestre, 
-                            nombre_heures_projet: listeHeures[index][3], 
-                        }); 
-                    };
-                    const item = listeRecherche[index]; 
-                    const response = await axios.post('api/enseignements', { 
-                        nom: item, 
-                        promo_id: promoId, 
-                        alternant: false,
-                        nombre_heures_cm: listeHeures[index][0], 
-                        nombre_heures_td: listeHeures[index][1], 
-                        nombre_heures_tp: listeHeures[index][2], 
-                        semestre: semestre, 
-                        nombre_heures_projet: listeHeures[index][3], 
-                    }); 
-                    //console.log(response.data);
-                    setIsDisabled(false);
-                    onClose();
-                }
-                
-            } catch (error) {
-                console.error("Erreur lors de la sauvegarde des données", error);
-            }
-        }
-    };
-    
-
-    
-
-    useEffect(() => {
-        if (selectedFile) {
-            const handleImport = async () => {
-                try {
-                    const reader = new FileReader();
-
-                    reader.onload = (event) => {
-                        const csvContent = event.target.result;
-                        //console.log("CSV Content:", csvContent);
-
-                        const rows = csvContent.split('\n').map(row => row.split(','));
-                        //console.log("Parsed CSV:", rows);
-
-                        let compteur = 18;
-                        let i = 0;
-                        let alternance = false;
-
-                        let liste_recherche = [];
-                        let liste_heures = [];
-
-                        while (rows[compteur] && rows[compteur][1] !== "") {
-                            let liste_temp = [];
-                            liste_recherche.push(rows[compteur][1]);
-
-                            let cm = parseFloat(rows[compteur][4] || "0");
-                            let td = parseFloat(rows[compteur][5] || "0");
-                            let tp = parseFloat(rows[compteur][6] || "0");
-                            let total = parseFloat(rows[compteur][8]);
-
-                            let heures_projet = total - (cm + td + tp);
-
-                            liste_temp.push(cm);
-                            liste_temp.push(td);
-                            liste_temp.push(tp);
-                            liste_temp.push(heures_projet);
-
-                            if (rows[9][7] === "Alternance") {
-                                alternance = true;
-                                liste_temp.push(parseFloat(rows[compteur][10] || cm));
-                                liste_temp.push(parseFloat(rows[compteur][11] || td));
-                                liste_temp.push(parseFloat(rows[compteur][12] || tp));
-                                liste_temp.push(parseFloat(rows[compteur][14]));
-                            }
-
-                            liste_heures.push(liste_temp);
-                            compteur++;
-                        }
-
-                        
-                        while (liste_recherche[i][0]!=="R"){
-                            i++;
-                        }
-                        let semestre = liste_recherche[i][1];
-                        //console.log("Liste des heures : ", liste_heures);
-                        //console.log("Liste des ressources :", liste_recherche);        
-                        //console.log(semestre);
-                        
-                        setIsAlternance(alternance);
-                        setListeRecherche(liste_recherche); 
-                        setListeHeures(liste_heures);
-                        setSemestre(semestre);
-                    };
-                    
-
-                    reader.readAsText(selectedFile);
-                } catch (error) {
-                    console.error("Erreur lors de la lecture du fichier:", error);
-                }
-            };
-            handleImport();
-        }
-    }, [selectedFile]);
 
     return (
         <div className="popup-overlay" onClick={onClose}>
             <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-                <input type="file" accept=".csv" onChange={handleFileChange} />
+                <input 
+                    type="file" 
+                    accept=".csv" 
+                    onChange={handleFileChange}
+                    disabled={state.status === 'saving'}
+                />
 
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                {state.error && (
+                    <div className="error-message">{state.error}</div>
+                )}
+
+                {state.status === 'saving' && (
+                    <div className="loading-message">Sauvegarde en cours...</div>
+                )}
                 
                 <div className="tableau-import">
-                    {listeRecherche.length > 0 && (
+                    {state.data.listeRecherche.length > 0 && (
                         <table>
                             <thead>
                                 <tr>
-                                    <th rowSpan={2} className="border border-black p-2">Ressources / SAE</th> 
-                                    <th colSpan={4} className="border border-black p-2">Formation initiale</th> 
-                                    {isAlternance && <th colSpan={4} className="border border-black p-2">Alternance</th>}
+                                    <th rowSpan={2}>Ressources / SAE</th>
+                                    <th colSpan={4}>Formation initiale</th>
+                                    {state.data.isAlternance && (
+                                        <th colSpan={4}>Alternance</th>
+                                    )}
                                 </tr>
                                 <tr>
-                                    <th className="border border-black p-2">CM</th>
-                                    <th className="border border-black p-2">TD</th>
-                                    <th className="border border-black p-2">TP</th>
-                                    <th className="border border-black p-2">Heures projet</th>
-                                    {isAlternance && <th className="border border-black p-2">CM</th>} 
-                                    {isAlternance && <th className="border border-black p-2">TD</th>} 
-                                    {isAlternance && <th className="border border-black p-2">TP</th>} 
-                                    {isAlternance && <th className="border border-black p-2">Heures projet</th>}
-                                </tr>                            
+                                    <th>CM</th>
+                                    <th>TD</th>
+                                    <th>TP</th>
+                                    <th>Heures projet</th>
+                                    {state.data.isAlternance && (
+                                        <>
+                                            <th>CM</th>
+                                            <th>TD</th>
+                                            <th>TP</th>
+                                            <th>Heures projet</th>
+                                        </>
+                                    )}
+                                </tr>
                             </thead>
-
-                            <tbody className="border border-black p-2">
-                                {listeRecherche.map((item, index) => (
+                            <tbody>
+                                {state.data.listeRecherche.map((item, index) => (
                                     <tr key={index}>
-                                        <td className="border border-black p-2">{item}</td>
-                                        <td className="border border-black p-2">{isEditing ? <input class = "champ" type="text" maxlength="4" value={listeHeures[index][0] !== undefined ? listeHeures[index][0] : ''} onChange={(e) => handleInputChange(e, index, 0)} /> : listeHeures[index] && listeHeures[index][0]}</td>
-                                        <td className="border border-black p-2">{isEditing ? <input class = "champ" type="text" maxlength="4" value={listeHeures[index][1] !== undefined ? listeHeures[index][1] : ''} onChange={(e) => handleInputChange(e, index, 1)} /> : listeHeures[index] && listeHeures[index][1]}</td>
-                                        <td className="border border-black p-2">{isEditing ? <input class = "champ" type="text" maxlength="4" value={listeHeures[index][2] !== undefined ? listeHeures[index][2] : ''} onChange={(e) => handleInputChange(e, index, 2)} /> : listeHeures[index] && listeHeures[index][2]}</td>
-                                        <td className="border border-black p-2">{isEditing ? <input class = "champ" type="text" maxlength="4" value={listeHeures[index][3] !== undefined ? listeHeures[index][3] : ''} onChange={(e) => handleInputChange(e, index, 3)} /> : listeHeures[index] && listeHeures[index][3]}</td>
-                                        {isAlternance && (
-                                            <>
-                                                <td className="border border-black p-2">{isEditing ? <input class = "champ" type="text" value={listeHeures[index][4] !== undefined ? listeHeures[index][4] : ''} onChange={(e) => handleInputChange(e, index, 4)} /> : listeHeures[index] && listeHeures[index][4]}</td>
-                                                <td className="border border-black p-2">{isEditing ? <input class = "champ" type="text" value={listeHeures[index][5] !== undefined ? listeHeures[index][5] : ''} onChange={(e) => handleInputChange(e, index, 5)} /> : listeHeures[index] && listeHeures[index][5]}</td>
-                                                <td className="border border-black p-2">{isEditing ? <input class = "champ" type="text" value={listeHeures[index][6] !== undefined ? listeHeures[index][6] : ''} onChange={(e) => handleInputChange(e, index, 6)} /> : listeHeures[index] && listeHeures[index][6]}</td>
-                                                <td className="border border-black p-2">{isEditing ? <input class = "champ" type="text" value={listeHeures[index][7] !== undefined ? listeHeures[index][7] : ''} onChange={(e) => handleInputChange(e, index, 7)} /> : listeHeures[index] && listeHeures[index][7]}</td>
-                                            </>
-                                        )}
+                                        <td>{item}</td>
+                                        {[0, 1, 2, 3].map((field) => (
+                                            <td key={field}>
+                                                {isEditing ? (
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        step="0.5"
+                                                        value={state.data.listeHeures[index][field]}
+                                                        onChange={(e) => handleInputChange(index, field, e.target.value)}
+                                                        className="heures-input"
+                                                    />
+                                                ) : (
+                                                    state.data.listeHeures[index][field]
+                                                )}
+                                            </td>
+                                        ))}
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     )}
-                </div>  
+                </div>
+
                 <div className="button-container">
-                    <button onClick={handleValidate} disabled={isDisabled} className={isDisabled ? 'button-disabled' : ''} > Valider </button>
-                    <button onClick={toggleEditMode}>{isEditing ? "Terminer" : "Modifier"}</button>
-                </div>     
+                    <button
+                        onClick={handleValidate}
+                        disabled={state.status === 'saving'}
+                        className={state.status === 'saving' ? 'button-disabled' : ''}
+                    >
+                        Valider
+                    </button>
+                    <button
+                        onClick={toggleEditMode}
+                        disabled={state.status === 'saving'}
+                    >
+                        {isEditing ? "Terminer" : "Modifier"}
+                    </button>
+                </div>
             </div>
         </div>
     );
 }
+
+ImportPopup.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    promoId: PropTypes.string.isRequired
+};
 
 export default ImportPopup;
