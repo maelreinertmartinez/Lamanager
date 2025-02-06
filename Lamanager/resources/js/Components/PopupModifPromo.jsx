@@ -3,7 +3,7 @@ import PopupModifPromoAdaptative from "./PopupModifPromoAdaptative.jsx";
 import axios from "axios";
 import "../../css/modifpromo.css";
 
-function PopupModifPromo({ onClose, promos, selectedAnnee }) {
+function PopupModifPromo({ onClose, promos, selectedAnnee, onPromoUpdated }) {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedPromo, setSelectedPromo] = useState(null);
     const [promoData, setPromoData] = useState(promos.map(promo => ({
@@ -51,6 +51,9 @@ function PopupModifPromo({ onClose, promos, selectedAnnee }) {
         try {
             const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
             setPromoData(response.data);
+            if (onPromoUpdated) {
+                onPromoUpdated();
+            }
         } catch (error) {
             console.error("Error refreshing promo data:", error);
         }
@@ -73,6 +76,9 @@ function PopupModifPromo({ onClose, promos, selectedAnnee }) {
             setPromoData(updatedPromoData);
 
             await axios.post('/api/promos/update', { promos: updatedPromoData });
+            if (onPromoUpdated) {
+                onPromoUpdated();
+            }
             onClose();
         } catch (error) {
             console.error("Error updating promos:", error);
@@ -98,22 +104,15 @@ function PopupModifPromo({ onClose, promos, selectedAnnee }) {
                     ))}
                 </div>
                 {showPopup && (
-                    <div>
-                        <PopupModifPromoAdaptative
-                            onClose={handleClosePopup}
-                            promoName={selectedPromo}
-                            promos={promos}
-                            updatePromoData={(id, type, count) => {
-                                setPromoData(prevData => prevData.map(promo =>
-                                    promo.id === id ? { ...promo, [`nombre_${type.toLowerCase()}`]: count } : promo
-                                ));
-                            }}
-                            refreshPromoData={refreshPromoData}
-                        />
-                    </div>
+                    <PopupModifPromoAdaptative
+                        onClose={handleClosePopup}
+                        promoName={selectedPromo}
+                        onSubmit={refreshPromoData}
+                    />
                 )}
-                <div className="custom-button-container">
+                <div className="popup-buttons">
                     <button onClick={handleSubmit}>Valider</button>
+                    <button onClick={onClose}>Annuler</button>
                 </div>
             </div>
         </div>

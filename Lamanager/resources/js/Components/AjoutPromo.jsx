@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function AjoutPromo({ onClose, selectedAnnee }) {
+function AjoutPromo({ onClose, selectedAnnee, onPromoAdded }) {
     const [promoName, setPromoName] = useState("");
     const [tdNbr, setTdNbr] = useState("");
     const [tpNbrByTd, setTpNbrByTd] = useState("");
@@ -9,7 +9,6 @@ function AjoutPromo({ onClose, selectedAnnee }) {
 
     async function creationPromo() {
         if (promoName !== "" && tdNbr !== "" && tpNbrByTd !== "" && tdNbr > 0 && tpNbrByTd > 0) {
-            onClose(); // Fermer la popup après soumission
             const newPromo = await handlePromos(); // Créer la promo normale
             if (newPromo) {
                 await handleGroupes(newPromo); // Créer les groupes pour la promo normale
@@ -21,8 +20,12 @@ function AjoutPromo({ onClose, selectedAnnee }) {
                         await handleGroupes(alternantPromo); // Créer les groupes pour la promo alternante
                     }
                 }
+                
+                // Fetch updated promos and notify parent
+                const response = await axios.get(`/api/promos/${selectedAnnee.id}`);
+                onPromoAdded(response.data);
+                onClose(); // Fermer la popup après soumission
             }
-            window.location.reload();
         }
     }
 
@@ -36,6 +39,7 @@ function AjoutPromo({ onClose, selectedAnnee }) {
             alternant: alternant,
         });
     }
+
     async function addGroupe(promo, nom, type) {
         return await axios.post('/api/groupes', {
             promo_id: promo.id,
@@ -46,7 +50,7 @@ function AjoutPromo({ onClose, selectedAnnee }) {
 
     const handlePromos = async () => {
         try {
-            const promo = await addPromo(selectedAnnee,null, promoName, tdNbr, tpNbrByTd, false);
+            const promo = await addPromo(selectedAnnee, null, promoName, tdNbr, tpNbrByTd, false);
             console.log("Promo créée :", promo.data);
             return promo.data;
         } catch (err) {
@@ -57,8 +61,14 @@ function AjoutPromo({ onClose, selectedAnnee }) {
 
     const handlePromosAlternant = async (promo) => {
         try {
-            const alternantPromo = await addPromo
-            (selectedAnnee,promo.id, `${promo.nom} Alternant`, promo.nombre_td, promo.nombre_tp, true);
+            const alternantPromo = await addPromo(
+                selectedAnnee,
+                promo.id,
+                `${promo.nom} Alternant`,
+                promo.nombre_td,
+                promo.nombre_tp,
+                true
+            );
 
             // Mettre à jour la promo principale avec l'alternant_id
             await axios.post(`/api/update-promos/${promo.id}`, {
@@ -83,10 +93,10 @@ function AjoutPromo({ onClose, selectedAnnee }) {
             const td = await addGroupe(promo, nomTD, "TD");
 
             for (let j = 1; j <= promo.nombre_tp; j++) {
-                num_td = num_td+1;
+                num_td = num_td + 1;
                 const nomTP = "TP" + num_td;
                 const tp = await addGroupe(promo, nomTP, "TP");
-                console.log(td,tp,td.data.id);
+                console.log(td, tp, td.data.id);
 
                 await axios.post('/api/liaison', {
                     groupe_td_id: td.data.id,
@@ -94,7 +104,6 @@ function AjoutPromo({ onClose, selectedAnnee }) {
                 });
             }
         }
-
     };
 
     return (

@@ -4,8 +4,7 @@ import InputModifPromo from "./InputModifPromo.jsx";
 import ConfirmModifPromo from "./ConfirmModifPromo.jsx";
 import "../../css/modifpromoadapt.css";
 
-function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData, refreshPromoData }) {
-    const promo = promos.find(promo => promo.nom === promoName);
+function PopupModifPromoAdaptative({ onClose, promoName, onSubmit }) {
     const [groupesData, setGroupesData] = useState([]);
     const [liaisons, setLiaisons] = useState([]);
     const [isInputModalOpen, setInputModalOpen] = useState(false);
@@ -13,259 +12,237 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
     const [modalType, setModalType] = useState("");
     const [tdGroupName, setTdGroupName] = useState("");
     const [tdGroupToDelete, setTdGroupToDelete] = useState(null);
+    const [promo, setPromo] = useState(null);
 
     useEffect(() => {
-        const fetchGroupes = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get(`/api/groupes/${promo.id}`);
-                setGroupesData(response.data);
+                // Fetch promo data
+                const promoResponse = await axios.get(`/api/promos/by-name/${promoName}`);
+                const promoData = promoResponse.data;
+                setPromo(promoData);
+
+                // Fetch groupes
+                const groupesResponse = await axios.get(`/api/groupes/${promoData.id}`);
+                setGroupesData(groupesResponse.data);
+
+                // Fetch liaisons
+                const liaisonsResponse = await axios.get(`/api/liaison_groupes`);
+                setLiaisons(liaisonsResponse.data);
             } catch (error) {
-                console.error("Error fetching groupes:", error);
+                console.error("Error fetching data:", error);
             }
         };
 
-        const fetchLiaisons = async () => {
-            try {
-                const response = await axios.get(`/api/liaison_groupes`);
-                setLiaisons(response.data);
-            } catch (error) {
-                console.error("Error fetching liaisons:", error);
-            }
-        };
-
-        fetchGroupes();
-        fetchLiaisons();
-    }, [promo.id]);
+        if (promoName) {
+            fetchData();
+        }
+    }, [promoName]);
 
     const isGroupNameExists = (name) => {
         return groupesData.some(groupe => groupe.nom === name);
     };
 
-    const handleInputChange = (id, field, value) => {
-        const newGroupesData = groupesData.map(groupe =>
-            groupe.id === id ? { ...groupe, [field]: value } : groupe
-        );
-        setGroupesData(newGroupesData);
+    const handleInputChange = async (id, field, value) => {
+        try {
+            await axios.patch(`/api/groupes/${id}`, { [field]: value });
+            const newGroupesData = groupesData.map(groupe =>
+                groupe.id === id ? { ...groupe, [field]: value } : groupe
+            );
+            setGroupesData(newGroupesData);
+        } catch (error) {
+            console.error("Error updating group:", error);
+        }
     };
 
     const handleAddGroup = async (type) => {
+        if (!promo) return;
+
         let newGroupName = 'amodifier';
         let counter = 1;
         while (isGroupNameExists(newGroupName)) {
             newGroupName = `amodifier${counter}`;
             counter++;
         }
+
         try {
             const payload = { promo_id: promo.id, type, nom: newGroupName };
             const response = await axios.post('/api/groupes', payload);
             const newGroup = response.data;
-            setGroupesData([...groupesData, newGroup]);
-            updatePromoData(promo.id, type, groupesData.length + 1);
+            setGroupesData(prevData => [...prevData, newGroup]);
+            if (onSubmit) onSubmit();
         } catch (error) {
             console.error("Error adding group:", error);
         }
     };
 
     const handleAddTPGroup = async (tdGroupName) => {
+        if (!promo) return;
+
         const tdGroup = groupesData.find(groupe => groupe.nom === tdGroupName && groupe.type === 'TD');
         if (!tdGroup) {
             alert("Groupe TD non trouvé.");
             return;
         }
+
         let newGroupName = 'amodifier';
         let counter = 1;
         while (isGroupNameExists(newGroupName)) {
             newGroupName = `amodifier${counter}`;
             counter++;
         }
+
         try {
-            const payload = { promo_id: promo.id, type: 'TP', nom: newGroupName };
-            console.log("Payload:", payload); // Ajoutez cette ligne pour vérifier le payload
-            const response = await axios.post('/api/groupes', payload);
+            // Create TP group
+            const groupPayload = { promo_id: promo.id, type: 'TP', nom: newGroupName };
+            const groupResponse = await axios.post('/api/groupes', groupPayload);
+            const newGroup = groupResponse.data;
 
-            const newGroup = response.data;
-
-            // Create the liaison between TD and TP groups
+            // Create liaison
             const liaisonPayload = { groupe_td_id: tdGroup.id, groupe_tp_id: newGroup.id };
             await axios.post('/api/liaison_groupes', liaisonPayload);
 
-            setGroupesData(prevGroupesData => [...prevGroupesData, newGroup]);
+            // Update state
+            setGroupesData(prevData => [...prevData, newGroup]);
             setLiaisons(prevLiaisons => [...prevLiaisons, { groupe_td_id: tdGroup.id, groupe_tp_id: newGroup.id }]);
-            updatePromoData(promo.id, 'TP', groupesData.length + 1);
+            
+            if (onSubmit) onSubmit();
         } catch (error) {
             console.error("Error adding TP group:", error);
         }
     };
 
     const handleDeleteGroup = async (type, groupNameToDelete) => {
+        if (!promo) return;
+
         const group = groupesData.find(groupe => groupe.type === type && groupe.nom === groupNameToDelete);
-
-        if (group) {
-            try {
-                await axios.delete(`/api/groupes/${group.id}`);
-                setGroupesData(groupesData.filter(groupe => groupe.id !== group.id));
-                updatePromoData(promo.id, type, groupesData.length - 1);
-            } catch (error) {
-                console.error("Error deleting group:", error);
-            }
-        } else {
-            alert("Groupe non trouvé.");
-        }
-    };
-
-    const handleDeleteTDGroup = (tdGroupName) => {
-        setTdGroupToDelete(tdGroupName);
-        setConfirmModalOpen(true);
-    };
-
-    const confirmDeleteTDGroup = async () => {
-        const tdGroup = groupesData.find(groupe => groupe.nom === tdGroupToDelete && groupe.type === 'TD');
-        if (tdGroup) {
-            try {
-                // Delete related TP groups
-                const relatedTPGroups = liaisons
-                    .filter(liaison => liaison.groupe_td_id === tdGroup.id)
-                    .map(liaison => liaison.groupe_tp_id);
-
-                for (const tpGroupId of relatedTPGroups) {
-                    await axios.delete(`/api/groupes/${tpGroupId}`);
-                }
-
-                // Delete the TD group
-                await axios.delete(`/api/groupes/${tdGroup.id}`);
-                setGroupesData(groupesData.filter(groupe => groupe.id !== tdGroup.id && !relatedTPGroups.includes(groupe.id)));
-                setLiaisons(liaisons.filter(liaison => liaison.groupe_td_id !== tdGroup.id));
-                updatePromoData(promo.id, 'TD', groupesData.length - 1);
-                updatePromoData(promo.id, 'TP', groupesData.filter(groupe => groupe.type === 'TP').length);
-            } catch (error) {
-                console.error("Error deleting TD group:", error);
-            }
-        } else {
-            alert("Groupe TD non trouvé.");
-        }
-        setConfirmModalOpen(false);
-        setTdGroupToDelete(null);
-    };
-
-    const handleDeleteTPGroup = async (tdGroupName, tpGroupName) => {
-        const tdGroup = groupesData.find(groupe => groupe.nom === tdGroupName && groupe.type === 'TD');
-        const tpGroup = groupesData.find(groupe => groupe.nom === tpGroupName && groupe.type === 'TP');
-        const liaisonExists = liaisons.some(liaison => liaison.groupe_td_id === tdGroup.id && liaison.groupe_tp_id === tpGroup.id);
-
-        if (tdGroup && tpGroup && liaisonExists) {
-            try {
-                await axios.delete(`/api/groupes/${tpGroup.id}`);
-                setGroupesData(groupesData.filter(groupe => groupe.id !== tpGroup.id));
-                setLiaisons(liaisons.filter(liaison => liaison.groupe_tp_id !== tpGroup.id));
-                updatePromoData(promo.id, 'TP', groupesData.length - 1);
-            } catch (error) {
-                console.error("Error deleting TP group:", error);
-            }
-        } else {
-            alert("Groupe TP non trouvé ou n'appartient pas au groupe TD spécifié.");
-        }
-    };
-
-    const handleSubmit = async () => {
-        const groupNames = groupesData.map(groupe => groupe.nom);
-        const hasDuplicateNames = groupNames.some((name, index) => groupNames.indexOf(name) !== index);
-
-        if (hasDuplicateNames) {
-            alert("Il y a des noms de groupes en double. Veuillez les corriger avant de valider.");
+        if (!group) {
+            console.error("Group not found");
             return;
         }
 
         try {
-            await axios.post('/api/update-groupes', { groupes: groupesData });
-
-            // Recalculate the counts of TD and TP groups
-            const tdCount = groupesData.filter(groupe => groupe.type === 'TD').length;
-            const tpCount = groupesData.filter(groupe => groupe.type === 'TP').length;
-
-            // Update the parent component's state with the new counts
-            updatePromoData(promo.id, 'TD', tdCount);
-            updatePromoData(promo.id, 'TP', tpCount);
-
-            refreshPromoData();
-            onClose(); // Close the popup after successful submission
+            await axios.delete(`/api/groupes/${group.id}`);
+            setGroupesData(prevData => prevData.filter(g => g.id !== group.id));
+            if (onSubmit) onSubmit();
         } catch (error) {
-            console.error("Error updating groupes:", error);
+            console.error("Error deleting group:", error);
         }
     };
 
-    function renderLiaisons(liaison) {
-        groupesData.filter(groupe => groupe.id === liaison.groupe_tp_id).map((groupeTP) => (
-            <div key={groupeTP.id} className="tp-group">
-                <input
-                    type="text"
-                    value={groupeTP.nom}
-                    onChange={(e) => handleInputChange(groupeTP.id, 'nom', e.target.value)}
-                />
-            </div>
-        ))
-    }
+    const handleOpenInputModal = (type) => {
+        setModalType(type);
+        setInputModalOpen(true);
+    };
 
-    function renderTDGroup(groupeTD) {
-        return (
-            liaisons.filter(liaison => liaison.groupe_td_id === groupeTD.id).map((liaison) => (
-                renderLiaisons(liaison)
-            ))
-        );
-    }
+    const handleCloseInputModal = () => {
+        setInputModalOpen(false);
+        setModalType("");
+    };
+
+    const handleOpenConfirmModal = (type, groupName) => {
+        setModalType(type);
+        setTdGroupToDelete(groupName);
+        setConfirmModalOpen(true);
+    };
+
+    const handleCloseConfirmModal = () => {
+        setConfirmModalOpen(false);
+        setModalType("");
+        setTdGroupToDelete(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (modalType && tdGroupToDelete) {
+            await handleDeleteGroup(modalType, tdGroupToDelete);
+            handleCloseConfirmModal();
+        }
+    };
+
+    if (!promo) return null;
+
+    const tdGroups = groupesData.filter(groupe => groupe.type === 'TD');
+    const tpGroups = groupesData.filter(groupe => groupe.type === 'TP');
 
     return (
-        <div className="custom-popup-overlay-modif" onClick={onClose}>
-            <div className="custom-popup-content-modif-voir" onClick={(e) => e.stopPropagation}>
-                <div className="popupmodifpromo-header">
-                    <h2>Modification de {promo.nom}</h2>
+        <div className="custom-popup-overlay-adapt" onClick={onClose}>
+            <div className="custom-popup-content-adapt" onClick={(e) => e.stopPropagation()}>
+                <div className="popup-header">
+                    <h2>Modification de {promoName}</h2>
+                    <button className="close-button" onClick={onClose}>×</button>
                 </div>
 
-                <div className="td-blocks-container">
-                    {groupesData.filter(groupe => groupe.type === 'TD').map((groupeTD) => (
-                        <div key={groupeTD.id} className="td-block">
-                            <div className="td-group">
+                <div className="groups-container">
+                    <div className="group-section">
+                        <h3>Groupes TD</h3>
+                        <button onClick={() => handleAddGroup('TD')}>Ajouter TD</button>
+                        {tdGroups.map((groupe) => (
+                            <div key={groupe.id} className="group-item">
                                 <input
                                     type="text"
-                                    value={groupeTD.nom}
-                                    onChange={(e) => handleInputChange(groupeTD.id, 'nom', e.target.value)}
+                                    value={groupe.nom}
+                                    onChange={(e) => handleInputChange(groupe.id, 'nom', e.target.value)}
                                 />
+                                <button onClick={() => handleOpenConfirmModal('TD', groupe.nom)}>
+                                    Supprimer
+                                </button>
+                                <button onClick={() => {
+                                    setTdGroupName(groupe.nom);
+                                    handleOpenInputModal('TP');
+                                }}>
+                                    Ajouter TP
+                                </button>
                             </div>
-                            <div className="tp-groups">
-                                {
-                                    renderTDGroup(groupeTD)
-                                }
-                            </div>
-                            <div className="custom-button-container-block">
-                                <button onClick={() => handleAddTPGroup(groupeTD.nom)}>+</button>
-                                <button onClick={() => { setTdGroupName(groupeTD.nom); setModalType('deleteTP'); setInputModalOpen(true); }}>-</button>
-                                <button onClick={() => handleDeleteTDGroup(groupeTD.nom)}>X</button>
-                            </div>
-                        </div>
-                    ))}                </div>
+                        ))}
+                    </div>
 
-                <div className="custom-button-container-mod">
-                    <button onClick={() => handleAddGroup('TD')}>Ajouter TD</button>
-                    <button onClick={handleSubmit}>Valider</button>
+                    <div className="group-section">
+                        <h3>Groupes TP</h3>
+                        {tpGroups.map((groupe) => {
+                            const liaison = liaisons.find(l => l.groupe_tp_id === groupe.id);
+                            const parentTD = liaison ? groupesData.find(g => g.id === liaison.groupe_td_id) : null;
+
+                            return (
+                                <div key={groupe.id} className="group-item">
+                                    <input
+                                        type="text"
+                                        value={groupe.nom}
+                                        onChange={(e) => handleInputChange(groupe.id, 'nom', e.target.value)}
+                                    />
+                                    <span className="parent-td">
+                                        {parentTD ? `(${parentTD.nom})` : ''}
+                                    </span>
+                                    <button onClick={() => handleOpenConfirmModal('TP', groupe.nom)}>
+                                        Supprimer
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
 
+                {isInputModalOpen && (
+                    <InputModifPromo
+                        type={modalType}
+                        onClose={handleCloseInputModal}
+                        onSubmit={(newName) => {
+                            if (modalType === 'TP') {
+                                handleAddTPGroup(tdGroupName);
+                            }
+                            handleCloseInputModal();
+                        }}
+                    />
+                )}
+
+                {isConfirmModalOpen && (
+                    <ConfirmModifPromo
+                        type={modalType}
+                        groupName={tdGroupToDelete}
+                        onClose={handleCloseConfirmModal}
+                        onConfirm={handleConfirmDelete}
+                    />
+                )}
             </div>
-            <InputModifPromo
-                isOpen={isInputModalOpen}
-                onClose={() => setInputModalOpen(false)}
-                onSubmit={(value) => {
-                    if (modalType === 'addTP') handleAddTPGroup(value);
-                    if (modalType === 'deleteTP') handleDeleteTPGroup(tdGroupName, value);
-                    if (modalType === 'deleteTD') handleDeleteGroup('TD', value);
-                }}
-                title={modalType === 'addTP' ? "Ajouter TP" : modalType === 'deleteTP' ? "Supprimer TP" : "Supprimer TD"}
-                label={modalType === 'addTP' ? "Nom du groupe TD" : modalType === 'deleteTP' ? "Nom du groupe TP" : "Nom du groupe TD"}
-            />
-            <ConfirmModifPromo
-                isOpen={isConfirmModalOpen}
-                onClose={() => setConfirmModalOpen(false)}
-                onConfirm={confirmDeleteTDGroup}
-                message={`Êtes-vous sûr de vouloir supprimer le groupe TD "${tdGroupToDelete}" ?`}
-            />
         </div>
     );
 }
