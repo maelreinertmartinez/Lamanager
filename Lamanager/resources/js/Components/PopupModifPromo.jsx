@@ -12,28 +12,28 @@ function PopupModifPromo({ onClose, promos, selectedAnnee }) {
         nombre_tp: promo.nombre_tp || 0
     })));
 
-    useEffect(() => {
-        const fetchGroupesForPromos = async () => {
-            const updatedPromos = await Promise.all(promoData.map(async (promo) => {
-                try {
-                    const response = await axios.get(`/api/groupes/${promo.id}`);
-                    const groupes = response.data;
-                    const tdCount = groupes.filter(groupe => groupe.type === 'TD').length;
-                    const tpCount = groupes.filter(groupe => groupe.type === 'TP').length;
-                    return {
-                        ...promo,
-                        groupes,
-                        nombre_td: tdCount,
-                        nombre_tp: tpCount
-                    };
-                } catch (error) {
-                    console.error(`Error fetching groupes for promo ${promo.id}:`, error);
-                    return { ...promo, groupes: [] };
-                }
-            }));
-            setPromoData(updatedPromos);
-        };
+    const fetchGroupesForPromos = async () => {
+        const updatedPromos = await Promise.all(promoData.map(async (promo) => {
+            try {
+                const response = await axios.get(`/api/groupes/${promo.id}`);
+                const groupes = response.data;
+                const tdCount = groupes.filter(groupe => groupe.type === 'TD').length;
+                const tpCount = groupes.filter(groupe => groupe.type === 'TP').length;
+                return {
+                    ...promo,
+                    groupes,
+                    nombre_td: tdCount,
+                    nombre_tp: tpCount
+                };
+            } catch (error) {
+                console.error(`Error fetching groupes for promo ${promo.id}:`, error);
+                return { ...promo, groupes: [] };
+            }
+        }));
+        setPromoData(updatedPromos);
+    };
 
+    useEffect(() => {
         fetchGroupesForPromos();
     }, []);
 
