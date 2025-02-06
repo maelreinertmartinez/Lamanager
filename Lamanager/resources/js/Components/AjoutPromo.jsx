@@ -24,7 +24,6 @@ function AjoutPromo({ onClose, selectedAnnee }) {
             }
             window.location.reload();
         }
-
     }
 
     async function addPromo(selectedAnnee, alternantId, promoName, tdNbr, tpNbr, alternant) {

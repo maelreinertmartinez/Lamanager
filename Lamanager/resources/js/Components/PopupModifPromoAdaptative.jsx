@@ -193,9 +193,29 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
         }
     };
 
+    function renderLiaisons(liaison) {
+        groupesData.filter(groupe => groupe.id === liaison.groupe_tp_id).map((groupeTP) => (
+            <div key={groupeTP.id} className="tp-group">
+                <input
+                    type="text"
+                    value={groupeTP.nom}
+                    onChange={(e) => handleInputChange(groupeTP.id, 'nom', e.target.value)}
+                />
+            </div>
+        ))
+    }
+
+    function renderTDGroup(groupeTD) {
+        return (
+            liaisons.filter(liaison => liaison.groupe_td_id === groupeTD.id).map((liaison) => (
+                renderLiaisons(liaison)
+            ))
+        );
+    }
+
     return (
         <div className="custom-popup-overlay-modif" onClick={onClose}>
-            <div className="custom-popup-content-modif-voir" onClick={(e) => e.stopPropagation()}>
+            <div className="custom-popup-content-modif-voir" onClick={(e) => e.stopPropagation}>
                 <div className="popupmodifpromo-header">
                     <h2>Modification de {promo.nom}</h2>
                 </div>
@@ -211,17 +231,9 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
                                 />
                             </div>
                             <div className="tp-groups">
-                                {liaisons.filter(liaison => liaison.groupe_td_id === groupeTD.id).map((liaison) => (
-                                    groupesData.filter(groupe => groupe.id === liaison.groupe_tp_id).map((groupeTP) => (
-                                        <div key={groupeTP.id} className="tp-group">
-                                            <input
-                                                type="text"
-                                                value={groupeTP.nom}
-                                                onChange={(e) => handleInputChange(groupeTP.id, 'nom', e.target.value)}
-                                            />
-                                        </div>
-                                    ))
-                                ))}
+                                {
+                                    renderTDGroup(groupeTD)
+                                }
                             </div>
                             <div className="custom-button-container-block">
                                 <button onClick={() => handleAddTPGroup(groupeTD.nom)}>+</button>
@@ -229,8 +241,7 @@ function PopupModifPromoAdaptative({ onClose, promoName, promos, updatePromoData
                                 <button onClick={() => handleDeleteTDGroup(groupeTD.nom)}>X</button>
                             </div>
                         </div>
-                    ))}
-                </div>
+                    ))}                </div>
 
                 <div className="custom-button-container-mod">
                     <button onClick={() => handleAddGroup('TD')}>Ajouter TD</button>

@@ -40,8 +40,8 @@ function PromoRightPart({ selectedAnnee }) {
     if (loading) return <div>Chargement...</div>;
     if (error) return <div>{error}</div>;
 
-    var temp = [];
-    for(var i=0;i<promos.length;i++){
+    let temp = [];
+    for(let i=0;i<promos.length;i++){
         if(!promos[i].alternant){
             temp.push(promos[i]);
         }
@@ -58,19 +58,21 @@ function PromoRightPart({ selectedAnnee }) {
                         </Link>
                     </li>
                 ))}
-                <li onClick={() => setShowCustomPopup(true)}><ChoixPromo className="but-class" title="+"/></li>
+                <li onClick={() => setShowCustomPopup(true)}>
+                    <ChoixPromo className="but-class" title="+"/>
+                </li>
             </ul>
         </div>
         <div className="ModificationsPromos">
             <BoutonModificationsPromos
-            className="btn-modif-class"
-            Icon={Trash2}
-            onClick={() => setShowDeletePopup(true)}
+                className="btn-modif-class"
+                Icon={Trash2}
+                onClick={() => setShowDeletePopup(true)}
             />
             <BoutonModificationsPromos
-            className="btn-modif-class"
-            Icon={Edit}
-            onClick={() => setShowEditPopup(true)}
+                className="btn-modif-class"
+                Icon={Edit}
+                onClick={() => setShowEditPopup(true)}
             />
         </div>
 
